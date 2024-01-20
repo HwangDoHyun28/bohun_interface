@@ -27,7 +27,7 @@
           <img
           src="lab_tag.svg"
           alt="Tutorial Logo"
-          class="h-4 sm:h-4"
+          class="h-5 sm:h-5"
         />
         </Button>
       </div>
