@@ -7,7 +7,7 @@
   <div class="rounded-lg border mx-10 px-20 py-10 bg-white">
     <div class="mt-5">
       <p class="text-4xl text-violet-800 font-semibold my-5">Tutorial</p>
-      <p class="text-slate-400 text-lg font-normal">
+      <p class="text-neutral-400 text-lg font-normal">
         Let's find out how to use the CAculator tool!
       </p>
     </div>
