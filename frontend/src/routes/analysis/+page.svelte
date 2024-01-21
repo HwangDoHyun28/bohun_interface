@@ -2,7 +2,8 @@
     import { Input, Label, Helper } from "flowbite-svelte";
     import { Fileupload, Button, Checkbox } from "flowbite-svelte";
     import { Select } from "flowbite-svelte";
-  
+    import { onMount } from 'svelte';
+
     let selected1;
     let selected2;
     let Single_Patient = [
@@ -20,9 +21,8 @@
     let selected5 = true;
     let selected6 = true;
     let selected7 = true;
-  
-  </script>
-  
+</script>    
+
   <form type="submit">
     <div class="rounded-lg border mx-5 px-20 py-10 bg-white">
       <div class="mt-5">
@@ -163,7 +163,7 @@
             </div>  
             <div class="mt-10 place-content-center">
               <Button
-              href="/loading"
+              href="/result"
               class="mx-16 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
               >Predict Probability</Button
             >
