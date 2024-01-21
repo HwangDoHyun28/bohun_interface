@@ -24,12 +24,12 @@
 </script>    
 
   <form type="submit">
-    <div class="rounded-lg border mx-5 px-20 py-10 bg-white">
+    <div class="rounded-lg border mx-5 px-16 py-10 bg-white">
       <div class="mt-5">
         <p class="text-4xl text-violet-800 font-semibold my-5">Ph(+) B-ALL & Ph-like B-ALL Probability Calculator</p>
       </div>
-      <div class="relative top-0 left-0 mt-10 flex">
-        <div class="pl-16 pr-12 py-8 rounded-lg border-2 border-violet-300 pr-80">
+      <div class="mt-10 flex">
+        <div class="w-1/2 px-16 py-8 rounded-lg border-2 border-violet-300">
           <p class="text-3xl text-violet-800 font-semibold mt-5">Data</p>
           <p class="text-slate-400 text-lg font-normal">
             Upload your RPKM matrix file ( csv, tsv, or ... )
@@ -40,11 +40,11 @@
                 >Select File</Button
               >
             </div>
-          <div class="text-center mt-3">
+          <div class="text-center mt-2">
               <Label class="text-slate-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
             </div>
           </div>
-          <div>
+          <div class="mt-8">
             <p class="text-slate-400 text-lg font-normal">
               Single or Multiple Patient
             </p>
@@ -61,9 +61,9 @@
               {/each}
             </Select>
           </div>
-          <p class="text-3xl text-violet-800 font-semibold my-5">Settings</p>     
+          <p class="mt-20 text-3xl text-violet-800 font-semibold">Settings</p>     
           <div>
-            <p class="text-slate-400 text-lg font-normal">
+            <p class="mt-1 text-slate-400 text-lg font-normal">
               RPKM or RANK Based
             </p>
             <Select
@@ -79,11 +79,11 @@
               {/each}
             </Select>
           </div>
-          <div class="mt-0">
+          <div class="mt-8">
             <p class="text-slate-400 text-lg font-normal">
               Quality Check
             </p>
-            <div class="flex">
+            <div class="mt-3 flex">
               <Checkbox
               id="boxplot-check"
               bind:checked={selected3}
@@ -96,7 +96,7 @@
               Adq / fair / inadq
             </p>
             </div>
-            <div class="flex">
+            <div class="mt-3 flex">
               <Checkbox
               id="boxplot-check"
               bind:checked={selected4}
@@ -110,12 +110,12 @@
             </p>
             </div>
             </div>
-            <div class="mt-0 relative flex">
-              <div>
+            <div class="mt-8 mb-16 relative flex">
+              <div class="mt-0">
                 <p class="text-slate-400 text-lg font-normal">
                   Score Class
                 </p>
-                <div class="flex">
+                <div class="mt-3 flex">
                   <Checkbox
                   id="boxplot-check"
                   bind:checked={selected5}
@@ -128,7 +128,7 @@
                   ABL1 Class
                 </p>
                 </div>
-                <div class="flex">
+                <div class="mt-3 flex">
                   <Checkbox
                   id="boxplot-check"
                   bind:checked={selected6}
@@ -141,7 +141,7 @@
                   CRLF2 Class
                 </p>
                 </div>
-                <div class="flex">
+                <div class="mt-3 flex">
                   <Checkbox
                   id="boxplot-check"
                   bind:checked={selected7}
@@ -161,15 +161,14 @@
                 </p> 
               </div>
             </div>  
-            <div class="mt-10 place-content-center">
+            <div class="relative my-10 place-content-center">
               <Button
               href="/result"
-              class="mx-16 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
-              >Predict Probability</Button
-            >
-          </div>
+              class="ml-48 object-center text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
+              >Predict Probability</Button>
+            </div>
         </div>
-        <div class="absolute top-0 right-0 ml-10 pl-12 pr-80 py-8 rounded-lg border-2 border-violet-300">
+        <div class="w-1/2 ml-10 pl-12 py-8 rounded-lg border-2 border-violet-300">
           <p class="text-3xl text-violet-800 font-semibold my-5">Results</p>
           <p class="text-slate-400 text-lg font-normal">
             Quality Check & Probability of Each Class

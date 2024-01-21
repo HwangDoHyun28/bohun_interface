@@ -18,7 +18,7 @@
     $: {
       if (fileContent) {
         // 파일 내용이 변경되면 실행되는 로직
-        const data = d3.csvParse(fileContent, d => ({ id: +d.gene_name, expression: +d.expression }));
+        const data = d3.csvParse(fileContent, d => ({ id: +d.gene_id, expression: +d.gene_expression }));
         const processedData = processData(data);
         visualizeData(processedData);
       }
@@ -28,12 +28,14 @@
   // 파일 업로드 이벤트 핸들러
   function handleFileUpload() {
     const file = fileInput.files[0];
-    if (file) {
+    if (file && file.name.endsWith('.txt')) {
       const reader = new FileReader();
       reader.onload = () => {
         fileContent = reader.result;
       };
       reader.readAsText(file);
+    } else {
+      alert('올바른 파일 형식을 선택하세요. (.txt)');
     }
   }
 
@@ -103,4 +105,3 @@
 {#if result !== null}
   <p>예측 확률: {result.toFixed(2)}</p>
 {/if}
-
