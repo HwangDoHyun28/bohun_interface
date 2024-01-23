@@ -26,11 +26,11 @@
   <form type="submit">
     <div class="rounded-lg border mx-5 px-16 py-10 bg-white">
       <div class="mt-5">
-        <p class="text-4xl text-violet-800 font-[450] my-5">Ph(+) B-ALL & Ph-like B-ALL Probability Calculator</p>
+        <p class="text-4xl text-violet-800 font-semibold my-5">Ph(+) B-ALL & Ph-like B-ALL Probability Calculator</p>
       </div>
       <div class="mt-10 flex">
-        <div class="w-1/2 px-16 py-8 rounded-lg border-2 border-violet-300">
-          <p class="text-4xl text-violet-800 font-[450] mt-5">Data</p>
+        <div class="w-1/2 px-16 py-8 mb-96 rounded-lg border-2 border-violet-300">
+          <p class="text-4xl text-violet-800 font-semibold mt-5">Data</p>
           <p class="mt-3 text-neutral-400 text-lg font-normal">
             Upload your RPKM matrix file ( csv, tsv, or ... )
           </p>      
@@ -41,16 +41,16 @@
               >
             </div>
           <div class="text-center mt-3">
-              <Label class="text-slate-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
+              <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
             </div>
           </div>
-          <div class="mt-8">
-            <p class="text-slate-400 text-lg font-normal">
+          <div class="mt-10">
+            <p class="text-neutral-400 text-lg font-normal">
               Single or Multiple Patient
             </p>
             <Select
               id="Patient"
-              class="mt-2 text-slate-500 bg-inherit focus:ring-white focus:border-spadoma1"
+              class="mt-5 text-xl text-violet-400 bg-inherit focus:ring-white focus:border-violet-300"
               bind:value={selected1}
               placeholder=""
             >
@@ -63,12 +63,12 @@
           </div>
           <p class="mt-20 text-3xl text-violet-800 font-semibold">Settings</p>     
           <div>
-            <p class="mt-1 text-slate-400 text-lg font-normal">
+            <p class="mt-1 text-neutral-400 text-lg font-normal">
               RPKM or RANK Based
             </p>
             <Select
               id="Based"
-              class="mt-2 text-slate-500 bg-inherit focus:ring-white focus:border-violet-300"
+              class="mt-2 text-xl text-neutral-500 bg-inherit focus:ring-white focus:border-violet-300"
               bind:value={selected1}
               placeholder=""
             >
@@ -167,24 +167,24 @@
             <div class="relative my-10 place-content-center">
               <Button
               href="/result"
-              class="ml-48 object-center text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
+              class="ml-32 object-center my-10 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
               >Predict Probability</Button>
             </div>
         </div>
-        <div class="w-1/2 px-16 ml-10 pl-16 py-8 rounded-lg border-2 border-violet-300">
-          <p class="text-4xl text-violet-800 font-[450] my-5">Results</p>
+        <div class="w-1/2 px-16 ml-10 mb-60 pl-16 pt-8 rounded-lg border-2 border-violet-300">
+          <p class="text-4xl text-violet-800 font-semibold my-5">Results</p>
           <p class="text-neutral-400 text-lg font-normal">
             Quality Check & Probability of Each Class
           </p>   
-          <div class="mt-8 ml-12">
+          <div class="mt-8 ml-8">
             <div>
-              <p class="text-violet-500 text-3xl font-normal">QC 1</p>
+              <p class="text-violet-500 text-3xl font-semibold">QC 1</p>
               <div class="flex">
                 <p class="mt-3 ml-3 text-neutral-400 text-lg font-normal">AdqAdq / fair / inadq</p>
               </div>
             </div>
             <div>
-              <p class="mt-16 text-violet-300 text-3xl font-normal">QC 2</p>
+              <p class="mt-12 text-violet-300 text-3xl font-semibold">QC 2</p>
               <div class="flex">
                 <p class="mt-3 ml-3 text-neutral-400 text-lg font-normal">House Keeping Gene Value</p>
               </div>
@@ -192,50 +192,88 @@
           </div>
           <img
           src="dotted_line.svg"
-          class="mt-20 h-fit text-center"
+          class="mt-12 h-fit text-center"
           alt="Tutorial Logo"
           />
-          <div class="flex mt-12">
-            <p class="ml-5 text-3xl text-violet-800 font-[450] my-5">Probability Score</p>
-            <p class="mt-6 ml-2 text-xl text-violet-800 font-[450] my-5">(Range: -1 ~ 1)</p>
+          <div class="flex mt-8">
+            <p class="ml-5 text-3xl text-violet-800 font-semibold my-5">Probability Score</p>
+            <p class="mt-6 ml-2 text-xl text-violet-800 font-semibold my-5">(Range: -1 ~ 1)</p>
           </div>
-          <div class="mt-0">
-            <p class="ml-5 text-3xl text-violet-800 font-lg my-5">Total class</p>
-          </div>
-          <img
+          <div>
+            <p class="ml-5 text-2xl text-violet-800 font-semibold mt-5">Total class</p>
+            <div class="mt-0 flex">
+              <img
+            src="red_triangle.svg"
+            class="ml-3 mt-3 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <img
+            src="yellow_triangle.svg"
+            class="ml-3 mt-3 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <img
+            src="blue_triangle.svg"
+            class="ml-3 mt-3 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            </div>
+            <img
           src="scorebar_purple.svg"
-          class="ml-20 mt-10 h-fit text-center"
+          class="ml-3 mt-0 h-fit text-center"
           alt="Tutorial Logo"
           />
-          <div class="flex mt-12">
-            <p class="ml-5 text-3xl text-neutral-500 font-lg my-5">ABL1 Class</p>
-            <p class="mt-6 ml-2 text-2xl text-neutral-400 font-lg my-5">: -0.0078</p>
           </div>
-          <img
-          src="scorebar_red.svg"
-          class="ml-20 mt-10 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          <div class="flex mt-12">
-            <p class="ml-5 text-3xl text-violet-800 font-lg my-5">CRLF2 Class</p>
-            <p class="mt-6 ml-2 text-xl text-violet-800 font-lg my-5">: -0.8765</p>
+          <div>
+            <div class="flex mt-12">
+              <p class="ml-5 text-2xl text-red-500 font-semibold mt-5">ABL1 Class</p>
+              <p class="mt-6 ml-2 text-xl text-neutral-400 font-lg mt-5">: -0.0078</p>
+            </div>
+            <img
+            src="red_triangle.svg"
+            class="ml-3 mt-3 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <img
+            src="scorebar_red.svg"
+            class="ml-3 -mt-0 h-fit text-center"
+            alt="Tutorial Logo"
+            />  
           </div>
-          <img
-          src="scorebar_yellow.svg"
-          class="ml-20 mt-10 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          <div class="flex mt-12">
-            <p class="ml-5 text-3xl text-violet-800 font-lg my-5">ABL1-Like Class</p>
-            <p class="mt-6 ml-2 text-xl text-violet-800 font-lg my-5">: 0.0236</p>
+          <div>
+            <div class="flex mt-12">
+              <p class="ml-5 text-2xl text-yellow-300 font-semibold mt-5">CRLF2 Class</p>
+              <p class="mt-6 ml-2 text-xl text-neutral-400 font-lg mt-5">: -0.8765</p>
+            </div>
+            <img
+            src="yellow_triangle.svg"
+            class="ml-3 mt-3 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <img
+            src="scorebar_yellow.svg"
+            class="ml-3 mt-0 h-fit text-center"
+            alt="Tutorial Logo"
+            />  
           </div>
-          <img
-          src="scorebar_blue.svg"
-          class="ml-20 mt-10 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-        </div>
-      </div>
+          <div>
+            <div class="flex mt-12">
+              <p class="ml-5 text-2xl text-blue-500 font-semibold mt-5">ABL1-Like Class</p>
+              <p class="mt-6 ml-2 text-xl text-neutral-400 font-lg mt-5">: 0.0236</p>
+            </div>
+            <img
+            src="blue_triangle.svg"
+            class="ml-3 mt-2 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <img
+            src="scorebar_blue.svg"
+            class="ml-3 mt-0 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+          </div>
+          </div>
+          </div>
       
     
       <div class="mt-12 -mb-10 ml-0 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">

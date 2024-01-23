@@ -1,3 +1,4 @@
+<!-- svelte-ignore non-top-level-reactive-declaration -->
 <!-- App.svelte -->
 
 <script>
@@ -93,10 +94,6 @@
     return Math.random(); // 임시로 랜덤값을 반환하는 예제
   }
 </script>
-
-<style>
-  /* 스타일링 옵션 추가 */
-</style>
 
 <input type="file" accept=".txt" bind:this={fileInput} on:change={handleFileUpload} />
 <button on:click={predictProbability}>Predict Probability</button>
