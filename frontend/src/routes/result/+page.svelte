@@ -4,6 +4,8 @@
 <script>
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
+  import { Label, Fileupload, Button } from "flowbite-svelte";
+  import { Select } from "flowbite-svelte"; 
 
   let chartContainer;
 
@@ -13,6 +15,8 @@
   
   // 결과 표시 변수
   let result = null;
+
+  let value;
 
   onMount(() => {
     // 파일 내용이 변경되면 실행되는 함수
@@ -102,3 +106,27 @@
 {#if result !== null}
   <p>예측 확률: {result.toFixed(2)}</p>
 {/if}
+
+
+
+<div class="mt-12 my-10">
+  <p class="text-3xl text-violet-600 font-semibold">Data</p>
+  <p class="text-violet-500 font-normal mt-2">
+    Upload your RPKM matrix file ( csv, tsv, or ... )
+  </p>
+  <Label class="w-32 mt-1 space-y-2 mb-2">
+    <Fileupload class = "w-32 opacity-0" bind:value/>
+  </Label>
+  
+  
+</div>
+<div class="flex -mt-[88px]">
+  <div>
+    <Button class="mt-3 bg-violet-300 hover:bg-violet-400 text-base font-medium"
+      >Select File</Button
+    >
+  </div>
+  <div class="relative top-5 text-center">
+    <Label class="text-slate-400 text-center text-[16px] font-normal px-3 ml-0 mt-1">{value}</Label>
+  </div>
+</div>

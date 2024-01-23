@@ -33,14 +33,17 @@
           <p class="text-4xl text-violet-800 font-semibold mt-5">Data</p>
           <p class="mt-3 text-neutral-400 text-lg font-normal">
             Upload your RPKM matrix file ( csv, tsv, or ... )
-          </p>      
-          <div class="mt-3 flex">
+          </p>   
+          <Label class="w-32 mt-1 space-y-2 mb-2">
+            <Fileupload class = "w-32 opacity-0" bind:value/>
+          </Label>           
+          <div class="-mt-12 flex">
             <div>
               <Button class="y-5 mt-2 py-2 bg-violet-300 hover:bg-violet-400 text-base font-semibold"
                 >Select File</Button
               >
             </div>
-          <div class="text-center mt-3">
+            <div class="text-center mt-3">
               <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
             </div>
           </div>
