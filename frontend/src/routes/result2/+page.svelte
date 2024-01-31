@@ -1,27 +1,27 @@
 <script>
-  import { Input, Label, Helper } from "flowbite-svelte";
-  import { Fileupload, Button, Checkbox } from "flowbite-svelte";
-  import { Select } from "flowbite-svelte";
-  import { onMount } from 'svelte';
+    import { Input, Label, Helper } from "flowbite-svelte";
+    import { Fileupload, Button, Checkbox } from "flowbite-svelte";
+    import { Select } from "flowbite-svelte";
+    import { onMount } from 'svelte';
 
-  let selected1;
-  let selected2;
-  let Single_Patient = [
-    { value: "Single", name: "Single_Patient" },
-    { value: "Multi", name: "Multi_Patients" },
-  ];
-  let Based = [
-    { value: "RPKM", name: "RPKM based" },
-    { value: "RANK", name: "Rank based" },
-  ];
-
-  let value;
-  let selected3 = true;
-  let selected4 = true;
-  let selected5 = true;
-  let selected6 = true;
-  let selected7 = true;
-</script>    
+    let selected1;
+    let selected2;
+    let Single_Patient = [
+      { value: "Single", name: "Single_Patient" },
+      { value: "Multi", name: "Multi_Patients" },
+    ];
+    let Based = [
+      { value: "RPKM", name: "RPKM based" },
+      { value: "RANK", name: "Rank based" },
+    ];
+  
+    let value;
+    let selected3 = true;
+    let selected4 = true;
+    let selected5 = true;
+    let selected6 = true;
+    let selected7 = true;
+</script>
 
 <form type="submit">
   <div class="rounded-lg border mx-5 px-16 py-10 bg-white">
@@ -29,7 +29,7 @@
       <p class="text-4xl text-violet-800 font-semibold my-5">Ph(+) B-ALL & Ph-like B-ALL Probability Calculator</p>
     </div>
     <div class="mt-12 flex">
-      <div class="w-1/2 px-16 py-8 mb-0 rounded-lg border-2 border-violet-300">
+      <div class="w-1/2 px-16 py-8 mb-96 rounded-lg border-2 border-violet-300">
         <p class="text-4xl text-violet-800 font-semibold mt-5">Data</p>
         <p class="mt-3 text-neutral-500 text-lg font-normal">
           Upload your RPKM matrix file ( csv, tsv, or ... )
@@ -59,7 +59,7 @@
             bind:value={selected1}
           >
             <option selected value="all">Number of patients</option>
-  
+
             {#each Single_Patient as { value, name }}
               <option {value}>{name}</option>
             {/each}
@@ -83,7 +83,7 @@
             bind:value={selected2}
           >
             <option selected value="all">Data Format</option>
-  
+
             {#each Based as { value, name }}
               <option {value}>{name}</option>
             {/each}
@@ -175,13 +175,12 @@
             </div>
           </div>  
           <div class="relative my-10 place-content-center">
-            <Button
-            href="/result"
-            class="ml-32 object-center mt-12 mb-5 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
+            <Button on:click={predictProbability}
+            class="ml-32 object-center my-10 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
             >Predict Probability</Button>
           </div>
       </div>
-      <div class="w-1/2 px-16 ml-10 mb-0 pl-16 pt-8 rounded-lg border-2 border-violet-300">
+      <div class="w-1/2 px-16 ml-10 mb-96 pl-16 pt-8 rounded-lg border-2 border-violet-300">
         <p class="text-4xl text-violet-800 font-semibold my-5">Results</p>
         <p class="text-neutral-500 text-lg font-normal">
           Quality Check & Probability of Each Class
@@ -207,93 +206,83 @@
         />
         <div class="flex mt-8">
           <p class="ml-0 text-2xl text-violet-800 font-semibold my-5">Probability Score</p>
-          <p class="mt-7 ml-2 text-base text-violet-500 font-semibold my-5">(Range: -1 ~ 1)</p>
+          <p class="mt-7 ml-1 text-base text-violet-600 font-semibold my-5">(Range: -1 ~ 1)</p>
         </div>
         <div>
           <p class="ml-3 text-xl text-violet-800 font-semibold mt-3">Total class</p>
-          <div>
-            <div class="relative mt-0 flex">
-              <img
-              src="red_triangle.svg"
-              class="absolute left-16 ml-3 mt-4 h-fit text-center"
-              alt="Tutorial Logo"
-              />
-              <img
-              src="yellow_triangle.svg"
-              class="absolute ml-3 mt-4 left-10 h-fit text-center"
-              alt="Tutorial Logo"
-              />
-              <img
-              src="blue_triangle.svg"
-              class="ml-3 mt-4 absolute h-fit text-center"
-              alt="Tutorial Logo"
-              />
-            </div>
-            <div class="mt-8 ml-3 relative h-11 pt-2 pb-4 flex rounded-lg font-bold text-medium text-violet-500 bg-inherit border-2 border-violet-500">
-              <p class="absolute left-2 text-left ml-3">-1</p>
-              <p class="absolute left-1/2">0</p>
-              <p class="absolute right-4 text-right">1</p>
-            </div>
+          <div class="mt-0 flex">
+            <img
+          src="red_triangle.svg"
+          class="ml-3 mt-5 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+          <img
+          src="yellow_triangle.svg"
+          class="ml-3 mt-5 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+          <img
+          src="blue_triangle.svg"
+          class="ml-3 mt-5 h-fit text-center"
+          alt="Tutorial Logo"
+          />
           </div>
+          <img
+        src="scorebar_purple.svg"
+        class="ml-3 mt-0 h-fit text-center"
+        alt="Tutorial Logo"
+        />
         </div>
         <div>
           <div class="flex mt-12">
             <p class="ml-3 text-xl text-red-500 font-semibold mt-5">ABL1 Class</p>
             <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.0078</p>
           </div>
-          <div class="relative">
-            <img
-            src="red_triangle.svg"
-            class="absolute ml-3 mt-4 h-fit text-center"
-            alt="Tutorial Logo"
-            />
-          </div>  
-          <div class="mt-8 ml-3 relative h-11 pt-2 pb-4 flex rounded-lg bg-amber-0 mt-0 font-bold text-medium text-red-500 bg-inherit border-2 border-red-500">
-            <p class="absolute left-2 text-left ml-3">-1</p>
-            <p class="absolute left-1/2">0</p>
-            <p class="absolute right-4 text-right">1</p>
-          </div>  
+          <img
+          src="red_triangle.svg"
+          class="ml-3 mt-5 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+          <img
+          src="scorebar_red.svg"
+          class="ml-3 h-fit text-center"
+          alt="Tutorial Logo"
+          />  
         </div>
         <div>
           <div class="flex mt-12">
             <p class="ml-3 text-xl text-yellow-300 font-semibold mt-5">CRLF2 Class</p>
             <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.8765</p>
           </div>
-          <div class="relative">
-            <img
-            src="yellow_triangle.svg"
-            class="absolute ml-3 mt-4 h-fit text-center"
-            alt="Tutorial Logo"
-            />
-          </div>
-          <div class="mt-8 ml-3 relative h-11 pt-2 pb-4 flex rounded-lg bg-amber-0 mt-0 font-bold text-medium text-yellow-300 bg-inherit border-2 border-yellow-300">
-            <p class="absolute left-2 text-left ml-3">-1</p>
-            <p class="absolute left-1/2">0</p>
-            <p class="absolute right-4 text-right">1</p>
-          </div>  
+          <img
+          src="yellow_triangle.svg"
+          class="ml-3 mt-5 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+          <img
+          src="scorebar_yellow.svg"
+          class="ml-3 mt-0 h-fit text-center"
+          alt="Tutorial Logo"
+          />  
         </div>
         <div>
           <div class="flex mt-12">
             <p class="ml-3 text-xl text-blue-500 font-semibold mt-5">ABL1-Like Class</p>
             <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: 0.0236</p>
           </div>
-          <div class="relative">
-            <img
-            src="blue_triangle.svg"
-            class="absolute ml-3 mt-4 h-fit text-center"
-            alt="Tutorial Logo"
-            />
-          </div>
-          <div class="mt-8 ml-3 relative h-11 pt-2 pb-4 flex rounded-lg bg-amber-0 mt-0 font-bold text-medium text-blue-500 bg-inherit border-2 border-blue-500">
-            <p class="absolute left-2 text-left ml-3">-1</p>
-            <p class="absolute left-1/2">0</p>
-            <p class="absolute right-4 text-right">1</p>
-          </div>
+          <img
+          src="blue_triangle.svg"
+          class="ml-3 mt-5 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+          <img
+          src="scorebar_blue.svg"
+          class="ml-3 mt-0 h-fit text-center"
+          alt="Tutorial Logo"
+          />
         </div>
         </div>
         </div>
-    
-  
     <div class="mt-12 -mb-10 ml-0 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">
       <Button target="self"
       href="https://pnucolab.com/"
@@ -306,3 +295,4 @@
     </div>
   </div>
 </form>
+

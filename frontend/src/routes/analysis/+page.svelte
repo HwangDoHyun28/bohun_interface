@@ -29,7 +29,7 @@
         <p class="text-4xl text-violet-800 font-semibold my-5">Ph(+) B-ALL & Ph-like B-ALL Probability Calculator</p>
       </div>
       <div class="mt-12 flex">
-        <div class="w-1/2 px-16 py-8 mb-96 rounded-lg border-2 border-violet-300">
+        <div class="w-1/2 px-16 py-8 mb-0 rounded-lg border-2 border-violet-300">
           <p class="text-4xl text-violet-800 font-semibold mt-5">Data</p>
           <p class="mt-3 text-neutral-500 text-lg font-normal">
             Upload your RPKM matrix file ( csv, tsv, or ... )
@@ -177,11 +177,11 @@
             <div class="relative my-10 place-content-center">
               <Button
               href="/result"
-              class="ml-32 object-center my-10 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
+              class="ml-32 object-center mt-12 mb-5 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
               >Predict Probability</Button>
             </div>
         </div>
-        <div class="w-1/2 px-16 ml-10 mb-96 pl-16 pt-8 rounded-lg border-2 border-violet-300">
+        <div class="w-1/2 px-16 ml-10 mb-0 pl-16 pt-8 rounded-lg border-2 border-violet-300">
           <p class="text-4xl text-violet-800 font-semibold my-5">Results</p>
           <p class="text-neutral-500 text-lg font-normal">
             Quality Check & Probability of Each Class
@@ -212,7 +212,7 @@
           <div>
             <p class="ml-3 text-xl text-violet-800 font-semibold mt-3">Total class</p>
             <div class="mt-0 flex">
-              <img
+            <img
             src="red_triangle.svg"
             class="ml-3 mt-5 h-fit text-center"
             alt="Tutorial Logo"
@@ -228,11 +228,11 @@
             alt="Tutorial Logo"
             />
             </div>
-            <img
-          src="scorebar_purple.svg"
-          class="ml-3 mt-0 h-fit text-center"
-          alt="Tutorial Logo"
-          />
+            <div class="ml-3 relative h-11 pt-2 pb-4 flex rounded-lg bg-amber-0 mt-0 font-bold text-medium text-violet-500 bg-inherit border-2 border-violet-500">
+              <p class="absolute left-2 text-left ml-3">-1</p>
+              <p class="absolute left-1/2">0</p>
+              <p class="absolute right-4 text-right">1</p>
+            </div>
           </div>
           <div>
             <div class="flex mt-12">
@@ -244,11 +244,11 @@
             class="ml-3 mt-5 h-fit text-center"
             alt="Tutorial Logo"
             />
-            <img
-            src="scorebar_red.svg"
-            class="ml-3 h-fit text-center"
-            alt="Tutorial Logo"
-            />  
+            <div class="ml-3 relative h-11 pt-2 pb-4 flex rounded-lg bg-amber-0 mt-0 font-bold text-medium text-red-500 bg-inherit border-2 border-red-500">
+              <p class="absolute left-2 text-left ml-3">-1</p>
+              <p class="absolute left-1/2">0</p>
+              <p class="absolute right-4 text-right">1</p>
+            </div>  
           </div>
           <div>
             <div class="flex mt-12">
@@ -260,11 +260,11 @@
             class="ml-3 mt-5 h-fit text-center"
             alt="Tutorial Logo"
             />
-            <img
-            src="scorebar_yellow.svg"
-            class="ml-3 mt-0 h-fit text-center"
-            alt="Tutorial Logo"
-            />  
+            <div class="ml-3 relative h-11 pt-2 pb-4 flex rounded-lg bg-amber-0 mt-0 font-bold text-medium text-yellow-300 bg-inherit border-2 border-yellow-300">
+              <p class="absolute left-2 text-left ml-3">-1</p>
+              <p class="absolute left-1/2">0</p>
+              <p class="absolute right-4 text-right">1</p>
+            </div>  
           </div>
           <div>
             <div class="flex mt-12">
@@ -276,11 +276,11 @@
             class="ml-3 mt-5 h-fit text-center"
             alt="Tutorial Logo"
             />
-            <img
-            src="scorebar_blue.svg"
-            class="ml-3 mt-0 h-fit text-center"
-            alt="Tutorial Logo"
-            />
+            <div class="ml-3 relative h-11 pt-2 pb-4 flex rounded-lg bg-amber-0 mt-0 font-bold text-medium text-blue-500 bg-inherit border-2 border-blue-500">
+              <p class="absolute left-2 text-left ml-3">-1</p>
+              <p class="absolute left-1/2">0</p>
+              <p class="absolute right-4 text-right">1</p>
+            </div>
           </div>
           </div>
           </div>
