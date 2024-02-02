@@ -204,7 +204,7 @@
         class="mt-12 h-fit text-center"
         alt="Tutorial Logo"
         />
-        <div class="flex mt-8">
+        <div class="flex mt-6">
           <p class="ml-0 text-2xl text-violet-800 font-semibold my-5">Probability Score</p>
           <p class="mt-7 ml-1 text-base text-violet-600 font-semibold my-5">(Range: -1 ~ 1)</p>
         </div>
