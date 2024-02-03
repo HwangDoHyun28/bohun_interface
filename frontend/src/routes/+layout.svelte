@@ -7,7 +7,7 @@
       NavUl,
       NavHamburger,
     } from "flowbite-svelte";
-    import { page, ImagePlaceholder, Skeleton, TextPlaceholder } from "$app/stores";
+    import { page } from "$app/stores";
     $: activeUrl = $page.url.pathname;
     let activeClass = '-mt-2 text-white bg-violet-700 md:bg-transparent md:text-violet-700 md:dark:text-white dark:bg-violet-600 md:dark:bg-transparent';
     let nonActiveClass = "-mt-2 text-violet-400 md:hover:text-violet-700 font-semibold text-base active:text-violet-700"
@@ -15,7 +15,7 @@
   </script>
   
   <header class="relative">
-    <Navbar class="fixed py-2 border-b border-violet-200" let:hidden let:toggle>
+    <Navbar class="fixed py-3 border-b border-violet-200" let:hidden let:toggle>
       <NavBrand href="/">
         <img
           src="logo.svg"
@@ -51,7 +51,7 @@
   <main class="bg-gray-100 py-5">
     <slot />
   </main>
-  <footer class="mt-10">
+  <footer>
     <hr />
     <div class="text-center py-5">
       <span class="text-sm text-gray-500">

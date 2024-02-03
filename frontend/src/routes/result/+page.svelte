@@ -1,111 +1,152 @@
-<!-- svelte-ignore non-top-level-reactive-declaration -->
-<!-- App.svelte -->
-
 <script>
+  import { P, A, Input, Label, Helper } from "flowbite-svelte";
+  import { Fileupload, Button, Checkbox } from "flowbite-svelte";
+  import { Select } from "flowbite-svelte";
   import { onMount } from 'svelte';
-  import * as d3 from 'd3';
-  import { Label, Fileupload, Button } from "flowbite-svelte";
-  import { Select } from "flowbite-svelte"; 
 
-  let chartContainer;
-
-  // 파일 업로드 관련 변수
-  let fileInput;
-  let fileContent = '';
-  
-  // 결과 표시 변수
-  let result = null;
+  let selected1;
+  let selected2;
+  let Single_Patient = [
+    { value: "Single", name: "Single_Patient" },
+    { value: "Multi", name: "Multi_Patients" },
+  ];
+  let Based = [
+    { value: "RPKM", name: "RPKM based" },
+    { value: "RANK", name: "Rank based" },
+  ];
 
   let value;
-
-  onMount(() => {
-    // 파일 내용이 변경되면 실행되는 함수
-    $: {
-      if (fileContent) {
-        // 파일 내용이 변경되면 실행되는 로직
-        const data = d3.csvParse(fileContent, d => ({ id: +d.gene_id, expression: +d.gene_expression }));
-        const processedData = processData(data);
-        visualizeData(processedData);
-      }
-    }
-  });
-
-  // 파일 업로드 이벤트 핸들러
-  function handleFileUpload() {
-    const file = fileInput.files[0];
-    if (file && file.name.endsWith('.txt')) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        fileContent = reader.result;
-      };
-      reader.readAsText(file);
-    } else {
-      alert('올바른 파일 형식을 선택하세요. (.txt)');
-    }
-  }
-
-  // 데이터 처리 함수
-  function processData(data) {
-    // 각 유전자에 대해 -1, 0, 1 점 부여
-    data.forEach(d => {
-      d.score = d.expression < -0.5 ? -1 : (d.expression > 0.5 ? 1 : 0);
-    });
-
-    // 평균 계산
-    const averageScore = d3.mean(data, d => d.score);
-    return { data, averageScore };
-  }
-
-  // 시각화 함수
-  function visualizeData({ data, averageScore }) {
-    // D3.js를 사용하여 바 차트 생성
-    const chart = d3.select(chartContainer)
-      .append('svg')
-      .attr('width', 200)
-      .attr('height', 100);
-
-    // 바 그리기
-    chart.selectAll('rect')
-      .data(data)
-      .enter()
-      .append('rect')
-      .attr('x', (d, i) => i * 50)
-      .attr('y', d => (1 - d.score) * 50)
-      .attr('width', 40)
-      .attr('height', d => Math.abs(d.score) * 50)
-      .attr('fill', d => (d.score === 1) ? 'green' : ((d.score === -1) ? 'red' : 'gray'));
-
-    // 평균 점수 표시
-    chart.append('line')
-      .attr('x1', 0)
-      .attr('y1', (1 - averageScore) * 50)
-      .attr('x2', 200)
-      .attr('y2', (1 - averageScore) * 50)
-      .attr('stroke', 'blue')
-      .attr('stroke-width', 2);
-  }
-
-  // 결과 예측 버튼 클릭 이벤트 핸들러
-  function predictProbability() {
-    // 여기에 결과를 예측하는 로직 추가
-    // 결과를 result 변수에 할당하고 화면에 표시
-    result = calculateProbability(); // 이 함수는 실제 결과를 계산하는 로직으로 대체되어야 합니다.
-  }
-
-  // 예측 로직 (임시 함수, 실제로는 모델을 사용하거나 다른 예측 로직으로 대체)
-  function calculateProbability() {
-    // 여기에 실제 예측 로직 추가
-    return Math.random(); // 임시로 랜덤값을 반환하는 예제
-  }
+  let selected3 = true;
+  let selected4 = true;
+  let selected5 = true;
+  let selected6 = true;
+  let selected7 = true;
 </script>
 
-<input type="file" accept=".txt" bind:this={fileInput} on:change={handleFileUpload} />
-<button on:click={predictProbability}>Predict Probability</button>
-<div bind:this={chartContainer}></div>
 
-{#if result !== null}
-  <p>예측 확률: {result.toFixed(2)}</p>
-{/if}
-
+<form type="submit">
+  <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
+    <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
+    <div class="relative w-full px-10 mt-8 mb-5 pt-3 pb-10">
+      <p class="text-3xl text-violet-700 font-medium">Results</p>
+      <p class="text-violet-400 text-base font-normal mt-2">
+        Probability of Each Class
+      </p>   
+      <div class="mt-8">
+        <p class="ml-3 text-lg text-neutral-600 font-normal">Total class</p>
+        <div>
+          <div class="mt-5 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-neutral-500 bg-inherit border-2 border-violet-300">
+            <p class="absolute left-2 text-left ml-3">-1</p>
+            <p class="absolute left-1/2">0</p>
+            <p class="absolute right-4 text-right">1</p>
+          </div>
+          <div class="relative mt-1 flex">
+            <p class="ml-5 text-sm text-neutral-500">BALLNOS</p>
+            <p class="absolute right-0 ml-5 text-sm text-neutral-500">Other Classes</p>
+          </div>
+          <div class="-mt-24 relative flex">
+            <img
+            src="Star_violet_800.svg"
+            class="w-7 h-7 absolute right-1/2 ml-3 mt-4 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <img
+            src="Star_violet_500.svg"
+            class="w-7 h-7 absolute left-0 ml-3 mt-4 left-10 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <img
+            src="Star_violet_300.svg"
+            class="w-7 h-7 ml-3 mt-4 absolute left-1/2 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+          </div>
+          
+        </div>
+      </div>
+      <div>
+        <div class="flex mt-20">
+          <p class="ml-3 text-lg text-violet-800 font-normal mt-5">ABL1 Class</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.0078</p>
+        </div>
+        <div class="mt-5 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
+          <p class="absolute left-2 text-left ml-3">-1</p>
+          <p class="absolute left-1/2">0</p>
+          <p class="absolute right-4 text-right">1</p>
+        </div> 
+        <div class="relative mt-1 flex">
+          <p class="ml-5 text-sm text-neutral-500">BALLNOS</p>
+          <p class="absolute right-0 ml-5 text-sm text-neutral-500">ABL1</p>
+        </div>
+        <div class="bg-inherit w-full relative">
+          <img
+          src="Star_violet_800.svg"
+          class="absolute right-1/2 w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+        </div>
+      </div>
+      <div>
+        <div class="flex mt-10">
+          <p class="ml-3 text-lg text-violet-500 font-normal mt-5">CRLF2 Class</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.8765</p>
+        </div>
+        <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
+          <p class="absolute left-2 text-left ml-3">-1</p>
+          <p class="absolute left-1/2">0</p>
+          <p class="absolute right-4 text-right">1</p>
+        </div>  
+        <div class="relative mt-1 flex">
+          <p class="ml-5 text-sm text-neutral-500">BALLNOS</p>
+          <p class="absolute right-0 ml-5 text-sm text-neutral-500">CRLF2</p>
+        </div>
+        <div class="bg-inherit w-full relative">
+          <img
+          src="Star_violet_500.svg"
+          class="absolute left-0 w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+        </div>
+      </div>
+      <div>
+        <div class="flex mt-10">
+          <p class="ml-3 text-lg text-violet-300 font-normal mt-5">ABL1-Like Class</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: 0.0236</p>
+        </div>
+        <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
+          <p class="absolute left-2 text-left ml-3">-1</p>
+          <p class="absolute left-1/2">0</p>
+          <p class="absolute right-4 text-right">1</p>
+        </div>
+        <div class="relative mt-1 flex">
+          <p class="absolute left-0 ml-5 text-sm text-neutral-500">BALLNOS</p>
+          <p class="absolute right-0 ml-5 text-sm text-neutral-500">ABL1-Like</p>
+      </div>
+      <div class="bg-inherit w-full relative">
+        <img
+        src="Star_violet_300.svg"
+        class="absolute left-1/2 w-7 h-7 ml-3 -mt-16 h-fit text-center"
+        alt="Tutorial Logo"
+        />
+      </div>
+      <div class="mt-16 text-center">
+        <Button
+        href="/analysis"
+        class="mb-5 px-7 text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
+        >Return</Button>
+      </div>
+      <div class="-mb-16 w-full bg-inherit absolute bottom-0 text-center">
+        <P class="text-violet-700 p-1 flex justify-center text-base" whitespace='nowrap'>This website is maintained by 
+          <A
+            class="text-violet-400 pl-1 underline"
+            href="https://pnucolab.com/">Computational Omics Lab
+          </A>, Pusan National University College of Biomedical Convergence
+            Engineering, South Korea.
+          <A class="text-violet-400 pl-1 underline">Contact US</A>
+        </P>
+      </div>
+    </div>
+  </div>
+</form>
 
 

@@ -5,7 +5,7 @@
   </script>
 
 <div class="-mt-5 py-5 bg-violet-400 -mb-5">
-    <div class="px-20 py-0 rounded-lg mx-5 border y-100 pb-1 bg-white">
+    <div class="mt-16 px-20 py-0 rounded-lg mx-5 border y-100 pb-1 bg-white">
       <p class="mt-14 text-4xl text-violet-800 font-semibold my-5">About</p>
       <p class="text-neutral-400 text-lg font-normal">
         We implement a 16S full-length rRNA analysis pipeline as a web interface to facilitate data processing and obtain analysis
@@ -17,14 +17,14 @@ such as PCoA plots, taxonomic composition bar charts, or diversity index compari
       <p class="mt-2 text-violet-400 text-xl font-normal">
         Enjoy the coolness of CAlculator!
       </p>
-      <div class="place-content-center">
+      <div class="">
        <img
         src="aboutfig.svg"
-        class="ml-48 mt-32 mb-12"
+        class="text-center mt-32 mb-12"
         alt="CAlculator Logo"
       />
       </div>
-      <div class="h-max rounded-lg place-content-center">
+      <div class="h-max rounded-lg text-center">
         <Button target="self"
         href="https://pnucolab.com/"
         class="p-5 -mb-16 mt-10 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center focus:ring-white">
