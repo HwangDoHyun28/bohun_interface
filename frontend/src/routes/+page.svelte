@@ -4,7 +4,7 @@
     import { Select } from "flowbite-svelte";
   </script>
 
-<div class="place-content-center rounded-lg border y-100 mx-5 bg-white">
+<div class="place-content-center rounded-lg border y-100 mx-5 mt-12 bg-white">
     <div class="content-center place-content-center px-10 py-10 rounded-lg border y-100 pb-10 bg-violet-400">
       <div class="text-center content-center place-content-center">
         <p class="mt-28 place-content-center text-2xl text-white font-sans font-semibold my-3">Gene Expression based Predicting Tool</p>
