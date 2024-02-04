@@ -15,20 +15,22 @@
           geneExpressions[geneName] = expression;
         }
       });
-  
-      // 각 gene expression 값에 대한 조건을 적용하고 결과를 출력
+       // 특정 유전자의 gene expression 값을 출력
+      console.log('CASP10 Expression:', geneExpressions['CASP10']);
+      console.log('CMTM7 Expression:', geneExpressions['CMTM7']);
+      console.log('CRLF2 Expression:', geneExpressions['CRLF2']);
+    
+      // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
       const casp10Result = applyExpressionCondition('CASP10', geneExpressions['CASP10'], 657, 1398, 1398, 3123, 3121, 5016);
       const cmtm7Result = applyExpressionCondition('CMTM7', geneExpressions['CMTM7'], 832, 1325, 1325, 4060, 4060, 5452);
-      const crlfResult = applyExpressionCondition('CRLF', geneExpressions['CRLF'], 48, 419, 419, 7410, 7410, 13061);
+      const crlf2Result = applyExpressionCondition('CRLF2', geneExpressions['CRLF2'], 48, 419, 419, 7410, 7410, 13061);
   
-      // 결과 출력
-      console.log('CASP10 Result:', casp10Result);
-      console.log('CMTM7 Result:', cmtm7Result);
-      console.log('CRLF Result:', crlfResult);
-  
-      // 세 결과의 평균을 구하고 출력
-      const averageResult = (casp10Result + cmtm7Result + crlfResult) / 3;
-      console.log('Average Result:', averageResult);
+      // 결과 반환
+      return {
+        casp10Result,
+        cmtm7Result,
+        crlf2Result
+      };
     }
   
     // gene expression 값에 대한 조건을 적용하여 결과를 반환하는 함수
@@ -50,17 +52,26 @@
       const file = fileInput.files[0];
   
       if (file) {
-        readFile(file);
+        processFile(file);
       }
     }
   
-    // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하는 함수 호출
-    function readFile(file) {
+    // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하고 결과를 출력하는 함수
+    function processFile(file) {
       const reader = new FileReader();
   
       reader.onload = function(event) {
         const content = event.target.result;
-        extractGeneExpressions(content);
+        const results = extractGeneExpressions(content);
+  
+        // 각 유전자의 결과 출력
+        console.log('CASP10 Result:', results.casp10Result);
+        console.log('CMTM7 Result:', results.cmtm7Result);
+        console.log('CRLF2 Result:', results.crlf2Result);
+  
+        // 세 결과의 평균을 구하고 출력
+        const averageResult = (results.casp10Result + results.cmtm7Result + results.crlf2Result) / 3;
+        console.log('Average Result:', averageResult);
       };
   
       reader.readAsText(file);
