@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
   
-    let totalExpression = 0;
+    let geneExpressions = {};
   
-    // 파일을 읽어서 gene expression 값을 합산하는 함수
-    function sumGeneExpressions(content) {
+    // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하는 함수
+    function extractGeneExpressions(content) {
       const lines = content.split('\n');
   
       lines.forEach(line => {
@@ -12,11 +12,36 @@
         const expression = parseFloat(expressionStr);
   
         if (!isNaN(expression)) {
-          totalExpression += expression;
+          geneExpressions[geneName] = expression;
         }
       });
   
-      console.log('Total Gene Expression:', totalExpression);
+      // 각 gene expression 값에 대한 조건을 적용하고 결과를 출력
+      const casp10Result = applyExpressionCondition('CASP10', geneExpressions['CASP10'], 657, 1398, 1398, 3123, 3121, 5016);
+      const cmtm7Result = applyExpressionCondition('CMTM7', geneExpressions['CMTM7'], 832, 1325, 1325, 4060, 4060, 5452);
+      const crlfResult = applyExpressionCondition('CRLF', geneExpressions['CRLF'], 48, 419, 419, 7410, 7410, 13061);
+  
+      // 결과 출력
+      console.log('CASP10 Result:', casp10Result);
+      console.log('CMTM7 Result:', cmtm7Result);
+      console.log('CRLF Result:', crlfResult);
+  
+      // 세 결과의 평균을 구하고 출력
+      const averageResult = (casp10Result + cmtm7Result + crlfResult) / 3;
+      console.log('Average Result:', averageResult);
+    }
+  
+    // gene expression 값에 대한 조건을 적용하여 결과를 반환하는 함수
+    function applyExpressionCondition(geneName, value, lower1, upper1, lower2, upper2, lower3, upper3) {
+      if (value >= lower1 && value <= upper1) {
+        return 1;
+      } else if (value > upper1 && value < lower2) {
+        return 0;
+      } else if (value >= lower2 && value <= upper2) {
+        return -1;
+      } else {
+        return 0;
+      }
     }
   
     // 파일 선택 시 호출되는 함수
@@ -29,13 +54,13 @@
       }
     }
   
-    // 파일을 읽어서 gene expression 값을 합산하는 함수 호출
+    // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하는 함수 호출
     function readFile(file) {
       const reader = new FileReader();
   
       reader.onload = function(event) {
         const content = event.target.result;
-        sumGeneExpressions(content);
+        extractGeneExpressions(content);
       };
   
       reader.readAsText(file);
