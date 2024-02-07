@@ -1,5 +1,10 @@
 <script>
     import { onMount } from 'svelte';
+    import { P, A, Input, Label, Helper } from "flowbite-svelte";
+    import { Fileupload, Button, Checkbox } from "flowbite-svelte";
+    import { Select } from "flowbite-svelte";
+  
+
   
     let geneExpressions = {};
   
@@ -82,6 +87,8 @@
       const fileInput = document.getElementById('fileInput');
       fileInput.addEventListener('change', handleFileSelect);
     });
+
+    export let value;
   </script>
   
   <style>
@@ -90,5 +97,27 @@
   
   <div>
     <input class="mt-16" type="file" id="fileInput" />
+
+    <label>
+      Label Text
+      <input type="text" />
+    </label>
   </div>
   
+  <p class="text-3xl text-violet-700 font-medium">Data</p>
+        <p class="mt-2 text-violet-400 text-base font-normal">
+          Upload your RPKM matrix file ( csv, tsv, or ... )
+        </p>   
+        <Label class="w-32 space-y-2 mb-2">
+          <Fileupload class = "w-32 opacity-0" bind:value id="fileInput"/>
+        </Label>           
+        <div class="-mt-12 flex">
+          <div>
+            <Button class="y-5 mt-3 py-2 bg-violet-400 hover:bg-violet-400 text-base font-semibold"
+              >Select File</Button
+            >
+          </div>
+          <div class="text-center mt-4">
+            <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
+          </div>
+        </div>
