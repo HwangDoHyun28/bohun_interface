@@ -1,26 +1,6 @@
 <script>
-  import { P, A, Input, Label, Helper } from "flowbite-svelte";
-  import { Fileupload, Button, Checkbox } from "flowbite-svelte";
-  import { Select } from "flowbite-svelte";
-  import { onMount } from 'svelte';
-
-  let selected1;
-  let selected2;
-  let Single_Patient = [
-    { value: "Single", name: "Single_Patient" },
-    { value: "Multi", name: "Multi_Patients" },
-  ];
-  let Based = [
-    { value: "RPKM", name: "RPKM based" },
-    { value: "RANK", name: "Rank based" },
-  ];
-
-  let value;
-  let selected3 = true;
-  let selected4 = true;
-  let selected5 = true;
-  let selected6 = true;
-  let selected7 = true;
+  import { P, A } from "flowbite-svelte";
+  import { Button } from "flowbite-svelte";
 </script>
 
 
