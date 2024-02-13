@@ -16,6 +16,11 @@
     const crlf2Result = page.query.crlf2Result || null;
     const averageResult = page.query.averageResult || null;
 
+    console.log('CASP10 Result:', casp10Result);
+    console.log('CMTM7 Result:', cmtm7Result);
+    console.log('CRLF2 Result:', crlf2Result);
+    console.log('Average Result:', averageResult);
+
     // 페이지가 로드될 때 결과 데이터를 가져옴
     return {
       props: {
@@ -32,6 +37,11 @@
   export let crlf2Result;
   export let averageResult;
 
+  console.log('CASP10 Result:', casp10Result);
+  console.log('CMTM7 Result:', cmtm7Result);
+  console.log('CRLF2 Result:', crlf2Result);
+  console.log('Average Result:', averageResult);
+  
   </script>
   
   <div class="mt-12">
