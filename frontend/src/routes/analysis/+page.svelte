@@ -1,57 +1,38 @@
 <script>
-  import { P, A, Input, Label, Helper } from "flowbite-svelte";
-  import { Fileupload, Button, Checkbox } from "flowbite-svelte";
-  import { Select } from "flowbite-svelte";
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  
-  let selected2;
+  import { load } from '../../lib/fetch';
+  import { Select } from "flowbite-svelte";
+  import { P, A, Input, Label, Helper } from "flowbite-svelte";
+  import { Fileupload, Button, Checkbox } from "flowbite-svelte";
+
+  let value;
+
+  let selectedmethod;
   let Based = [
     { value: "RPKM", name: "RPKM based" },
     { value: "RANK", name: "Rank based" },
   ];
 
-  let value;
-  let selected5 = true;
-  let selected6 = true;
-  let selected7 = true;
+  let ticket;
+
+  let ABL1selected = true;
+  let CRLF2selected = true;
+  let ABL1_LikeSelected = true;
 
   let geneExpressions = {};
+
+  let ABL1geneScores = {};
+  let CRLF2geneScores = {};
+  let ABL1_LikegeneScores = {};
+
   let casp10Result = 0;
   let cmtm7Result = 0;
   let crlf2Result = 0;
-  let averageResult = 0;
 
-  // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하는 함수
-  function extractGeneExpressions(content) {
-    const lines = content.split('\n');
-
-    lines.forEach(line => {
-      const [geneName, expressionStr] = line.split('\t');
-      const expression = parseFloat(expressionStr);
-
-      if (!isNaN(expression)) {
-        geneExpressions[geneName] = expression;
-      }
-    });
-
-    // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-    const casp10Result = applyExpressionCondition('CASP10', geneExpressions['CASP10'], 657, 1398, 1398, 3123, 3121, 5016);
-    const cmtm7Result = applyExpressionCondition('CMTM7', geneExpressions['CMTM7'], 832, 1325, 1325, 4060, 4060, 5452);
-    const crlf2Result = applyExpressionCondition('CRLF2', geneExpressions['CRLF2'], 48, 419, 419, 7410, 7410, 13061);
-    
-    // 각 유전자의 결과 출력
-    console.log('CASP10 Gene Expression:', geneExpressions['CASP10']);
-    console.log('CMTM7 Gene Expression:', geneExpressions['CMTM7']);
-    console.log('CRLF2 Gene Expression:', geneExpressions['CRLF2']);
-
-    // 결과 반환
-    return {
-      casp10Result,
-      cmtm7Result,
-      crlf2Result
-    };
-  }
+  let ABL1averageResult = 0;
+  let CRLF2averageResult = 0;
+  let ABL1_LikeaverageResult = 0;
 
   // gene expression 값에 대한 조건을 적용하여 결과를 반환하는 함수
   function applyExpressionCondition(geneName, value, lower1, upper1, lower2, upper2, lower3, upper3) {
@@ -66,8 +47,28 @@
     }
   }
 
-   // 파일 선택 시 호출되는 함수
-   function handleFileSelect(event) {
+  // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하고 결과를 출력하는 함수
+  function processFile(file) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      const content = event.target.result;
+      const lines = content.split('\n');
+
+      lines.forEach(line => {
+        const [geneName, expressionStr] = line.split('\t');
+        const expression = parseFloat(expressionStr);
+
+        if (!isNaN(expression)) {
+          geneExpressions[geneName] = expression;
+        }
+      });
+    };
+    reader.readAsText(file);
+  }
+
+  // 파일 선택 시 호출되는 함수
+  function handleFileSelect(event) {
     const fileInput = event.target;
     const file = fileInput.files[0];
 
@@ -76,56 +77,93 @@
     }
   }
 
-  // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하고 결과를 출력하는 함수
-  function processFile(file) {
-    const reader = new FileReader();
+  // 버튼 클릭 시 결과 페이지로 이동하는 함수
+  async function handlePredictProbability() {
+    if (selectedmethod == "RPKM") {
+      if (ABL1selected == true) {
 
-    reader.onload = function(event) {
-      const content = event.target.result;
-      const results = extractGeneExpressions(content);
+      }
 
-      casp10Result = results.casp10Result;
-      cmtm7Result = results.cmtm7Result;
-      crlf2Result = results.crlf2Result;
+      if (CRLF2selected == true) {
+        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+        CRLF2geneScores['CASP10'] = applyExpressionCondition('CASP10', geneExpressions['CASP10'], 657, 1398, 1398, 3123, 3121, 5016);
+        CRLF2geneScores['CMTM7'] = applyExpressionCondition('CMTM7', geneExpressions['CMTM7'], 832, 1325, 1325, 4060, 4060, 5452);
+        CRLF2geneScores['CRLF2'] = applyExpressionCondition('CRLF2', geneExpressions['CRLF2'], 48, 419, 419, 7410, 7410, 13061);
 
-      // 각 유전자의 결과 출력
-      console.log('CASP10 Result:', results.casp10Result);
-      console.log('CMTM7 Result:', results.cmtm7Result);
-      console.log('CRLF2 Result:', results.crlf2Result);
+        console.log('CASP10 Result:', CRLF2geneScores['CASP10']);
+        console.log('CMTM7 Result:', CRLF2geneScores['CMTM7']);
+        console.log('CRLF2 Result:', CRLF2geneScores['CRLF2']);
+      }
+
+      if (ABL1_LikeSelected == true) {
+
+      }
 
       // 세 결과의 평균을 구하고 출력
-      averageResult = (results.casp10Result + results.cmtm7Result + results.crlf2Result) / 3;
-      console.log('Average Result:', averageResult);
-    };
+      ABL1averageResult = 0;
+      CRLF2averageResult = (CRLF2geneScores['CASP10'] + CRLF2geneScores['CMTM7'] + CRLF2geneScores['CRLF2']) / 3;
+      ABL1_LikeaverageResult = 0;
 
-    reader.readAsText(file);
-  }
+      console.log('ABL1 Average Result:', ABL1averageResult);
+      console.log('CRLF2 Average Result:', CRLF2averageResult);
+      console.log('ABL1_Like Average Result:', ABL1_LikeaverageResult);     
+    }
 
-  // 버튼 클릭 시 결과 페이지로 이동하는 함수
-  function handlePredictProbability() {
-    console.log('CASP10:', casp10Result);
-    console.log('CMTM7:', cmtm7Result);
-    console.log('CRLF2:', crlf2Result);
-    console.log('Average:', averageResult);
+    else if (selectedmethod == "RANK") {
+      if (ABL1selected == true) {
 
-    goto('/result', {
-      state: {
-        casp10Result,
-        cmtm7Result,
-        crlf2Result,
-        averageResult
       }
+
+      if (CRLF2selected == true) {
+        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+        casp10Result = results.CRLF2geneScores['CASP10'];
+        cmtm7Result = results.CRLF2geneScores['CMTM7'];
+        crlf2Result = results.CRLF2geneScores['CRLF2'];
+        
+        // 각 유전자의 결과 출력
+        console.log('CASP10 Result:', casp10Result);
+        console.log('CMTM7 Result:', cmtm7Result);
+        console.log('CRLF2 Result:', crlf2Result);
+      }
+
+      if (ABL1_LikeSelected == true) {
+
+      }
+
+      // 세 결과의 평균을 구하고 출력
+      ABL1averageResult = 0;
+      CRLF2averageResult = (casp10Result + cmtm7Result + crlf2Result) / 3;
+      ABL1_LikeaverageResult = 0;
+
+      console.log('CASP10:', casp10Result);
+      console.log('CMTM7:', cmtm7Result);
+      console.log('CRLF2:', crlf2Result);
+      console.log('ABL1 Average:', ABL1averageResult);
+      console.log('CRLF2 Average:', CRLF2averageResult);
+      console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+    }  
+
+    const queryParams = new URLSearchParams({
+      ABL1averageResult: ABL1averageResult,
+      CRLF2averageResult: CRLF2averageResult,
+      ABL1_LikeaverageResult: ABL1_LikeaverageResult,
+      ABL1selected: ABL1selected,
+      CRLF2selected: CRLF2selected,
+      ABL1_LikeSelected: ABL1_LikeSelected
+      // 다른 쿼리 매개변수들도 추가할 수 있습니다.
     });
-    
+
+    // URL에 데이터를 추가하여 다음 페이지로 이동
+    goto(`/result?${queryParams.toString()}`);
   }
 
   // 파일 선택 이벤트에 핸들러 등록
   onMount(() => {
     const fileInput = document.getElementById('fileInput');
+    
     fileInput.addEventListener('change', handleFileSelect);
   });
-
-</script>    
+</script>
 
 <form type="submit">
   <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
@@ -159,7 +197,7 @@
               id="Patient"
               size="sm" 
               class="mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
-              bind:value={selected2}
+              bind:value={selectedmethod}
             >
               {#each Based as { value, name }}
                 <option {value}>{name}</option>
@@ -173,39 +211,39 @@
             <div class="flex">
               <div class="mt-4 flex">
                 <Checkbox
-                  id="boxplot-check"
-                  bind:checked={selected5}
+                  id="boxplot-check1"
+                  bind:checked={ABL1selected}
                   on:click={() => {
-                    selected5 = !selected5;
+                    ABL1selected = !ABL1selected;
                   }}
                   class="h-6 w-6 bg-inherit checked:bg-violet-800 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check">
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check1">
                   ABL1 Class
                 </label>
               </div>
               <div class="ml-36 mt-4 flex">
                 <Checkbox
-                  id="boxplot-check"
-                  bind:checked={selected6}
+                  id="boxplot-check2"
+                  bind:checked={CRLF2selected}
                   on:click={() => {
-                    selected6 = !selected6;
+                    CRLF2selected = !CRLF2selected;
                   }}
                   class="w-6 h-6 bg-inherit checked:bg-violet-500 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check">
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check2">
                   CRLF2 Class
                 </label>
               </div>
               <div class="ml-36 mt-4 flex">
                 <Checkbox
-                id="boxplot-check"
-                bind:checked={selected7}
+                id="boxplot-check3"
+                bind:checked={ABL1_LikeSelected}
                 on:click={() => {
-                  selected7 = !selected7;
+                  ABL1_LikeSelected = !ABL1_LikeSelected;
                 }}
                 class="w-6 h-6 bg-inherit checked:bg-violet-300 focus:ring-white"/>
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check">
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check3">
                   ABL1-Like Class
                 </label>
               </div>

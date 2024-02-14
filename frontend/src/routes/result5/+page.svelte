@@ -1,12 +1,19 @@
 <script>
-  import { P, A } from "flowbite-svelte";
+  import { page } from '$app/stores';
   import { Button } from "flowbite-svelte";
-  import { onMount } from 'svelte';
-  import { load } from '../../lib/fetch';
+  import { P, A } from "flowbite-svelte";
 
-  import { page } from '$app/stores'; // SvelteKit stores에서 page 가져오기
-
-  const { ABL1averageResult, CRLF2averageResult, ABL1_LikeaverageResult, ABL1selected, CRLF2selected, ABL1_LikeSelected } = page.query;
+  let url = $page.url.search;
+  let values = url.split('&');
+  let ABL1averageResult = parseFloat(values[0].split('=')[1]).toFixed(4);
+  let CRLF2averageResult = parseFloat(values[1].split('=')[1]).toFixed(4);
+  let ABL1_LikeaverageResult = parseFloat(values[2].split('=')[1]).toFixed(4);
+  let ABL1selected = values[3].split('=')[1];
+  let CRLF2selected = values[4].split('=')[1];
+  let ABL1_LikeSelected = values[5].split('=')[1];
+  console.log('ABL1 Average:', ABL1averageResult);
+  console.log('CRLF2 Average:', CRLF2averageResult);
+  console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
 </script>
 
 <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
@@ -53,11 +60,11 @@
         </div>  
       </div>
     </div>
-    {#if ABL1selected}
+    {#if ABL1selected == 'true'}
       <div>
         <div class="flex mt-20">
           <p class="ml-3 text-lg text-violet-800 font-normal mt-5">ABL1 Class</p>
-          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.0078</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: {ABL1averageResult}</p>
         </div>
         <div class="mt-5 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
@@ -77,11 +84,11 @@
         </div>
       </div>         
     {/if}
-    {#if CRLF2selected}
+    {#if CRLF2selected == 'true'}
       <div>
         <div class="flex mt-10">
           <p class="ml-3 text-lg text-violet-500 font-normal mt-5">CRLF2 Class</p>
-          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.8765</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: {CRLF2averageResult}</p>
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
@@ -102,11 +109,11 @@
       </div>              
     {/if}  
 
-    {#if ABL1_LikeSelected}     
+    {#if ABL1_LikeSelected == 'true'}     
       <div>
         <div class="flex mt-10">
           <p class="ml-3 text-lg text-violet-300 font-normal mt-5">ABL1-Like Class</p>
-          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: 0.0236</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: {ABL1_LikeaverageResult}</p>
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
@@ -128,7 +135,7 @@
     {/if} 
     <div class="mt-16 text-center">
       <Button
-      href="/analysis"
+      href="/result3"
       class="mb-5 px-7 text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
       >Return</Button>
     </div>
@@ -144,13 +151,3 @@
     </div>
   </div>
 </div>
-
-<div class="ml-5 mt-16">
-  <p>ABL1 Average Result: {ABL1averageResult}</p>
-  <p>CRLF2 Average Result: {CRLF2averageResult}</p>
-  <p>ABL1_Like Average Result: {ABL1_LikeaverageResult}</p>
-  <p>ABL1 Selected: {ABL1selected}</p>
-  <p>CRLF2 Selected: {CRLF2selected}</p>
-  <p>ABL1_Like Selected: {ABL1_LikeSelected}</p>
-</div>
-  

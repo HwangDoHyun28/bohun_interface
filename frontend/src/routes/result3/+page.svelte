@@ -1,8 +1,7 @@
 <script>
   import { onMount } from 'svelte';
-  import { navigate } from 'sveltekit/navigation';
-  import { load } from '../../lib/fetch';
   import { goto } from '$app/navigation';
+  import { load } from '../../lib/fetch';
   import { Select } from "flowbite-svelte";
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
@@ -144,8 +143,18 @@
       console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
     }  
 
+    const queryParams = new URLSearchParams({
+      ABL1averageResult: ABL1averageResult,
+      CRLF2averageResult: CRLF2averageResult,
+      ABL1_LikeaverageResult: ABL1_LikeaverageResult,
+      ABL1selected: ABL1selected,
+      CRLF2selected: CRLF2selected,
+      ABL1_LikeSelected: ABL1_LikeSelected
+      // 다른 쿼리 매개변수들도 추가할 수 있습니다.
+    });
+
     // URL에 데이터를 추가하여 다음 페이지로 이동
-    navigate(`/result5?ABL1averageResult=${ABL1averageResult}&CRLF2averageResult=${CRLF2averageResult}&ABL1_LikeaverageResult=${ABL1_LikeaverageResult}&ABL1selected=${ABL1selected}&CRLF2selected=${CRLF2selected}&ABL1_LikeSelected=${ABL1_LikeSelected}`);
+    goto(`/result5?${queryParams.toString()}`);
   }
 
   // 파일 선택 이벤트에 핸들러 등록

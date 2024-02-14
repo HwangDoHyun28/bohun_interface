@@ -54,8 +54,8 @@
   <footer>
     <hr />
     <div class="text-center py-5">
-      <span class="text-sm text-gray-500">
+      <p class="text-sm text-gray-500">
         © 2024 CAlculator. All rights reserved.
-      </span>
+      </p>
     </div>
   </footer>
