@@ -1,4 +1,6 @@
 <script context="module">
+  import { page } from '$app/stores'; 
+
   export async function load({ page }) {
     const ABL1averageResult = page.query.ABL1averageResult || null;
     const CRLF2averageResult = page.query.CRLF2averageResult || null;
@@ -24,6 +26,7 @@
 </script>
 
 <script>
+  import { page } from '$app/stores';
   import { P, A } from "flowbite-svelte";
   import { Button } from "flowbite-svelte";
 
@@ -41,6 +44,7 @@
 </script>
   
   
+
 
 <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
   <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
@@ -77,75 +81,82 @@
           class="w-7 h-7 ml-3 mt-4 absolute left-1/2 h-fit text-center"
           alt="Tutorial Logo"
           />
+        </div>  
+      </div>
+    </div>
+    {#if ABL1selected}
+      <div>
+        <div class="flex mt-20">
+          <p class="ml-3 text-lg text-violet-800 font-normal mt-5">ABL1 Class</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.0078</p>
         </div>
-        
-      </div>
-    </div>
-    <div>
-      <div class="flex mt-20">
-        <p class="ml-3 text-lg text-violet-800 font-normal mt-5">ABL1 Class</p>
-        <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.0078</p>
-      </div>
-      <div class="mt-5 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
-        <p class="absolute left-2 text-left ml-3">-1</p>
-        <p class="absolute left-1/2">0</p>
-        <p class="absolute right-4 text-right">1</p>
-      </div> 
-      <div class="relative mt-1 flex">
-        <p class="ml-5 text-sm text-neutral-500">BALLNOS</p>
-        <p class="absolute right-0 ml-5 text-sm text-neutral-500">ABL1</p>
+        <div class="mt-5 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
+          <p class="absolute left-2 text-left ml-3">-1</p>
+          <p class="absolute left-1/2">0</p>
+          <p class="absolute right-4 text-right">1</p>
+        </div> 
+        <div class="relative mt-1 flex">
+          <p class="ml-5 text-sm text-neutral-500">BALLNOS</p>
+          <p class="absolute right-0 ml-5 text-sm text-neutral-500">ABL1</p>
+        </div>
+        <div class="bg-inherit w-full relative">
+          <img
+          src="Star_violet_800.svg"
+          class="absolute right-1/2 w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+        </div>
+      </div>         
+    {/if}
+    {#if CRLF2selected}
+      <div>
+        <div class="flex mt-10">
+          <p class="ml-3 text-lg text-violet-500 font-normal mt-5">CRLF2 Class</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.8765</p>
+        </div>
+        <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
+          <p class="absolute left-2 text-left ml-3">-1</p>
+          <p class="absolute left-1/2">0</p>
+          <p class="absolute right-4 text-right">1</p>
+        </div>  
+        <div class="relative mt-1 flex">
+          <p class="ml-5 text-sm text-neutral-500">BALLNOS</p>
+          <p class="absolute right-0 ml-5 text-sm text-neutral-500">CRLF2</p>
+        </div>
+        <div class="bg-inherit w-full relative">
+          <img
+          src="Star_violet_500.svg"
+          class="absolute left-0 w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          alt="Tutorial Logo"
+          />
+        </div>
+      </div>              
+    {/if}  
+    
+    {#if ABL1_LikeSelected}
+      <div>
+        <div class="flex mt-10">
+          <p class="ml-3 text-lg text-violet-300 font-normal mt-5">ABL1-Like Class</p>
+          <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: 0.0236</p>
+        </div>
+        <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
+          <p class="absolute left-2 text-left ml-3">-1</p>
+          <p class="absolute left-1/2">0</p>
+          <p class="absolute right-4 text-right">1</p>
+        </div>
+        <div class="relative mt-1 flex">
+          <p class="absolute left-0 ml-5 text-sm text-neutral-500">BALLNOS</p>
+          <p class="absolute right-0 ml-5 text-sm text-neutral-500">ABL1-Like</p>
       </div>
       <div class="bg-inherit w-full relative">
         <img
-        src="Star_violet_800.svg"
-        class="absolute right-1/2 w-7 h-7 ml-3 -mt-20 h-fit text-center"
+        src="Star_violet_300.svg"
+        class="absolute left-1/2 w-7 h-7 ml-3 -mt-16 h-fit text-center"
         alt="Tutorial Logo"
         />
-      </div>
-    </div>
-    <div>
-      <div class="flex mt-10">
-        <p class="ml-3 text-lg text-violet-500 font-normal mt-5">CRLF2 Class</p>
-        <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.8765</p>
-      </div>
-      <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
-        <p class="absolute left-2 text-left ml-3">-1</p>
-        <p class="absolute left-1/2">0</p>
-        <p class="absolute right-4 text-right">1</p>
-      </div>  
-      <div class="relative mt-1 flex">
-        <p class="ml-5 text-sm text-neutral-500">BALLNOS</p>
-        <p class="absolute right-0 ml-5 text-sm text-neutral-500">CRLF2</p>
-      </div>
-      <div class="bg-inherit w-full relative">
-        <img
-        src="Star_violet_500.svg"
-        class="absolute left-0 w-7 h-7 ml-3 -mt-20 h-fit text-center"
-        alt="Tutorial Logo"
-        />
-      </div>
-    </div>
-    <div>
-      <div class="flex mt-10">
-        <p class="ml-3 text-lg text-violet-300 font-normal mt-5">ABL1-Like Class</p>
-        <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: 0.0236</p>
-      </div>
-      <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
-        <p class="absolute left-2 text-left ml-3">-1</p>
-        <p class="absolute left-1/2">0</p>
-        <p class="absolute right-4 text-right">1</p>
-      </div>
-      <div class="relative mt-1 flex">
-        <p class="absolute left-0 ml-5 text-sm text-neutral-500">BALLNOS</p>
-        <p class="absolute right-0 ml-5 text-sm text-neutral-500">ABL1-Like</p>
-    </div>
-    <div class="bg-inherit w-full relative">
-      <img
-      src="Star_violet_300.svg"
-      class="absolute left-1/2 w-7 h-7 ml-3 -mt-16 h-fit text-center"
-      alt="Tutorial Logo"
-      />
-    </div>
+      </div>              
+    {/if} 
+    
     <div class="mt-16 text-center">
       <Button
       href="/analysis"
