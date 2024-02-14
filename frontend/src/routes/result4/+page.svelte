@@ -42,9 +42,6 @@
   console.log('CRLF2 Average Result:', CRLF2averageResult);
   console.log('ABL1_Like Average Result:', ABL1_LikeaverageResult);
 </script>
-  
-  
-
 
 <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
   <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
@@ -132,7 +129,7 @@
         </div>
       </div>              
     {/if}  
-    
+
     {#if ABL1_LikeSelected}
       <div>
         <div class="flex mt-10">
