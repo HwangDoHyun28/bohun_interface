@@ -206,39 +206,39 @@
             <div class="flex">
               <div class="mt-4 flex">
                 <Checkbox
-                  id="boxplot-check"
+                  id="boxplot-check1"
                   bind:checked={ABL1selected}
                   on:click={() => {
                     ABL1selected = !ABL1selected;
                   }}
                   class="h-6 w-6 bg-inherit checked:bg-violet-800 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check">
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check1">
                   ABL1 Class
                 </label>
               </div>
               <div class="ml-36 mt-4 flex">
                 <Checkbox
-                  id="boxplot-check"
+                  id="boxplot-check2"
                   bind:checked={CRLF2selected}
                   on:click={() => {
                     CRLF2selected = !CRLF2selected;
                   }}
                   class="w-6 h-6 bg-inherit checked:bg-violet-500 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check">
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check2">
                   CRLF2 Class
                 </label>
               </div>
               <div class="ml-36 mt-4 flex">
                 <Checkbox
-                id="boxplot-check"
+                id="boxplot-check3"
                 bind:checked={ABL1_LikeSelected}
                 on:click={() => {
                   ABL1_LikeSelected = !ABL1_LikeSelected;
                 }}
                 class="w-6 h-6 bg-inherit checked:bg-violet-300 focus:ring-white"/>
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check">
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check3">
                   ABL1-Like Class
                 </label>
               </div>
