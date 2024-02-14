@@ -1,47 +1,12 @@
-<script context="module">
-  export async function load({ page }) {
-    // URL 쿼리 매개변수에서 데이터 추출
-    const ABL1averageResult = page.query.get('ABL1averageResult');
-    const CRLF2averageResult = page.query.get('CRLF2averageResult');
-    const ABL1_LikeaverageResult = page.query.get('ABL1_LikeaverageResult');
-    const ABL1selected = page.query.get('ABL1selected');
-    const CRLF2selected = page.query.get('CRLF2selected');
-    const ABL1_LikeSelected = page.query.get('ABL1_LikeSelected');
-
-    // 추출한 데이터를 활용하여 필요한 작업 수행
-    console.log('Received data:');
-    console.log('ABL1 Average Result:', ABL1averageResult);
-    console.log('CRLF2 Average Result:', CRLF2averageResult);
-    console.log('ABL1_Like Average Result:', ABL1_LikeaverageResult);
-    console.log('ABL1 selected:', ABL1selected);
-    console.log('CRLF2 selected:', CRLF2selected);
-    console.log('ABL1_Like selected:', ABL1_LikeSelected);
-
-    // 페이지 로드 시 데이터를 프롭스로 반환
-    return {
-      props: {
-        ABL1averageResult,
-        CRLF2averageResult,
-        ABL1_LikeaverageResult,
-        ABL1selected,
-        CRLF2selected,
-        ABL1_LikeSelected
-      }
-    };
-  }
-</script>
-
 <script>
   import { P, A } from "flowbite-svelte";
   import { Button } from "flowbite-svelte";
-  
-  export let ABL1averageResult;
-  export let CRLF2averageResult;
-  export let ABL1_LikeaverageResult;
-  export let ABL1selected;
-  export let CRLF2selected;
-  export let ABL1_LikeSelected;
+  import { onMount } from 'svelte';
+  import { load } from '../../lib/fetch';
 
+  import { page } from '$app/stores'; // SvelteKit stores에서 page 가져오기
+
+  const { ABL1averageResult, CRLF2averageResult, ABL1_LikeaverageResult, ABL1selected, CRLF2selected, ABL1_LikeSelected } = page.query;
 </script>
 
 <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
@@ -184,7 +149,8 @@
   <p>ABL1 Average Result: {ABL1averageResult}</p>
   <p>CRLF2 Average Result: {CRLF2averageResult}</p>
   <p>ABL1_Like Average Result: {ABL1_LikeaverageResult}</p>
+  <p>ABL1 Selected: {ABL1selected}</p>
+  <p>CRLF2 Selected: {CRLF2selected}</p>
+  <p>ABL1_Like Selected: {ABL1_LikeSelected}</p>
 </div>
-
-
   

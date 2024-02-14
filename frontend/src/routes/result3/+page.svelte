@@ -1,5 +1,7 @@
 <script>
   import { onMount } from 'svelte';
+  import { navigate } from 'sveltekit/navigation';
+  import { load } from '../../lib/fetch';
   import { goto } from '$app/navigation';
   import { Select } from "flowbite-svelte";
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
@@ -12,6 +14,8 @@
     { value: "RPKM", name: "RPKM based" },
     { value: "RANK", name: "Rank based" },
   ];
+
+  let ticket;
 
   let ABL1selected = true;
   let CRLF2selected = true;
@@ -75,7 +79,7 @@
   }
 
   // 버튼 클릭 시 결과 페이지로 이동하는 함수
-  function handlePredictProbability() {
+  async function handlePredictProbability() {
     if (selectedmethod == "RPKM") {
       if (ABL1selected == true) {
 
@@ -140,16 +144,8 @@
       console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
     }  
 
-    goto('/result4', {
-        state: {
-          ABL1averageResult,
-          CRLF2averageResult,
-          ABL1_LikeaverageResult,
-          ABL1selected,
-          CRLF2selected,
-          ABL1_LikeSelected
-        }
-      });
+    // URL에 데이터를 추가하여 다음 페이지로 이동
+    navigate(`/result5?ABL1averageResult=${ABL1averageResult}&CRLF2averageResult=${CRLF2averageResult}&ABL1_LikeaverageResult=${ABL1_LikeaverageResult}&ABL1selected=${ABL1selected}&CRLF2selected=${CRLF2selected}&ABL1_LikeSelected=${ABL1_LikeSelected}`);
   }
 
   // 파일 선택 이벤트에 핸들러 등록
