@@ -191,9 +191,9 @@
         CRLF2rankScores['CMTM7'] = applyExpressionCondition(cmtm7Rank, 832, 1325, 1325, 4060, 4060, 5452);
         CRLF2rankScores['CRLF2'] = applyExpressionCondition(crlf2Rank, 48, 419, 419, 7410, 7410, 13061);
 
-        console.log('CASP10 Result:', CRLF2geneScores['CASP10']);
-        console.log('CMTM7 Result:', CRLF2geneScores['CMTM7']);
-        console.log('CRLF2 Result:', CRLF2geneScores['CRLF2']);
+        console.log('CASP10 Result:', CRLF2rankScores['CASP10']);
+        console.log('CMTM7 Result:', CRLF2rankScores['CMTM7']);
+        console.log('CRLF2 Result:', CRLF2rankScores['CRLF2']);
 
         CRLF2averageResult = (CRLF2rankScores['CASP10'] + CRLF2rankScores['CMTM7'] + CRLF2rankScores['CRLF2']) / 3;
       }
