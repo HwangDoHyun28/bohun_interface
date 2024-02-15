@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { load } from '../../lib/fetch';
   import { Select } from "flowbite-svelte";
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";

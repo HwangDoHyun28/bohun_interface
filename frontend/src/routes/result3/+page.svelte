@@ -200,7 +200,7 @@
               bind:value={selectedmethod}
             >
               {#each Based as { value, name }}
-                <option {value}>{name}</option>
+                <option class="group-hover:text-white group-hover:bg-neutral-200" {value}>{name}</option>
               {/each}
             </Select>
           </div>
