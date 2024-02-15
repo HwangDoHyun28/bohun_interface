@@ -1,7 +1,6 @@
 <script>
-    import { Input, Label, Helper } from "flowbite-svelte";
-    import { ButtonGroup, Button } from "flowbite-svelte";
-    import { Select } from "flowbite-svelte";
+    import { Button } from "flowbite-svelte";
+    import { P, A } from "flowbite-svelte";
   </script>
 
 <div class="place-content-center rounded-lg border y-100 mx-5 mt-12 bg-white">
@@ -17,21 +16,20 @@
         <div class="my-20 left-96 place-content-center">
           <Button
             href="/about"
-            class="my-0 place-content-center py-4 px-6 mt-5 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
+            class="my-0 place-content-center py-4 px-6 mt-5 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-transparent"
           >About</Button>
         </div>
       </div>
     </div>
-    <div class="mt-3 h-max rounded-lg place-content-center">
-        <Button target="self"
-        href="https://pnucolab.com/"
-        class="justify-center -mt-96 ml-3 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center focus:ring-white">
-          <img
-          src="lab_tag.svg"
-          alt="Tutorial Logo"
-          class="h-5 sm:h-5"
-        />
-        </Button>
-      </div>
+    <div class="mt-0 mb-0 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">
+      <P class="text-violet-700 p-1 flex justify-center text-lg" whitespace='nowrap'>This website is maintained by 
+        <A
+          class="text-violet-400 pl-1 underline"
+          href="https://pnucolab.com/">Computational Omics Lab
+        </A>, Pusan National University College of Biomedical Convergence
+          Engineering, South Korea.
+        <A class="text-violet-400 pl-1 underline">Contact US</A>
+      </P>
+    </div>
     
 </div>

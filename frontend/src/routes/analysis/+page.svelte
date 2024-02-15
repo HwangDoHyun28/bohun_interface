@@ -238,7 +238,7 @@
       <div class="w-full px-10 rounded-lg">
         <p class="text-3xl text-violet-700 font-medium">Data</p>
         <p class="mt-2 text-violet-400 text-base font-normal">
-          Upload your RPKM matrix file ( csv, tsv, or ... )
+          Upload your RPKM matrix file ( txt, csv, tsv, or ... )
         </p>   
         <Label class="w-32 space-y-2 mb-2">
           <Fileupload id="fileInput" class = "w-32 opacity-0" bind:value/>

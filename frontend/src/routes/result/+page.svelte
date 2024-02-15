@@ -19,7 +19,7 @@
 
   // 파일 선택 시 호출되는 함수
   function starlocation(number) {
-    let result = parseInt((parseFloat(number) + 1) * 46.5 + 2);
+    let result = parseInt((parseFloat(number) + 1) * 48 + 2).toString();
     return `absolute left-[${result}%] w-7 h-7 ml-3 -mt-20 h-fit text-center`;
   }
   console.log('ABL1 Starlocation:', starlocation(ABL1averageResult));
@@ -40,7 +40,7 @@
       </div>
       <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
         <p class="absolute left-2 text-left ml-3">-1</p>
-        <p class="absolute ml-4 left-[50%]">0</p>
+        <p class="absolute -ml-3 left-[50%]">0</p>
         <p class="absolute right-4 text-right">1</p>
       </div>  
       <div class="relative mt-1 flex">
@@ -48,21 +48,21 @@
         <p class="absolute right-0 ml-5 text-sm text-neutral-500">Other Classes</p>
       </div>
       <div class="bg-inherit w-full relative">
-        {#if ABL1selected}
+        {#if ABL1selected == 'true'}
           <img
           src="Star_violet_800.svg"
           class={starlocation(ABL1averageResult)}
           alt="Tutorial Logo"
           />
         {/if}
-        {#if CRLF2selected}
+        {#if CRLF2selected == 'true'}
           <img
           src="Star_violet_500.svg"
           class={starlocation(CRLF2averageResult)}
           alt="Tutorial Logo"
           />
         {/if}
-        {#if ABL1_LikeSelected}
+        {#if ABL1_LikeSelected == 'true'}
           <img
           src="Star_violet_300.svg"
           class={starlocation(ABL1_LikeaverageResult)}
@@ -80,7 +80,7 @@
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
-          <p class="absolute ml-4 left-1/2">0</p>
+          <p class="absolute -ml-3 left-1/2">0</p>
           <p class="absolute right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
@@ -104,7 +104,7 @@
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
-          <p class="absolute ml-4 left-1/2">0</p>
+          <p class="absolute -ml-3 left-1/2">0</p>
           <p class="absolute right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
@@ -128,7 +128,7 @@
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
-          <p class="absolute ml-4 left-1/2">0</p>
+          <p class="absolute -ml-3 left-1/2">0</p>
           <p class="absolute right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
