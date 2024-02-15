@@ -1,6 +1,4 @@
 <script>
-    import { Input, Label, Helper } from "flowbite-svelte";
-    import { Button } from "flowbite-svelte";
     import { P, A } from "flowbite-svelte";
   
   </script>

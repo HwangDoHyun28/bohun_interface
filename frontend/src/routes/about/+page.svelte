@@ -1,7 +1,4 @@
 <script>
-    import { Input, Label, Helper } from "flowbite-svelte";
-    import { ButtonGroup, Button } from "flowbite-svelte";
-    import { Select } from "flowbite-svelte";
     import { P, A } from "flowbite-svelte";
   </script>
 
@@ -18,13 +15,15 @@ results without the need for professional bioinformatics background knowledge. I
         Enjoy the coolness of CAlculator!
       </p>
       <div class="place-content-center">
-        <div class="ml-16 text-center justify-center mt-32 mb-12">
+        <div class="text-center place-content-center justify-center mt-28 mb-12">
           <img
             src="aboutfig.svg"
             alt="CAlculator Logo"
           />
         </div>
       </div>
+      <hr/>
+      <p class="mt-14 text-4xl text-violet-800 font-medium my-5">Model Validation</p>
       <div class="mt-10 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">
         <P class="text-violet-700 p-1 flex justify-center text-base" whitespace='nowrap'>This website is maintained by 
           <A

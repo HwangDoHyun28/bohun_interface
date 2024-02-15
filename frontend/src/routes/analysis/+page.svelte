@@ -245,7 +245,7 @@
         </Label>           
         <div class="-mt-12 flex">
           <div>
-            <Button class="y-5 mt-3 py-2 bg-violet-400 hover:bg-violet-400 text-base font-semibold"
+            <Button class="ring-transparent y-5 mt-3 py-2 bg-violet-400 hover:bg-violet-500 text-base font-semibold"
               >Select File</Button
             >
           </div>
