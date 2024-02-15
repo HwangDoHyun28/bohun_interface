@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
-  import { load } from '../../lib/fetch';
   import { Select } from "flowbite-svelte";
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
@@ -216,8 +215,8 @@
       ABL1_LikeaverageResult: ABL1_LikeaverageResult,
       ABL1selected: ABL1selected,
       CRLF2selected: CRLF2selected,
-      ABL1_LikeSelected: ABL1_LikeSelected
-      // 다른 쿼리 매개변수들도 추가할 수 있습니다.
+      ABL1_LikeSelected: ABL1_LikeSelected,
+      selectedmethod: selectedmethod
     });
 
     // URL에 데이터를 추가하여 다음 페이지로 이동
