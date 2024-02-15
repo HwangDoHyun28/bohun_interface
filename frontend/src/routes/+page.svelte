@@ -19,16 +19,20 @@
             class="place-content-center py-4 px-6 mt-5 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-transparent"
           >About</Button>
           <div class="mt-10 mb-5 place-content-center flex">
-            <img
+            <Button href="https://pnucolab.com/" type="submit" target="self">
+              <img
               src="colablogo.svg"
               class="w-44 mx-5 mt-12 h-fit text-center"
               alt="Tutorial Logo"
             />
-            <img
+            </Button>
+            <Button href="https://www.kvmri.org" type="submit" target="self" class="ring-transparent">
+              <img
               src="bohunlogo.svg"
               class="w-44 mx-5 mt-16 h-fit text-center"
               alt="Tutorial Logo"
             />
+            </Button>
           </div>
         </div>
       </div>
