@@ -14,7 +14,7 @@
   let nonActiveClass = "-mt-2 text-violet-400 md:hover:text-violet-700 font-semibold text-base active:text-violet-700";
 </script>
 
-<header class="relative">
+<header class="z-50 relative">
   <Navbar class="fixed py-3 border-b border-violet-200" let:hidden let:toggle>
       <NavBrand href="/">
           <img

@@ -20,16 +20,16 @@
   // 파일 선택 시 호출되는 함수
   function starlocation(number) {
     let result = parseInt((parseFloat(number) + 1) * 46.5 + 2);
-    return `absolute left-[${result}%] w-7 h-7 ml-3 -mt-20 h-fit text-center`;
+    return result;
   }
   console.log('ABL1 Starlocation:', starlocation(ABL1averageResult));
   console.log('CRLF2 Starlocation:', starlocation(CRLF2averageResult));
   console.log('ABL1_Like Starlocation:', starlocation(ABL1_LikeaverageResult));
 </script>
 
-<div class="mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
+<div class="relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
   <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
-  <div class="relative w-full px-10 mt-8 mb-0 pt-3 pb-0">
+  <div class="relative w-full px-10 mt-8 pt-3">
     <p class="text-3xl text-violet-700 font-medium">Results</p>
     <p class="text-violet-400 text-base font-normal mt-2">
       {selectedmethod} Based Probability of Each Class
@@ -51,21 +51,24 @@
         {#if ABL1selected}
           <img
           src="Star_violet_800.svg"
-          class={starlocation(ABL1averageResult)}
+          class="absolute w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          style="left: {`${starlocation(ABL1averageResult)}%`}"
           alt="Tutorial Logo"
           />
         {/if}
         {#if CRLF2selected}
           <img
           src="Star_violet_500.svg"
-          class={starlocation(CRLF2averageResult)}
+          class="absolute w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          style="left: {`${starlocation(CRLF2averageResult)}%`}"
           alt="Tutorial Logo"
           />
         {/if}
         {#if ABL1_LikeSelected}
           <img
           src="Star_violet_300.svg"
-          class={starlocation(ABL1_LikeaverageResult)}
+          class="absolute w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          style="left: {`${starlocation(ABL1_LikeaverageResult)}%`}"
           alt="Tutorial Logo"
           />
         {/if}
@@ -90,7 +93,8 @@
         <div class="bg-inherit w-full relative">
           <img
           src="Star_violet_800.svg"
-          class={starlocation(ABL1averageResult)}
+          class="absolute w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          style="left: {`${starlocation(ABL1averageResult)}%`}"
           alt="Tutorial Logo"
           />
         </div>
@@ -114,7 +118,8 @@
         <div class="bg-inherit w-full relative">
           <img
           src="Star_violet_500.svg"
-          class={starlocation(CRLF2averageResult)}
+          class="absolute w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          style="left: {`${starlocation(CRLF2averageResult)}%`}"
           alt="Tutorial Logo"
           />
         </div>
@@ -138,7 +143,8 @@
         <div class="bg-inherit w-full relative">
           <img
           src="Star_violet_300.svg"
-          class={starlocation(ABL1_LikeaverageResult)}
+          class="absolute w-7 h-7 ml-3 -mt-20 h-fit text-center"
+          style="left: {`${starlocation(ABL1_LikeaverageResult)}%`}"
           alt="Tutorial Logo"
           />
         </div>

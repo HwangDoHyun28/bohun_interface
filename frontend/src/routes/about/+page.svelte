@@ -2,8 +2,8 @@
     import { P, A } from "flowbite-svelte";
   </script>
 
-<div class="-mt-5 py-5 bg-violet-300 -mb-5">
-    <div class="mt-12 px-20 py-0 rounded-lg mx-5 border y-100 pb-1 bg-white">
+<div class="py-5 bg-violet-300 -mb-5">
+    <div class="mt-8 px-20 py-0 rounded-lg mx-5 border y-100 pb-1 bg-white">
       <p class="mt-14 text-4xl text-violet-800 font-medium my-5">About</p>
       <p class="text-neutral-400 text-lg font-normal">
         We implement a gene expression based predicting tool as a web interface to facilitate data processing and obtain prediction
@@ -15,7 +15,7 @@ results without the need for professional bioinformatics background knowledge. I
         Enjoy the coolness of CAlculator!
       </p>
       <div class="place-content-center">
-        <div class="text-center place-content-center justify-center mt-24 mb-16">
+        <div class="text-center place-content-center justify-center mt-28 mb-16">
           <img
             src="aboutfig.svg"
             alt="CAlculator Logo"

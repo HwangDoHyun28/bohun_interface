@@ -1,45 +1,251 @@
 <script>
-    import { Input, Label, Helper } from "flowbite-svelte";
-    import { Fileupload, Button, Checkbox } from "flowbite-svelte";
-    import { Select } from "flowbite-svelte";
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+  import { Select } from "flowbite-svelte";
+  import { P, A, Input, Label, Helper } from "flowbite-svelte";
+  import { Fileupload, Button, Checkbox } from "flowbite-svelte";
 
-    let selected1;
-    let selected2;
-    let Single_Patient = [
-      { value: "Single", name: "Single_Patient" },
-      { value: "Multi", name: "Multi_Patients" },
-    ];
-    let Based = [
-      { value: "RPKM", name: "RPKM based" },
-      { value: "RANK", name: "Rank based" },
-    ];
-  
-    let value;
-    let selected3 = true;
-    let selected4 = true;
-    let selected5 = true;
-    let selected6 = true;
-    let selected7 = true;
+  let value;
+
+  let selectedmethod;
+  let Based = [
+    { value: "RPKM", name: "RPKM based" },
+    { value: "RANK", name: "Rank based" },
+  ];
+
+  let ABL1selected = true;
+  let CRLF2selected = true;
+  let ABL1_LikeSelected = true;
+
+  let geneExpressions = {};
+
+  let ABL1geneScores = {};
+  let CRLF2geneScores = {};
+  let ABL1_LikegeneScores = {};
+
+  let ABL1rankScores = {};
+  let CRLF2rankScores = {};
+  let ABL1_LikerankScores = {};
+
+  let casp10Result = 0;
+  let cmtm7Result = 0;
+  let crlf2Result = 0;
+
+  let ABL1averageResult = 0;
+  let CRLF2averageResult = 0;
+  let ABL1_LikeaverageResult = 0;
+
+  // gene expression 값에 대한 조건을 적용하여 결과를 반환하는 함수
+  function applyExpressionCondition(value, lower1, upper1, lower2, upper2) {
+    if (value >= lower1 && value <= upper1) {
+      return 1;
+    } else if (value > upper1 && value < lower2) {
+      return 0;
+    } else if (value >= lower2 && value <= upper2) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
+  // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하고 결과를 출력하는 함수
+  function processFile(file) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      const content = event.target.result;
+      const lines = content.split('\n');
+
+      lines.forEach(line => {
+        const [geneName, expressionStr] = line.split('\t');
+        const expression = parseFloat(expressionStr);
+
+        if (!isNaN(expression)) {
+          geneExpressions[geneName] = expression;
+        }
+      });
+    };
+    reader.readAsText(file);
+  }
+
+  // 파일 선택 시 호출되는 함수
+  function handleFileSelect(event) {
+    const fileInput = event.target;
+    const file = fileInput.files[0];
+
+    if (file) {
+      processFile(file);
+    }
+  }
+
+  // 버튼 클릭 시 결과 페이지로 이동하는 함수
+  async function handlePredictProbability() {
+    if (selectedmethod == "RPKM") {
+      if (ABL1selected == true) {
+        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+        ABL1geneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.5654433, 58.45411, 0, 4.883518);
+        ABL1geneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 13.46951, 700.5429, 0.2895722, 87.59672);
+        ABL1geneScores['SLC2A5'] = applyExpressionCondition(geneExpressions['SLC2A5'], 15.26396, 205.1955, 0.1024562, 54.12377);
+        ABL1geneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.93495, 40.47132, 3.555556, 27.80424);
+        ABL1geneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 171.042, 756.3316, 0.6464725, 457.4958);
+        ABL1geneScores['NEURL1B'] = applyExpressionCondition(geneExpressions['NEURL1B'], 48.08602, 377.4831, 0.808105, 87.74368);
+        ABL1geneScores['AFAP1L2'] = applyExpressionCondition(geneExpressions['AFAP1L2'], 2.67134324933023, 148.361961244139, 0.276805776923961, 12.8356383275342);
+        ABL1geneScores['CEACAM21'] = applyExpressionCondition(geneExpressions['CEACAM21'], 15.46394, 65.26508, 4.370161, 47.89709);
+        ABL1geneScores['ELFN2'] = applyExpressionCondition(geneExpressions['ELFN2'], 3.731676, 160.7782, 0.08965376, 31.71739);
+        ABL1geneScores['ZFHX3'] = applyExpressionCondition(geneExpressions['ZFHX3'], 1.363497, 11.44101, 0.08152398, 4.554561);
+        ABL1geneScores['ABL1'] = applyExpressionCondition(geneExpressions['ABL1'], 13.0397867876073, 100.822441272638, 7.0543970000532, 58.5511885839582);
+        ABL1geneScores['DCTN4'] = applyExpressionCondition(geneExpressions['DCTN4'], 61.16148, 243.7928, 15.17781, 105.4528);
+        ABL1geneScores['SLFN13'] = applyExpressionCondition(geneExpressions['SLFN13'], 4.167124, 33.07598, 0.8668036, 17.89969);
+        ABL1geneScores['HPCAL1'] = applyExpressionCondition(geneExpressions['HPCAL1'], 87.19817, 375.5679, 33.24991, 212.7731);
+        ABL1geneScores['SH2D4A'] = applyExpressionCondition(geneExpressions['SH2D4A'], 0.04547993, 9.107743, 0, 1.3434);
+        ABL1geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 31.45275, 257.4393, 15.5387, 91.99394);
+        ABL1geneScores['DEXI'] = applyExpressionCondition(geneExpressions['DEXI'], 11.99806, 55.72624, 2.747108, 27.06386);
+        ABL1geneScores['LAIR1'] = applyExpressionCondition(geneExpressions['LAIR1'], 153.355, 960.5403, 22.27905, 532.9934); 
+
+        console.log('WNT9A Result:', geneExpressions['WNT9A']);
+        console.log('SPATS2L Result:', geneExpressions['SPATS2L']);
+        console.log('SLC2A5 Result:', geneExpressions['SLC2A5']);
+        console.log('WSB2 Result:', geneExpressions['WSB2']);
+        console.log('SOCS2 Result:', geneExpressions['SOCS2']);
+        console.log('NEURL1B Result:', geneExpressions['NEURL1B']);
+        console.log('AFAP1L2 Result:', geneExpressions['AFAP1L2']);
+        console.log('CEACAM21 Result:', geneExpressions['CEACAM21']);
+        console.log('ELFN2 Result:', geneExpressions['ELFN2']);
+        console.log('ZFHX3 Result:', geneExpressions['ZFHX3']);
+        console.log('ABL1 Result:', geneExpressions['ABL1']);
+        console.log('DCTN4 Result:', geneExpressions['DCTN4']);
+        console.log('SLFN13 Result:', geneExpressions['SLFN13']);
+        console.log('HPCAL1 Result:', geneExpressions['HPCAL1']);
+        console.log('SH2D4A Result:', geneExpressions['SH2D4A']);
+        console.log('CASP10 Result:', geneExpressions['CASP10']);
+        console.log('DEXI Result:', geneExpressions['DEXI']);
+        console.log('LAIR1 Result:', geneExpressions['LAIR1']);
+
+        ABL1averageResult = (ABL1geneScores['WNT9A'] + ABL1geneScores['SPATS2L'] + ABL1geneScores['SLC2A5'] + ABL1geneScores['WSB2'] + ABL1geneScores['SOCS2'] + ABL1geneScores['NEURL1B'] + ABL1geneScores['AFAP1L2'] + ABL1geneScores['CEACAM21'] + ABL1geneScores['ELFN2'] + ABL1geneScores['ZFHX3'] + ABL1geneScores['ABL1'] + ABL1geneScores['DCTN4'] + ABL1geneScores['SLFN13'] + ABL1geneScores['HPCAL1'] + ABL1geneScores['SH2D4A'] + ABL1geneScores['CASP10'] + ABL1geneScores['DEXI'] + ABL1geneScores['LAIR1']) / 18;
+        
+        console.log('ABL1 Sum:', ABL1averageResult);
+      }
+
+      if (CRLF2selected == true) {
+        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+        CRLF2geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 657, 3123, 1398, 5016);
+        CRLF2geneScores['CMTM7'] = applyExpressionCondition(geneExpressions['CMTM7'], 832, 4060, 1325, 5452);
+        CRLF2geneScores['CRLF2'] = applyExpressionCondition(geneExpressions['CRLF2'], 48, 7410, 419, 13061);
+
+        console.log('CASP10 Result:', CRLF2geneScores['CASP10']);
+        console.log('CMTM7 Result:', CRLF2geneScores['CMTM7']);
+        console.log('CRLF2 Result:', CRLF2geneScores['CRLF2']);
+
+        CRLF2averageResult = (CRLF2geneScores['CASP10'] + CRLF2geneScores['CMTM7'] + CRLF2geneScores['CRLF2']) / 3;
+      }
+
+      if (ABL1_LikeSelected == true) {
+        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+        ABL1_LikegeneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 4.101311,	853.4433,	0.2895722,	83.71679);
+        ABL1_LikegeneScores['SAV1'] = applyExpressionCondition(geneExpressions['SAV1'], 14.06004, 76.60259, 0.3860737, 26.77266);
+        ABL1_LikegeneScores['SNAP47'] = applyExpressionCondition(geneExpressions['SNAP47'], 5.299292, 59.40034, 1.991974, 20.32479);
+        ABL1_LikegeneScores['JCHAIN'] = applyExpressionCondition(geneExpressions['JCHAIN'], 11.55285, 2401.916, 1.834375, 814.8963);
+        ABL1_LikegeneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.6469912, 56.28609, 0, 4.883518);
+        ABL1_LikegeneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.3198, 39.32335, 3.555556, 27.80424);
+        ABL1_LikegeneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 73.41159, 1177.613, 0.6464725, 457.4958);
+        ABL1_LikegeneScores['ABCA9'] = applyExpressionCondition(geneExpressions['ABCA9'], 0.012253011315132, 61.1093687703313, 0, 9.05664532319996);
+
+        console.log('SPATS2L Result:', ABL1_LikegeneScores['SPATS2L']);
+        console.log('SAV1 Result:', ABL1_LikegeneScores['SAV1']);
+        console.log('SNAP47 Result:', ABL1_LikegeneScores['SNAP47']);
+        console.log('JCHAIN Result:', ABL1_LikegeneScores['JCHAIN']);
+        console.log('WNT9A Result:', ABL1_LikegeneScores['WNT9A']);
+        console.log('WSB2 Result:', ABL1_LikegeneScores['WSB2']);
+        console.log('SOCS2 Result:', ABL1_LikegeneScores['SOCS2']);
+        console.log('ABCA9 Result:', ABL1_LikegeneScores['ABCA9']);
+
+        ABL1_LikeaverageResult = (ABL1_LikegeneScores['SPATS2L'] + ABL1_LikegeneScores['SAV1'] + ABL1_LikegeneScores['SNAP47'] + ABL1_LikegeneScores['JCHAIN'] 
+        + ABL1_LikegeneScores['WNT9A'] + ABL1_LikegeneScores['WSB2'] + ABL1_LikegeneScores['SOCS2'] + ABL1_LikegeneScores['ABCA9']) / 8;
+      }
+      console.log('ABL1 Average Result:', ABL1averageResult);
+      console.log('CRLF2 Average Result:', CRLF2averageResult);
+      console.log('ABL1_Like Average Result:', ABL1_LikeaverageResult);     
+    }
+
+    else if (selectedmethod == "RANK") {
+      const sortedGenes = Object.keys(geneExpressions).sort((a, b) => geneExpressions[b] - geneExpressions[a]);
+
+      if (ABL1selected == true) {
+        ABL1averageResult = 0;
+      }
+
+      if (CRLF2selected == true) {
+        // CASP10, CMTM7, CRLF의 gene expression 값을 기준으로 순위 계산
+        const casp10Rank = sortedGenes.indexOf('CASP10') + 1;
+        const cmtm7Rank = sortedGenes.indexOf('CMTM7') + 1;
+        const crlf2Rank = sortedGenes.indexOf('CRLF2') + 1;
+        
+        // 각 유전자의 결과 출력
+        console.log('CASP10 Rank:', casp10Rank);
+        console.log('CMTM7 Rank:', cmtm7Rank);
+        console.log('CRLF2 Rank:', crlf2Rank);
+
+        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+        CRLF2rankScores['CASP10'] = applyExpressionCondition(casp10Rank, 657, 1398, 1398, 3123, 3121, 5016);
+        CRLF2rankScores['CMTM7'] = applyExpressionCondition(cmtm7Rank, 832, 1325, 1325, 4060, 4060, 5452);
+        CRLF2rankScores['CRLF2'] = applyExpressionCondition(crlf2Rank, 48, 419, 419, 7410, 7410, 13061);
+
+        console.log('CASP10 Result:', CRLF2rankScores['CASP10']);
+        console.log('CMTM7 Result:', CRLF2rankScores['CMTM7']);
+        console.log('CRLF2 Result:', CRLF2rankScores['CRLF2']);
+
+        CRLF2averageResult = (CRLF2rankScores['CASP10'] + CRLF2rankScores['CMTM7'] + CRLF2rankScores['CRLF2']) / 3;
+      }
+
+      if (ABL1_LikeSelected == true) {
+        ABL1_LikeaverageResult = 0;
+      }
+
+      console.log('CASP10:', casp10Result);
+      console.log('CMTM7:', cmtm7Result);
+      console.log('CRLF2:', crlf2Result);
+      console.log('ABL1 Average:', ABL1averageResult);
+      console.log('CRLF2 Average:', CRLF2averageResult);
+      console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+    }  
+
+    const queryParams = new URLSearchParams({
+      ABL1averageResult: ABL1averageResult,
+      CRLF2averageResult: CRLF2averageResult,
+      ABL1_LikeaverageResult: ABL1_LikeaverageResult,
+      ABL1selected: ABL1selected,
+      CRLF2selected: CRLF2selected,
+      ABL1_LikeSelected: ABL1_LikeSelected,
+      selectedmethod: selectedmethod
+    });
+
+    // URL에 데이터를 추가하여 다음 페이지로 이동
+    goto(`/result5?${queryParams.toString()}`);
+  }
+
+  // 파일 선택 이벤트에 핸들러 등록
+  onMount(() => {
+    const fileInput = document.getElementById('fileInput');
+    
+    fileInput.addEventListener('change', handleFileSelect);
+  });
 </script>
 
 <form type="submit">
-  <div class="rounded-lg border mx-5 px-16 py-10 bg-white">
-    <div class="mt-5">
-      <p class="text-4xl text-violet-800 font-semibold my-5">Ph(+) B-ALL & Ph-like B-ALL Probability Calculator</p>
-    </div>
-    <div class="mt-12 flex">
-      <div class="w-1/2 px-16 py-8 mb-96 rounded-lg border-2 border-violet-300">
-        <p class="text-4xl text-violet-800 font-semibold mt-5">Data</p>
-        <p class="mt-3 text-neutral-500 text-lg font-normal">
+  <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
+    <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
+    <div class="mt-10">
+      <div class="w-full px-10 rounded-lg">
+        <p class="text-3xl text-violet-700 font-medium">Data</p>
+        <p class="mt-2 text-violet-400 text-base font-normal">
           Upload your RPKM matrix file ( csv, tsv, or ... )
         </p>   
-        <Label class="w-32 mt-1 space-y-2 mb-2">
-          <Fileupload class = "w-32 opacity-0" bind:value/>
+        <Label class="w-32 space-y-2 mb-2">
+          <Fileupload id="fileInput" class = "w-32 opacity-0" bind:value/>
         </Label>           
         <div class="-mt-12 flex">
           <div>
-            <Button class="y-5 mt-3 py-2 bg-violet-300 hover:bg-violet-400 text-base font-semibold"
+            <Button class="y-5 mt-3 py-2 bg-violet-400 hover:bg-violet-400 text-base font-semibold"
               >Select File</Button
             >
           </div>
@@ -47,252 +253,86 @@
             <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
           </div>
         </div>
-        <div class="mt-16">
-          <p class="text-neutral-500 text-lg font-normal">
-            Single or Multiple Patient
-          </p>
-          <Select
-            id="Patient"
-            size="sm" 
-            placeholder="Small input"
-            class="mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
-            bind:value={selected1}
-          >
-            <option selected value="all">Number of patients</option>
-
-            {#each Single_Patient as { value, name }}
-              <option {value}>{name}</option>
-            {/each}
-          </Select>
-        </div>
-        <img
-        src="dotted_line.svg"
-        class="mt-12 h-fit text-center"
-        alt="Tutorial Logo"
-        />
-        <p class="mt-12 text-3xl text-violet-800 font-semibold">Settings</p>     
-        <div>
-          <p class="mt-3 text-neutral-500 text-lg font-normal">
-            RPKM or RANK Based
-          </p>
-          <Select
-            id="Patient"
-            size="sm" 
-            placeholder="Small input"
-            class="mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
-            bind:value={selected2}
-          >
-            <option selected value="all">Data Format</option>
-
-            {#each Based as { value, name }}
-              <option {value}>{name}</option>
-            {/each}
-          </Select>
-        </div>
-        <div class="mt-16">
-          <p class="text-neutral-500 text-lg font-medium">
-            Quality Check
-          </p>
-          <div class="mt-5 flex">
-            <Checkbox
-            id="boxplot-check"
-            bind:checked={selected3}
-            on:click={() => {
-              selected3 = !selected3;
-            }}
-            class="w-5 h-5 bg-inherit checked:bg-violet-500 focus:ring-white"
-          />
-          <p class="ml-5 text-neutral-400 text-base font-normal">
-            Adq / fair / inadq
-          </p>
+        <p class="mt-20 text-3xl text-violet-700 font-medium">Settings</p>   
+        <div class="mb-10 w-full">
+          <div class="w-full mr-24">
+            <p class="mt-2 text-violet-400 text-base font-normal">
+              RPKM or RANK Based
+            </p>
+            <Select
+              id="Patient"
+              size="sm" 
+              class="mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
+              bind:value={selectedmethod}
+            >
+              {#each Based as { value, name }}
+                <option class="group-hover:text-white group-hover:bg-neutral-200" {value}>{name}</option>
+              {/each}
+            </Select>
           </div>
-          <div class="mt-6 flex">
-            <Checkbox
-            id="boxplot-check"
-            bind:checked={selected4}
-            on:click={() => {
-              selected4 = !selected4;
-            }}
-            class="w-5 h-5 bg-inherit checked:bg-violet-300 focus:ring-white"
-          />
-          <p class="ml-5 text-neutral-400 text-base font-normal">
-            House Keeping Gene Value
-          </p>
-          </div>
-          </div>
-          <div class="mt-16 mb-16 relative flex">
-            <div>
-              <p class="text-neutral-500 text-lg font-medium">
-                Score Class
-              </p>
-              <div class="mt-6 flex">
-                <Checkbox
-                id="boxplot-check"
-                bind:checked={selected5}
-                on:click={() => {
-                  selected5 = !selected5;
-                }}
-                class="h-5 w-5 bg-inherit checked:bg-violet-800 focus:ring-white"
-              />
-              <p class="ml-5 text-neutral-400 text-base font-normal">
-                ABL1 Class
-              </p>
-              </div>
-              <div class="mt-6 flex">
-                <Checkbox
-                id="boxplot-check"
-                bind:checked={selected6}
-                on:click={() => {
-                  selected6 = !selected6;
-                }}
-                class="w-5 h-5 bg-inherit checked:bg-violet-500 focus:ring-white"
-              />
-              <p class="ml-5 text-neutral-400 text-base font-normal">
-                CRLF2 Class
-              </p>
-              </div>
-              <div class="mt-6 flex">
-                <Checkbox
-                id="boxplot-check"
-                bind:checked={selected7}
-                on:click={() => {
-                  selected7 = !selected7;
-                }}
-                class="w-5 h-5 bg-inherit checked:bg-violet-300 focus:ring-white"
-              />
-              <p class="ml-5 text-neutral-400 text-base font-normal">
-                ABL1-Like Class
-              </p>
-              </div>
-            </div>
-            <div class="absolute top-0 right-0">
-              <p class="text-neutral-500 text-lg font-medium">
-                Color Palette
-              </p> 
-              <div class="mt-4 ml-10 rounded-full w-8 h-8 bg-red-500"/>
-              <div class="mt-4 ml-10 rounded-full w-8 h-8 bg-yellow-300"/>   
-              <div class="mt-4 ml-10 rounded-full w-8 h-8 bg-blue-500"/>   
-            </div>
-          </div>  
-          <div class="relative my-10 place-content-center">
-            <Button on:click={predictProbability}
-            class="ml-32 object-center my-10 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-violet-700"
-            >Predict Probability</Button>
-          </div>
-      </div>
-      <div class="w-1/2 px-16 ml-10 mb-96 pl-16 pt-8 rounded-lg border-2 border-violet-300">
-        <p class="text-4xl text-violet-800 font-semibold my-5">Results</p>
-        <p class="text-neutral-500 text-lg font-normal">
-          Quality Check & Probability of Each Class
-        </p>   
-        <div class="mt-8 ml-8">
-          <div>
-            <p class="text-violet-500 text-2xl font-semibold">QC 1</p>
+          <div class="w-full mt-16 mr-5">
+            <p class="text-violet-400 text-base font-normal">
+              Score Class
+            </p>
             <div class="flex">
-              <p class="mt-3 ml-3 text-neutral-400 text-lg font-normal">AdqAdq / fair / inadq</p>
+              <div class="mt-4 flex">
+                <Checkbox
+                  id="boxplot-check1"
+                  bind:checked={ABL1selected}
+                  on:click={() => {
+                    ABL1selected = !ABL1selected;
+                  }}
+                  class="h-6 w-6 bg-inherit checked:bg-violet-800 focus:ring-white"
+                />
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check1">
+                  ABL1 Class
+                </label>
+              </div>
+              <div class="ml-36 mt-4 flex">
+                <Checkbox
+                  id="boxplot-check2"
+                  bind:checked={CRLF2selected}
+                  on:click={() => {
+                    CRLF2selected = !CRLF2selected;
+                  }}
+                  class="w-6 h-6 bg-inherit checked:bg-violet-500 focus:ring-white"
+                />
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check2">
+                  CRLF2 Class
+                </label>
+              </div>
+              <div class="ml-36 mt-4 flex">
+                <Checkbox
+                id="boxplot-check3"
+                bind:checked={ABL1_LikeSelected}
+                on:click={() => {
+                  ABL1_LikeSelected = !ABL1_LikeSelected;
+                }}
+                class="w-6 h-6 bg-inherit checked:bg-violet-300 focus:ring-white"/>
+                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check3">
+                  ABL1-Like Class
+                </label>
+              </div>
             </div>
           </div>
-          <div>
-            <p class="mt-12 text-violet-300 text-2xl font-semibold">QC 2</p>
-            <div class="flex">
-              <p class="mt-3 ml-3 text-neutral-400 text-lg font-normal">House Keeping Gene Value</p>
-            </div>
-          </div>
+        </div>  
+        <div class="mt-28 mb-12 text-center">
+          <Button
+          class="text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
+          on:click={handlePredictProbability}
+          >Predict Probability</Button>
         </div>
-        <img
-        src="dotted_line.svg"
-        class="mt-12 h-fit text-center"
-        alt="Tutorial Logo"
-        />
-        <div class="flex mt-6">
-          <p class="ml-0 text-2xl text-violet-800 font-semibold my-5">Probability Score</p>
-          <p class="mt-7 ml-1 text-base text-violet-600 font-semibold my-5">(Range: -1 ~ 1)</p>
-        </div>
-        <div>
-          <p class="ml-3 text-xl text-violet-800 font-semibold mt-3">Total class</p>
-          <div class="mt-0 flex">
-            <img
-          src="red_triangle.svg"
-          class="ml-3 mt-5 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          <img
-          src="yellow_triangle.svg"
-          class="ml-3 mt-5 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          <img
-          src="blue_triangle.svg"
-          class="ml-3 mt-5 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          </div>
-          <img
-        src="scorebar_purple.svg"
-        class="ml-3 mt-0 h-fit text-center"
-        alt="Tutorial Logo"
-        />
-        </div>
-        <div>
-          <div class="flex mt-12">
-            <p class="ml-3 text-xl text-red-500 font-semibold mt-5">ABL1 Class</p>
-            <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.0078</p>
-          </div>
-          <img
-          src="red_triangle.svg"
-          class="ml-3 mt-5 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          <img
-          src="scorebar_red.svg"
-          class="ml-3 h-fit text-center"
-          alt="Tutorial Logo"
-          />  
-        </div>
-        <div>
-          <div class="flex mt-12">
-            <p class="ml-3 text-xl text-yellow-300 font-semibold mt-5">CRLF2 Class</p>
-            <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: -0.8765</p>
-          </div>
-          <img
-          src="yellow_triangle.svg"
-          class="ml-3 mt-5 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          <img
-          src="scorebar_yellow.svg"
-          class="ml-3 mt-0 h-fit text-center"
-          alt="Tutorial Logo"
-          />  
-        </div>
-        <div>
-          <div class="flex mt-12">
-            <p class="ml-3 text-xl text-blue-500 font-semibold mt-5">ABL1-Like Class</p>
-            <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: 0.0236</p>
-          </div>
-          <img
-          src="blue_triangle.svg"
-          class="ml-3 mt-5 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-          <img
-          src="scorebar_blue.svg"
-          class="ml-3 mt-0 h-fit text-center"
-          alt="Tutorial Logo"
-          />
-        </div>
-        </div>
-        </div>
-    <div class="mt-12 -mb-10 ml-0 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">
-      <Button target="self"
-      href="https://pnucolab.com/"
-      class="-mt-96 ml-3 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center focus:ring-white">
-        <img
-        src="lab_tag.svg"
-        alt="Tutorial Logo"
-      />
-      </Button>
+      </div> 
+    </div>
+    <div class="mt-16 -mb-9 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">
+      <P class="text-violet-700 p-1 flex justify-center text-base" whitespace='nowrap'>This website is maintained by 
+        <A
+          class="text-violet-400 pl-1 underline"
+          href="https://pnucolab.com/">Computational Omics Lab
+        </A>, Pusan National University College of Biomedical Convergence
+          Engineering, South Korea.
+        <A class="text-violet-400 pl-1 underline">Contact US</A>
+      </P>
     </div>
   </div>
 </form>
-

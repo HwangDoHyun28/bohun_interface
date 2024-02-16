@@ -3,18 +3,20 @@
   
   </script>
   
-  <div class="rounded-lg border mx-10 px-20 py-10 bg-white">
+  <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
     <div class="mt-5">
       <p class="text-4xl text-violet-800 font-medium my-5">Tutorial</p>
       <p class="text-neutral-400 text-lg font-normal">
         Let's find out how to use the CAculator tool!
       </p>
     </div>
-    <img
+    <div class="ml-10 mt-10 text-center place-content-center justify-center">
+      <img
       src="tutorialfig.svg"
-      class="mt-5 h-fit text-center"
+      class="mt-5 h-fit place-content-center justify-center text-center"
       alt="Tutorial Logo"
-    />
+      />
+    </div>
     <div class="mt-16 -mb-9 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">
       <P class="text-violet-700 p-1 flex justify-center text-base" whitespace='nowrap'>This website is maintained by 
         <A

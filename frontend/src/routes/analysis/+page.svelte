@@ -5,8 +5,9 @@
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
 
-  let value;
 
+  let value = "";
+  let file_value = "";
   let selectedmethod;
   let Based = [
     { value: "RPKM", name: "RPKM based" },
@@ -223,6 +224,18 @@
     goto(`/result?${queryParams.toString()}`);
   }
 
+  // 파일 선택 시 파일 이름을 추출하여 레이블에 표시하는 함수
+  function updateFileName(event) {
+    const fileInput = event.target;
+
+    if (fileInput.files.length > 0) {
+      const fileName = fileInput.files[0].name;
+      file_value = fileName;
+    } else {
+      file_value = '';
+    }
+  }
+
   // 파일 선택 이벤트에 핸들러 등록
   onMount(() => {
     const fileInput = document.getElementById('fileInput');
@@ -238,19 +251,19 @@
       <div class="w-full px-10 rounded-lg">
         <p class="text-3xl text-violet-700 font-medium">Data</p>
         <p class="mt-2 text-violet-400 text-base font-normal">
-          Upload your RPKM matrix file ( txt, csv, tsv, or ... )
+          Upload your RPKM matrix file ( csv, tsv, or ... )
         </p>   
         <Label class="w-32 space-y-2 mb-2">
-          <Fileupload id="fileInput" class = "w-32 opacity-0" bind:value/>
+          <Fileupload id="fileInput" class = "w-32 opacity-0" bind:value on:change={updateFileName}/>
         </Label>           
         <div class="-mt-12 flex">
           <div>
-            <Button class="ring-transparent y-5 mt-3 py-2 bg-violet-400 hover:bg-violet-500 text-base font-semibold"
+            <Button class="y-5 mt-3 py-2 bg-violet-400 hover:bg-violet-400 text-base font-semibold"
               >Select File</Button
             >
           </div>
           <div class="text-center mt-4">
-            <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
+            <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{file_value}</Label>
           </div>
         </div>
         <p class="mt-20 text-3xl text-violet-700 font-medium">Settings</p>   
