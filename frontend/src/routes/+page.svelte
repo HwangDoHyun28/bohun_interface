@@ -6,30 +6,30 @@
 <div class="place-content-center rounded-lg border y-100 mx-5 mt-12 bg-white">
     <div class="content-center place-content-center px-10 pt-10 rounded-lg border y-100 bg-violet-400">
       <div class="text-center content-center place-content-center">
-        <p class="mt-24 place-content-center text-2xl text-white font-sans font-semibold my-3">Gene Expression based Predicting Tool</p>
+        <p class="mt-40 place-content-center text-2xl text-white font-sans font-semibold my-3">Gene Expression based Predicting Tool</p>
         <p class="mt-8 place-content-center text-7xl text-white font-semibold my-3">
         Cancer Patient
         </p>
         <p class="place-content-center text-7xl text-white font-sans font-semibold my-3">
         Probability Calculator
         </p>
-        <div class="mt-16 left-96 place-content-center">
+        <div class="mt-24 left-96 place-content-center">
           <Button
             href="/about"
-            class="place-content-center py-4 px-6 mt-5 text-xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-transparent"
+            class="place-content-center py-4 px-8 mt-5 text-2xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-transparent"
           >About</Button>
-          <div class="mt-10 mb-5 place-content-center flex">
-            <Button href="https://pnucolab.com/" type="submit" target="self">
+          <div class="mt-20 mb-5 place-content-center flex">
+            <Button href="https://pnucolab.com/" type="submit" target="self" class="ring-transparent">
               <img
               src="colablogo.svg"
-              class="w-44 mx-5 mt-12 h-fit text-center"
+              class="w-56 mx-5 mt-12 h-fit text-center"
               alt="Tutorial Logo"
             />
             </Button>
             <Button href="https://www.kvmri.org" type="submit" target="self" class="ring-transparent">
               <img
               src="bohunlogo.svg"
-              class="w-44 mx-5 mt-16 h-fit text-center"
+              class="w-60 mx-5 mt-16 h-fit text-center"
               alt="Tutorial Logo"
             />
             </Button>

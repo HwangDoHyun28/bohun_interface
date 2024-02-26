@@ -253,6 +253,7 @@
             <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
           </div>
         </div>
+        <!-- 파일 업로드 섹션 -->
         <p class="mt-20 text-3xl text-violet-700 font-medium">Settings</p>   
         <div class="mb-10 w-full">
           <div class="w-full mr-24">

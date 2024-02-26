@@ -246,7 +246,7 @@
 
 <form type="submit">
   <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
-    <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
+    <p class="ml-8 text-3xl text-violet-900 font-medium mt-5">Ph(+) B-ALL Probability Calculator</p>
     <div class="mt-10">
       <div class="w-full px-10 rounded-lg">
         <p class="text-3xl text-violet-700 font-medium">Data</p>

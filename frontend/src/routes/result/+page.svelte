@@ -40,7 +40,7 @@
       </div>
       <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
         <p class="absolute left-2 text-left ml-3">-1</p>
-        <p class="absolute ml-4 left-[50%]">0</p>
+        <p class="absolute ml-4 left-[48%]">0</p>
         <p class="absolute right-4 text-right">1</p>
       </div>  
       <div class="relative mt-1 flex">
@@ -83,7 +83,7 @@
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
-          <p class="absolute ml-4 left-1/2">0</p>
+          <p class="absolute ml-4 left-[48%]">0</p>
           <p class="absolute right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
@@ -108,7 +108,7 @@
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
-          <p class="absolute ml-4 left-1/2">0</p>
+          <p class="absolute ml-4 left-[48%]">0</p>
           <p class="absolute right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
@@ -133,7 +133,7 @@
         </div>
         <div class="mt-8 ml-3 relative h-10 pt-2 flex rounded-lg font-medium text-medium text-neutral-500 bg-inherit border-2 border-violet-300">
           <p class="absolute left-2 text-left ml-3">-1</p>
-          <p class="absolute ml-4 left-1/2">0</p>
+          <p class="absolute ml-4 left-[48%]">0</p>
           <p class="absolute right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
@@ -156,15 +156,6 @@
       class="mb-5 px-7 text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
       >Return</Button>
     </div>
-    <div class="w-full bg-inherit text-center">
-      <P class="text-violet-700 p-1 flex justify-center text-base" whitespace='nowrap'>This website is maintained by 
-        <A
-          class="text-violet-400 pl-1 underline"
-          href="https://pnucolab.com/">Computational Omics Lab
-        </A>, Pusan National University College of Biomedical Convergence
-          Engineering, South Korea.
-        <A class="text-violet-400 pl-1 underline">Contact US</A>
-      </P>
-    </div>
+    
   </div>
 </div>

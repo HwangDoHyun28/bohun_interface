@@ -25,7 +25,7 @@ results without the need for professional bioinformatics background knowledge. I
       </div>
       <hr/>
       <div>
-        <p class="mt-16 text-3xl text-violet-500 font-medium my-5">Model Validation</p>
+        <p class="mt-16 text-2xl text-violet-500 font-medium my-5">Model Validation</p>
         <p class="text-neutral-400 text-lg font-normal">
           We implement a gene expression based predicting tool as a web interface to facilitate data processing and obtain prediction
   results without the need for professional bioinformatics background knowledge. 

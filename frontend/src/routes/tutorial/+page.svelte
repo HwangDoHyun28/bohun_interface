@@ -3,7 +3,7 @@
   
   </script>
   
-  <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
+  <div class="mt-12 rounded-lg border mx-5 px-20 py-10 bg-white">
     <div class="mt-5">
       <p class="text-4xl text-violet-800 font-medium my-5">Tutorial</p>
       <p class="text-neutral-400 text-lg font-normal">
@@ -12,7 +12,7 @@
     </div>
     <div class="ml-10 mt-10 text-center place-content-center justify-center">
       <img
-      src="tutorialfig.svg"
+      src="tutorialfig1.svg"
       class="mt-5 h-fit place-content-center justify-center text-center"
       alt="Tutorial Logo"
       />
