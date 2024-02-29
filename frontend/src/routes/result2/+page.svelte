@@ -1,4 +1,23 @@
 <script>
+    import { onMount } from 'svelte';
+    import CarouselItemAbout0 from '/home/hdh1028/Downloads/Bohun_Ranking_Pathway/bohun_interface/frontend/src/lib/about0.svelte';
+  // 다른 CarouselItem 컴포넌트들도 필요하다면 추가하세요
+
+  let currentIndex = 0;
+
+  const items = [
+    { component: CarouselItemAbout0 },
+    // 다른 CarouselItem들도 여기에 추가하세요
+  ];
+
+  function next() {
+    currentIndex = (currentIndex + 1) % items.length;
+  }
+
+  function prev() {
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+  }
+
   let fileContent = "";
   let fileRows = [];
   let loading = false; // 로딩 상태를 나타내는 변수
@@ -26,6 +45,7 @@
       processFile(file);
     }
   }
+
 </script>
 
 <!-- 로딩 화면 -->
@@ -55,6 +75,12 @@
           </tr>
         {/each}
       </table>
+      <div class="carousel">
+        <button on:click={prev}>Prev</button>
+        {#if items[currentIndex]}
+          <svelte:component this={items[currentIndex].component} />
+        {/if}
+        <button on:click={next}>Next</button>
     </div>
   </div>
 </form>
