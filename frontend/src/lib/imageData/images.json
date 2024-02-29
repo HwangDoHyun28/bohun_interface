@@ -1,0 +1,15 @@
+[
+    {
+      "id": 1,
+      "src": "tutorial1.svg",
+      "alt": "Image 1",
+      "caption": "This is image 1"
+    },
+    {
+      "id": 2,
+      "src": "tutorial2.svg",
+      "alt": "Image 2",
+      "caption": "This is image 2"
+    }
+  ]
+  
