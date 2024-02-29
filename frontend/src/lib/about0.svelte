@@ -1,7 +1,7 @@
 <script>
     import { P, A } from "flowbite-svelte";
   </script>
-<div class="mt-5 pr-12 pl-24 rounded-lg mx-5 y-100 pb-1 bg-white">
+<div class="mt-5 pr-12 pl-24 py-0 rounded-lg mx-5 y-100 pb-1 bg-white">
   <p class="mt-14 text-4xl text-violet-800 font-medium my-5">About</p>
   <p class="text-neutral-400 text-lg font-normal">
     We implement a gene expression based predicting tool as a web interface to facilitate data processing and obtain prediction
