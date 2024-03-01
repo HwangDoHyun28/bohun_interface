@@ -8,7 +8,6 @@ let currentIndex = 0;
 const items = [
   { component: CarouselItemAbout0 },
   { component: CarouselItemAbout1 }
-  // 다른 CarouselItem들도 여기에 추가하세요
 ];
 
 function next() {
@@ -27,7 +26,7 @@ function prev() {
       <img
         src="left_botton6.svg"
         alt="CAlculator Logo"
-        class="w-10 h-12"
+        class="w-12 h-12"
       />
     </button>
     {#if items[currentIndex]}
@@ -37,7 +36,7 @@ function prev() {
       <img
         src="right_botton6.svg"
         alt="CAlculator Logo"
-        class="w-10 h-12"
+        class="w-12 h-12"
       />
     </button>
   </div>

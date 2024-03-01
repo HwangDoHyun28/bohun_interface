@@ -46,14 +46,22 @@
 
     <!-- 파일 미리보기 섹션 -->
     <div class="mt-5 px-10">
-      <table class="mt-3 border border-gray-300">
-        {#each fileRows as row, rowIndex}
-          <tr>
-            {#each row as cell, cellIndex}
-              <td class="border border-gray-300 p-2">{cell}</td>
-            {/each}
-          </tr>
+      <table class="mt-3 border border-neutral-300 text-violet-500">
+        {#each fileRows.slice(0, 6) as row, rowIndex}
+          {#if rowIndex === 0}
+            <tr>
+              {#each row as cell, cellIndex}
+                <th class="border text-white border-neutral-300 bg-violet-700 p-2">{cell}</th>
+              {/each}
+            </tr>
+          {:else}
+            <tr>
+              {#each row as cell, cellIndex}
+                <td class="border border-violet-900 p-2">{cell}</td>
+              {/each}
+            </tr>
+          {/if}
         {/each}
       </table>
-  </div>
+    </div>
 </form>

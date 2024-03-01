@@ -12,7 +12,7 @@
     </div>
     <div class="ml-10 mt-10 text-center place-content-center justify-center">
       <img
-      src="tutorialfig1.svg"
+      src="tutorial.svg"
       class="mt-5 h-fit place-content-center justify-center text-center"
       alt="Tutorial Logo"
       />
