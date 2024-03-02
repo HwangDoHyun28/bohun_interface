@@ -67,24 +67,7 @@
       if (filetype=="txt") {
         fileContent = event.target.result;
         fileRows = fileContent.split('\n').map(row => row.split('\t'));
-      }
-      else if (filetype=="csv") {
-        fileContent = event.target.result;
-        fileRows = fileContent.split('\n').map(row => row.split(','));
-      }
-      else if (filetype=="tsv") {
-        fileContent = event.target.result;
-        fileRows = fileContent.split('\n').map(row => row.split('\t'));
-      }
-      else if (filetype=="xlsx") {
-        fileContent = event.target.result;
-        fileRows = fileContent.split('\n').map(row => row.split(','));
-
-      }
-      const length = fileRows.length;
-      selectedColumns = Array.from({ length: length }, () => true);
-
-      lines.forEach(line => {
+        lines.forEach(line => {
         const [geneName, expressionStr] = line.split('\t');
         const expression = parseFloat(expressionStr);
 
@@ -92,6 +75,48 @@
           geneExpressions[geneName] = expression;
         }
       });
+      }
+      else if (filetype=="csv") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split(','));
+        lines.forEach(line => {
+        const [geneName, expressionStr] = line.split(',');
+        const expression = parseFloat(expressionStr);
+
+        if (!isNaN(expression)) {
+          geneExpressions[geneName] = expression;
+        }
+      });
+      }
+      else if (filetype=="tsv") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split('\t'));
+        lines.forEach(line => {
+        const [geneName, expressionStr] = line.split('\t');
+        const expression = parseFloat(expressionStr);
+
+        if (!isNaN(expression)) {
+          geneExpressions[geneName] = expression;
+        }
+      });
+      }
+      else if (filetype=="xlsx") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split(','));
+        lines.forEach(line => {
+        const [geneName, expressionStr] = line.split(',');
+        const expression = parseFloat(expressionStr);
+
+        if (!isNaN(expression)) {
+          geneExpressions[geneName] = expression;
+        }
+      });
+
+      }
+      const length = fileRows.length;
+      selectedColumns = Array.from({ length: length }, () => true);
+
+      
       
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
       preview = true; 
