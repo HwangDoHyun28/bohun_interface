@@ -38,7 +38,7 @@
       <div class="mt-10">
         <p class="ml-3 text-lg text-neutral-500 font-medium mt-5">Total class</p>
       </div>
-      <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
+      <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
         <p class="absolute -mt-1 left-2 text-left ml-3">-1</p>
         <p class="absolute -mt-1 ml-4 left-[48%]">0</p>
         <p class="absolute -mt-1 right-4 text-right">1</p>
@@ -83,7 +83,7 @@
         </div>
         <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
           <p class="absolute -mt-1 left-2 text-left ml-3">-1</p>
-          <p class="absolute -mt-1 ml-4 left-[48%]">0</p>
+          <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
           <p class="absolute -mt-1 right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
@@ -108,7 +108,7 @@
         </div>
         <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
           <p class="absolute -mt-1 left-2 text-left ml-3">-1</p>
-          <p class="absolute -mt-1 ml-4 left-[48%]">0</p>
+          <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
           <p class="absolute -mt-1 right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">
@@ -133,7 +133,7 @@
         </div>
         <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
           <p class="absolute -mt-1 left-2 text-left ml-3">-1</p>
-          <p class="absolute -mt-1 ml-4 left-[48%]">0</p>
+          <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
           <p class="absolute -mt-1 right-4 text-right">1</p>
         </div>  
         <div class="relative mt-1 flex">

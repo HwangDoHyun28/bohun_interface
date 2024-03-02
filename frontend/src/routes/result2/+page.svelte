@@ -4,7 +4,7 @@
   import { Select } from "flowbite-svelte";
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
-
+  import { Alert } from 'flowbite-svelte';
 
   let value = "";
   let file_value = "";
@@ -88,7 +88,7 @@
     const file = fileInput.files[0];
 
     if (file) {
-      processFile(event.target.files[0]);
+      processFile(file);
     }
   }
 
