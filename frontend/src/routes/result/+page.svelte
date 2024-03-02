@@ -156,6 +156,12 @@
       class="mb-5 px-7 text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
       >Return</Button>
     </div>
-    
+    <footer>
+      <div class="mt-16 mb-2 px-2 sm:px-4">
+          <div class="mx-auto flex flex-col container">
+              <P class="text-violet-700 text-center">This website is maintained by <A class="text-violet-400 underline" href="https://sites.google.com/view/kimlab" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
+          </div>
+      </div>
+    </footer>
   </div>
 </div>
