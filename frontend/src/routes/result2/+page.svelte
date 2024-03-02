@@ -73,8 +73,11 @@
       });
       fileContent = event.target.result;
       fileRows = fileContent.split('\n').map(row => row.split(','));
+      const length = fileRows.length;
+      selectedColumns = Array.from({ length: length }, () => true);
+
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
-      preview = true;
+      preview = true; 
     };
     reader.readAsText(file);
   }
@@ -85,7 +88,7 @@
     const file = fileInput.files[0];
 
     if (file) {
-      processFile(file);
+      processFile(event.target.files[0]);
     }
   }
 
@@ -252,7 +255,18 @@
     
     fileInput.addEventListener('change', handleFileSelect);
   });
+
+  let selectedColumns = []; // 각 열의 선택 여부를 저장하는 배열
+
+  function toggleColumn(cellIndex) {
+    selectedColumns[cellIndex] = !selectedColumns[cellIndex];
+  }
+
 </script>
+<style>
+  /* YourComponent에 대한 스타일 */
+  @import '/home/hdh1028/Downloads/Bohun_Ranking_Pathway/bohun_interface/frontend/src/routes/scrollbar.css'; /* scrollbar.css 파일 임포트 */
+</style>
 
 <!-- 로딩 화면 -->
 {#if loading}
@@ -295,7 +309,7 @@
             </p>
           </div>
           <!-- 파일 미리보기 섹션 -->
-          <div class="mt-2">
+          <div class="mt-2 overflow-x-auto">
             <table class="mt-1 border-2 text-sm border-neutral-100 text-neutral-400">
               {#each fileRows.slice(0, 6) as row, rowIndex}
                 {#if rowIndex === 0}
@@ -304,14 +318,14 @@
                       <th class="border-2 text-center text-white text-sm border-neutral-100 bg-violet-300 p-2 mr-5">
                         <div class="mx-2 flex">
                           <Checkbox
-                          id="$check{cellIndex}"
-                          bind:checked={CRLF2selected}
-                          on:click={() => {
-                            CRLF2selected = !CRLF2selected;
-                          }}
-                          class="mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                            id="{cellIndex}"
+                            bind:checked={selectedColumns[cellIndex]}
+                            class="mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                            on:click={() => toggleColumn(cellIndex)}
                           />
-                          {cell}
+                          <label for="{cellIndex}">
+                            {cell}
+                          </label>
                         </div>
                       </th>
                     {/each}
@@ -410,3 +424,4 @@
     </div>
   </div>
 </form>
+

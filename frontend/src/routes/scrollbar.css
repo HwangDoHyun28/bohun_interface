@@ -1,0 +1,24 @@
+/* src/routes/scrollbar.css */
+
+/* 스크롤바를 꾸미기 위한 스타일 */
+/* 가로 스크롤바 */
+::-webkit-scrollbar {
+  width: 12px; /* 스크롤바 너비 */
+  height: 8px; /* 수직 스크롤바 높이 */
+}
+
+/* 스크롤바 전체 영역 */
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5; /* 스크롤바 전체 영역 배경색 */
+}
+
+/* 스크롤바 핸들 */
+::-webkit-scrollbar-thumb {
+  background-color: #d4d4d4; /* 스크롤바 핸들 색상 */
+  border-radius: 6px; /* 스크롤바 핸들 둥글기 정도 */
+}
+
+/* 마우스 호버 시 스크롤바 핸들 */
+::-webkit-scrollbar-thumb:hover {
+  background: #a3a3a3; /* 마우스 호버 시 스크롤바 핸들 색상 */
+}
