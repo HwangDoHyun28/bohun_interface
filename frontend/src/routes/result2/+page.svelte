@@ -6,6 +6,7 @@
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
   import { Alert } from 'flowbite-svelte';
 
+  let filetype = "";
   let value = "";
   let file_value = "";
   let selectedmethod;
@@ -63,6 +64,26 @@
       const content = event.target.result;
       const lines = content.split('\n');
 
+      if (filetype=="txt") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split('\t'));
+      }
+      else if (filetype=="csv") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split(','));
+      }
+      else if (filetype=="tsv") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split('\t'));
+      }
+      else if (filetype=="xlsx") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split(','));
+
+      }
+      const length = fileRows.length;
+      selectedColumns = Array.from({ length: length }, () => true);
+
       lines.forEach(line => {
         const [geneName, expressionStr] = line.split('\t');
         const expression = parseFloat(expressionStr);
@@ -71,11 +92,7 @@
           geneExpressions[geneName] = expression;
         }
       });
-      fileContent = event.target.result;
-      fileRows = fileContent.split('\n').map(row => row.split(','));
-      const length = fileRows.length;
-      selectedColumns = Array.from({ length: length }, () => true);
-
+      
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
       preview = true; 
     };
@@ -246,10 +263,13 @@
       const fileName = fileInput.files[0].name;
       
       file_value = fileName;
+      filetype = file_value.split('.')[1];
+
     } else {
       file_value = '';
     }
     console.log('File Name:', file_value);
+    console.log('File Type:', filetype);
   }
 
   // 파일 선택 이벤트에 핸들러 등록
