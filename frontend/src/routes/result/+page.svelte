@@ -48,7 +48,7 @@
         <p class="absolute right-0 ml-5 text-xs text-neutral-500">Other Classes</p>
       </div>
       <div class="mt-2 bg-inherit w-full relative">
-        {#if ABL1selected}
+        {#if ABL1selected == 'true'}
           <img
           src="Star_violet_800_2.svg"
           class="absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
@@ -56,7 +56,7 @@
           alt="Tutorial Logo"
           />
         {/if}
-        {#if CRLF2selected}
+        {#if CRLF2selected == 'true'}
           <img
           src="Star_violet_500_2.svg"
           class="absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
@@ -64,13 +64,13 @@
           alt="Tutorial Logo"
           />
         {/if}
-        {#if ABL1_LikeSelected}
-          <img
-          src="Star_violet_300_2.svg"
-          class="absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-          style="left: {`${starlocation(ABL1_LikeaverageResult)}%`}"
-          alt="Tutorial Logo"
-          />
+        {#if ABL1_LikeSelected == 'true'}
+        <img
+        src="Star_violet_300_2.svg"
+        class="absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
+        style="left: {`${starlocation(ABL1_LikeaverageResult)}%`}"
+        alt="Tutorial Logo"
+        />
         {/if}
       </div>
     </div>              

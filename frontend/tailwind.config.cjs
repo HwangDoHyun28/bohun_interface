@@ -19,6 +19,7 @@ const config = {
         light: "300",
         normal: "400",
         medium: "500",
+        semimedium: "550",
         semibold: "600",
         bold: "700",
         extrabold: "800",

@@ -5,7 +5,8 @@
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
   import { Alert } from 'flowbite-svelte';
-
+  
+  let columnNumber;
   let filetype = "";
   let value = "";
   let file_value = "";
@@ -61,63 +62,29 @@
     const reader = new FileReader();
 
     reader.onload = function(event) {
-      const content = event.target.result;
-      const lines = content.split('\n');
-
       if (filetype=="txt") {
         fileContent = event.target.result;
         fileRows = fileContent.split('\n').map(row => row.split('\t'));
-        lines.forEach(line => {
-        const [geneName, expressionStr] = line.split('\t');
-        const expression = parseFloat(expressionStr);
-
-        if (!isNaN(expression)) {
-          geneExpressions[geneName] = expression;
-        }
-      });
       }
       else if (filetype=="csv") {
         fileContent = event.target.result;
         fileRows = fileContent.split('\n').map(row => row.split(','));
-        lines.forEach(line => {
-        const [geneName, expressionStr] = line.split(',');
-        const expression = parseFloat(expressionStr);
-
-        if (!isNaN(expression)) {
-          geneExpressions[geneName] = expression;
-        }
-      });
       }
       else if (filetype=="tsv") {
         fileContent = event.target.result;
         fileRows = fileContent.split('\n').map(row => row.split('\t'));
-        lines.forEach(line => {
-        const [geneName, expressionStr] = line.split('\t');
-        const expression = parseFloat(expressionStr);
-
-        if (!isNaN(expression)) {
-          geneExpressions[geneName] = expression;
-        }
-      });
       }
       else if (filetype=="xlsx") {
         fileContent = event.target.result;
         fileRows = fileContent.split('\n').map(row => row.split(','));
-        lines.forEach(line => {
-        const [geneName, expressionStr] = line.split(',');
-        const expression = parseFloat(expressionStr);
-
-        if (!isNaN(expression)) {
-          geneExpressions[geneName] = expression;
-        }
-      });
-
       }
-      const length = fileRows.length;
-      selectedColumns = Array.from({ length: length }, () => true);
+      console.log(fileRows[0]);
 
-      
-      
+      columnNumber = fileRows[0].length;
+      console.log('File Length:', columnNumber);
+      console.log('File Content:', fileRows[0][1]);
+      selectedColumns = Array.from({ length: columnNumber }, () => true);
+
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
       preview = true; 
     };
@@ -135,149 +102,186 @@
   }
 
   // 버튼 클릭 시 결과 페이지로 이동하는 함수
-  async function handlePredictProbability() {
-    if (selectedmethod == "RPKM") {
-      if (ABL1selected == true) {
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        ABL1geneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.5654433, 58.45411, 0, 4.883518);
-        ABL1geneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 13.46951, 700.5429, 0.2895722, 87.59672);
-        ABL1geneScores['SLC2A5'] = applyExpressionCondition(geneExpressions['SLC2A5'], 15.26396, 205.1955, 0.1024562, 54.12377);
-        ABL1geneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.93495, 40.47132, 3.555556, 27.80424);
-        ABL1geneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 171.042, 756.3316, 0.6464725, 457.4958);
-        ABL1geneScores['NEURL1B'] = applyExpressionCondition(geneExpressions['NEURL1B'], 48.08602, 377.4831, 0.808105, 87.74368);
-        ABL1geneScores['AFAP1L2'] = applyExpressionCondition(geneExpressions['AFAP1L2'], 2.67134324933023, 148.361961244139, 0.276805776923961, 12.8356383275342);
-        ABL1geneScores['CEACAM21'] = applyExpressionCondition(geneExpressions['CEACAM21'], 15.46394, 65.26508, 4.370161, 47.89709);
-        ABL1geneScores['ELFN2'] = applyExpressionCondition(geneExpressions['ELFN2'], 3.731676, 160.7782, 0.08965376, 31.71739);
-        ABL1geneScores['ZFHX3'] = applyExpressionCondition(geneExpressions['ZFHX3'], 1.363497, 11.44101, 0.08152398, 4.554561);
-        ABL1geneScores['ABL1'] = applyExpressionCondition(geneExpressions['ABL1'], 13.0397867876073, 100.822441272638, 7.0543970000532, 58.5511885839582);
-        ABL1geneScores['DCTN4'] = applyExpressionCondition(geneExpressions['DCTN4'], 61.16148, 243.7928, 15.17781, 105.4528);
-        ABL1geneScores['SLFN13'] = applyExpressionCondition(geneExpressions['SLFN13'], 4.167124, 33.07598, 0.8668036, 17.89969);
-        ABL1geneScores['HPCAL1'] = applyExpressionCondition(geneExpressions['HPCAL1'], 87.19817, 375.5679, 33.24991, 212.7731);
-        ABL1geneScores['SH2D4A'] = applyExpressionCondition(geneExpressions['SH2D4A'], 0.04547993, 9.107743, 0, 1.3434);
-        ABL1geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 31.45275, 257.4393, 15.5387, 91.99394);
-        ABL1geneScores['DEXI'] = applyExpressionCondition(geneExpressions['DEXI'], 11.99806, 55.72624, 2.747108, 27.06386);
-        ABL1geneScores['LAIR1'] = applyExpressionCondition(geneExpressions['LAIR1'], 153.355, 960.5403, 22.27905, 532.9934); 
+  async function handlePredictProbability() { 
+    let true_length = selectedColumns.filter(element => true === element).length;
 
-        console.log('WNT9A Result:', geneExpressions['WNT9A']);
-        console.log('SPATS2L Result:', geneExpressions['SPATS2L']);
-        console.log('SLC2A5 Result:', geneExpressions['SLC2A5']);
-        console.log('WSB2 Result:', geneExpressions['WSB2']);
-        console.log('SOCS2 Result:', geneExpressions['SOCS2']);
-        console.log('NEURL1B Result:', geneExpressions['NEURL1B']);
-        console.log('AFAP1L2 Result:', geneExpressions['AFAP1L2']);
-        console.log('CEACAM21 Result:', geneExpressions['CEACAM21']);
-        console.log('ELFN2 Result:', geneExpressions['ELFN2']);
-        console.log('ZFHX3 Result:', geneExpressions['ZFHX3']);
-        console.log('ABL1 Result:', geneExpressions['ABL1']);
-        console.log('DCTN4 Result:', geneExpressions['DCTN4']);
-        console.log('SLFN13 Result:', geneExpressions['SLFN13']);
-        console.log('HPCAL1 Result:', geneExpressions['HPCAL1']);
-        console.log('SH2D4A Result:', geneExpressions['SH2D4A']);
-        console.log('CASP10 Result:', geneExpressions['CASP10']);
-        console.log('DEXI Result:', geneExpressions['DEXI']);
-        console.log('LAIR1 Result:', geneExpressions['LAIR1']);
-
-        ABL1averageResult = (ABL1geneScores['WNT9A'] + ABL1geneScores['SPATS2L'] + ABL1geneScores['SLC2A5'] + ABL1geneScores['WSB2'] + ABL1geneScores['SOCS2'] + ABL1geneScores['NEURL1B'] + ABL1geneScores['AFAP1L2'] + ABL1geneScores['CEACAM21'] + ABL1geneScores['ELFN2'] + ABL1geneScores['ZFHX3'] + ABL1geneScores['ABL1'] + ABL1geneScores['DCTN4'] + ABL1geneScores['SLFN13'] + ABL1geneScores['HPCAL1'] + ABL1geneScores['SH2D4A'] + ABL1geneScores['CASP10'] + ABL1geneScores['DEXI'] + ABL1geneScores['LAIR1']) / 18;
-        
-        console.log('ABL1 Sum:', ABL1averageResult);
-      }
-
-      if (CRLF2selected == true) {
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        CRLF2geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 657, 3123, 1398, 5016);
-        CRLF2geneScores['CMTM7'] = applyExpressionCondition(geneExpressions['CMTM7'], 832, 4060, 1325, 5452);
-        CRLF2geneScores['CRLF2'] = applyExpressionCondition(geneExpressions['CRLF2'], 48, 7410, 419, 13061);
-
-        console.log('CASP10 Result:', CRLF2geneScores['CASP10']);
-        console.log('CMTM7 Result:', CRLF2geneScores['CMTM7']);
-        console.log('CRLF2 Result:', CRLF2geneScores['CRLF2']);
-
-        CRLF2averageResult = (CRLF2geneScores['CASP10'] + CRLF2geneScores['CMTM7'] + CRLF2geneScores['CRLF2']) / 3;
-      }
-
-      if (ABL1_LikeSelected == true) {
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        ABL1_LikegeneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 4.101311,	853.4433,	0.2895722,	83.71679);
-        ABL1_LikegeneScores['SAV1'] = applyExpressionCondition(geneExpressions['SAV1'], 14.06004, 76.60259, 0.3860737, 26.77266);
-        ABL1_LikegeneScores['SNAP47'] = applyExpressionCondition(geneExpressions['SNAP47'], 5.299292, 59.40034, 1.991974, 20.32479);
-        ABL1_LikegeneScores['JCHAIN'] = applyExpressionCondition(geneExpressions['JCHAIN'], 11.55285, 2401.916, 1.834375, 814.8963);
-        ABL1_LikegeneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.6469912, 56.28609, 0, 4.883518);
-        ABL1_LikegeneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.3198, 39.32335, 3.555556, 27.80424);
-        ABL1_LikegeneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 73.41159, 1177.613, 0.6464725, 457.4958);
-        ABL1_LikegeneScores['ABCA9'] = applyExpressionCondition(geneExpressions['ABCA9'], 0.012253011315132, 61.1093687703313, 0, 9.05664532319996);
-
-        console.log('SPATS2L Result:', ABL1_LikegeneScores['SPATS2L']);
-        console.log('SAV1 Result:', ABL1_LikegeneScores['SAV1']);
-        console.log('SNAP47 Result:', ABL1_LikegeneScores['SNAP47']);
-        console.log('JCHAIN Result:', ABL1_LikegeneScores['JCHAIN']);
-        console.log('WNT9A Result:', ABL1_LikegeneScores['WNT9A']);
-        console.log('WSB2 Result:', ABL1_LikegeneScores['WSB2']);
-        console.log('SOCS2 Result:', ABL1_LikegeneScores['SOCS2']);
-        console.log('ABCA9 Result:', ABL1_LikegeneScores['ABCA9']);
-
-        ABL1_LikeaverageResult = (ABL1_LikegeneScores['SPATS2L'] + ABL1_LikegeneScores['SAV1'] + ABL1_LikegeneScores['SNAP47'] + ABL1_LikegeneScores['JCHAIN'] 
-        + ABL1_LikegeneScores['WNT9A'] + ABL1_LikegeneScores['WSB2'] + ABL1_LikegeneScores['SOCS2'] + ABL1_LikegeneScores['ABCA9']) / 8;
-      }
-      console.log('ABL1 Average Result:', ABL1averageResult);
-      console.log('CRLF2 Average Result:', CRLF2averageResult);
-      console.log('ABL1_Like Average Result:', ABL1_LikeaverageResult);     
+    if (true_length < 2) {
+      alert("Please select 2 columns");
+      return;
     }
 
-    else if (selectedmethod == "RANK") {
-      const sortedGenes = Object.keys(geneExpressions).sort((a, b) => geneExpressions[b] - geneExpressions[a]);
+    else if (true_length > 2) {
+      alert("Please select 2 columns");
+      return;
+    }
 
-      if (ABL1selected == true) {
-        ABL1averageResult = 0;
+    else if (true_length == 2){
+      let step;
+      let num = 0;
+      console.log(fileRows[37055][1])
+      for (step=0; step<selectedColumns.length; step++) {
+        if (selectedColumns[step] == true) {
+          num = num + 1;
+          if (num ==1) {
+            let step2;
+            for (step2=1; step2<fileRows.length-1; step2++) {
+              value = fileRows[step2][step];
+              geneExpressions[value] = 0;
+            }
+          }
+          else if (num == 2) {
+            let step2;
+            for (step2=1; step2<fileRows.length; step2++) {
+              geneExpressions[value] = fileRows[step2][step];
+            }
+          }
+      }
+    }
+
+      if (selectedmethod == "RPKM") {
+        if (ABL1selected == true) {
+          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+          ABL1geneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.5654433, 58.45411, 0, 4.883518);
+          ABL1geneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 13.46951, 700.5429, 0.2895722, 87.59672);
+          ABL1geneScores['SLC2A5'] = applyExpressionCondition(geneExpressions['SLC2A5'], 15.26396, 205.1955, 0.1024562, 54.12377);
+          ABL1geneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.93495, 40.47132, 3.555556, 27.80424);
+          ABL1geneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 171.042, 756.3316, 0.6464725, 457.4958);
+          ABL1geneScores['NEURL1B'] = applyExpressionCondition(geneExpressions['NEURL1B'], 48.08602, 377.4831, 0.808105, 87.74368);
+          ABL1geneScores['AFAP1L2'] = applyExpressionCondition(geneExpressions['AFAP1L2'], 2.67134324933023, 148.361961244139, 0.276805776923961, 12.8356383275342);
+          ABL1geneScores['CEACAM21'] = applyExpressionCondition(geneExpressions['CEACAM21'], 15.46394, 65.26508, 4.370161, 47.89709);
+          ABL1geneScores['ELFN2'] = applyExpressionCondition(geneExpressions['ELFN2'], 3.731676, 160.7782, 0.08965376, 31.71739);
+          ABL1geneScores['ZFHX3'] = applyExpressionCondition(geneExpressions['ZFHX3'], 1.363497, 11.44101, 0.08152398, 4.554561);
+          ABL1geneScores['ABL1'] = applyExpressionCondition(geneExpressions['ABL1'], 13.0397867876073, 100.822441272638, 7.0543970000532, 58.5511885839582);
+          ABL1geneScores['DCTN4'] = applyExpressionCondition(geneExpressions['DCTN4'], 61.16148, 243.7928, 15.17781, 105.4528);
+          ABL1geneScores['SLFN13'] = applyExpressionCondition(geneExpressions['SLFN13'], 4.167124, 33.07598, 0.8668036, 17.89969);
+          ABL1geneScores['HPCAL1'] = applyExpressionCondition(geneExpressions['HPCAL1'], 87.19817, 375.5679, 33.24991, 212.7731);
+          ABL1geneScores['SH2D4A'] = applyExpressionCondition(geneExpressions['SH2D4A'], 0.04547993, 9.107743, 0, 1.3434);
+          ABL1geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 31.45275, 257.4393, 15.5387, 91.99394);
+          ABL1geneScores['DEXI'] = applyExpressionCondition(geneExpressions['DEXI'], 11.99806, 55.72624, 2.747108, 27.06386);
+          ABL1geneScores['LAIR1'] = applyExpressionCondition(geneExpressions['LAIR1'], 153.355, 960.5403, 22.27905, 532.9934); 
+
+          console.log('WNT9A Result:', geneExpressions['WNT9A']);
+          console.log('SPATS2L Result:', geneExpressions['SPATS2L']);
+          console.log('SLC2A5 Result:', geneExpressions['SLC2A5']);
+          console.log('WSB2 Result:', geneExpressions['WSB2']);
+          console.log('SOCS2 Result:', geneExpressions['SOCS2']);
+          console.log('NEURL1B Result:', geneExpressions['NEURL1B']);
+          console.log('AFAP1L2 Result:', geneExpressions['AFAP1L2']);
+          console.log('CEACAM21 Result:', geneExpressions['CEACAM21']);
+          console.log('ELFN2 Result:', geneExpressions['ELFN2']);
+          console.log('ZFHX3 Result:', geneExpressions['ZFHX3']);
+          console.log('ABL1 Result:', geneExpressions['ABL1']);
+          console.log('DCTN4 Result:', geneExpressions['DCTN4']);
+          console.log('SLFN13 Result:', geneExpressions['SLFN13']);
+          console.log('HPCAL1 Result:', geneExpressions['HPCAL1']);
+          console.log('SH2D4A Result:', geneExpressions['SH2D4A']);
+          console.log('CASP10 Result:', geneExpressions['CASP10']);
+          console.log('DEXI Result:', geneExpressions['DEXI']);
+          console.log('LAIR1 Result:', geneExpressions['LAIR1']);
+
+          ABL1averageResult = (ABL1geneScores['WNT9A'] + ABL1geneScores['SPATS2L'] + ABL1geneScores['SLC2A5'] + ABL1geneScores['WSB2'] + ABL1geneScores['SOCS2'] + ABL1geneScores['NEURL1B'] + ABL1geneScores['AFAP1L2'] + ABL1geneScores['CEACAM21'] + ABL1geneScores['ELFN2'] + ABL1geneScores['ZFHX3'] + ABL1geneScores['ABL1'] + ABL1geneScores['DCTN4'] + ABL1geneScores['SLFN13'] + ABL1geneScores['HPCAL1'] + ABL1geneScores['SH2D4A'] + ABL1geneScores['CASP10'] + ABL1geneScores['DEXI'] + ABL1geneScores['LAIR1']) / 18;
+          
+          console.log('ABL1 Sum:', ABL1averageResult);
+        }
+
+        if (CRLF2selected == true) {
+          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+          CRLF2geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 657, 3123, 1398, 5016);
+          CRLF2geneScores['CMTM7'] = applyExpressionCondition(geneExpressions['CMTM7'], 832, 4060, 1325, 5452);
+          CRLF2geneScores['CRLF2'] = applyExpressionCondition(geneExpressions['CRLF2'], 48, 7410, 419, 13061);
+
+          console.log('CASP10 Result:', CRLF2geneScores['CASP10']);
+          console.log('CMTM7 Result:', CRLF2geneScores['CMTM7']);
+          console.log('CRLF2 Result:', CRLF2geneScores['CRLF2']);
+
+          CRLF2averageResult = (CRLF2geneScores['CASP10'] + CRLF2geneScores['CMTM7'] + CRLF2geneScores['CRLF2']) / 3;
+        }
+
+        if (ABL1_LikeSelected == true) {
+          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+          ABL1_LikegeneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 4.101311,	853.4433,	0.2895722,	83.71679);
+          ABL1_LikegeneScores['SAV1'] = applyExpressionCondition(geneExpressions['SAV1'], 14.06004, 76.60259, 0.3860737, 26.77266);
+          ABL1_LikegeneScores['SNAP47'] = applyExpressionCondition(geneExpressions['SNAP47'], 5.299292, 59.40034, 1.991974, 20.32479);
+          ABL1_LikegeneScores['JCHAIN'] = applyExpressionCondition(geneExpressions['JCHAIN'], 11.55285, 2401.916, 1.834375, 814.8963);
+          ABL1_LikegeneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.6469912, 56.28609, 0, 4.883518);
+          ABL1_LikegeneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.3198, 39.32335, 3.555556, 27.80424);
+          ABL1_LikegeneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 73.41159, 1177.613, 0.6464725, 457.4958);
+          ABL1_LikegeneScores['ABCA9'] = applyExpressionCondition(geneExpressions['ABCA9'], 0.012253011315132, 61.1093687703313, 0, 9.05664532319996);
+
+          console.log('SPATS2L Result:', ABL1_LikegeneScores['SPATS2L']);
+          console.log('SAV1 Result:', ABL1_LikegeneScores['SAV1']);
+          console.log('SNAP47 Result:', ABL1_LikegeneScores['SNAP47']);
+          console.log('JCHAIN Result:', ABL1_LikegeneScores['JCHAIN']);
+          console.log('WNT9A Result:', ABL1_LikegeneScores['WNT9A']);
+          console.log('WSB2 Result:', ABL1_LikegeneScores['WSB2']);
+          console.log('SOCS2 Result:', ABL1_LikegeneScores['SOCS2']);
+          console.log('ABCA9 Result:', ABL1_LikegeneScores['ABCA9']);
+
+          ABL1_LikeaverageResult = (ABL1_LikegeneScores['SPATS2L'] + ABL1_LikegeneScores['SAV1'] + ABL1_LikegeneScores['SNAP47'] + ABL1_LikegeneScores['JCHAIN'] 
+          + ABL1_LikegeneScores['WNT9A'] + ABL1_LikegeneScores['WSB2'] + ABL1_LikegeneScores['SOCS2'] + ABL1_LikegeneScores['ABCA9']) / 8;
+        }
+        console.log('ABL1 Average Result:', ABL1averageResult);
+        console.log('CRLF2 Average Result:', CRLF2averageResult);
+        console.log('ABL1_Like Average Result:', ABL1_LikeaverageResult);     
       }
 
-      if (CRLF2selected == true) {
-        // CASP10, CMTM7, CRLF의 gene expression 값을 기준으로 순위 계산
-        const casp10Rank = sortedGenes.indexOf('CASP10') + 1;
-        const cmtm7Rank = sortedGenes.indexOf('CMTM7') + 1;
-        const crlf2Rank = sortedGenes.indexOf('CRLF2') + 1;
-        
-        // 각 유전자의 결과 출력
-        console.log('CASP10 Rank:', casp10Rank);
-        console.log('CMTM7 Rank:', cmtm7Rank);
-        console.log('CRLF2 Rank:', crlf2Rank);
+      else if (selectedmethod == "RANK") {
+        const sortedGenes = Object.keys(geneExpressions).sort((a, b) => geneExpressions[b] - geneExpressions[a]);
 
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        CRLF2rankScores['CASP10'] = applyExpressionCondition(casp10Rank, 657, 1398, 1398, 3123, 3121, 5016);
-        CRLF2rankScores['CMTM7'] = applyExpressionCondition(cmtm7Rank, 832, 1325, 1325, 4060, 4060, 5452);
-        CRLF2rankScores['CRLF2'] = applyExpressionCondition(crlf2Rank, 48, 419, 419, 7410, 7410, 13061);
+        if (ABL1selected == true) {
+          ABL1averageResult = 0;
+        }
 
-        console.log('CASP10 Result:', CRLF2rankScores['CASP10']);
-        console.log('CMTM7 Result:', CRLF2rankScores['CMTM7']);
-        console.log('CRLF2 Result:', CRLF2rankScores['CRLF2']);
+        if (CRLF2selected == true) {
+          // CASP10, CMTM7, CRLF의 gene expression 값을 기준으로 순위 계산
+          const casp10Rank = sortedGenes.indexOf('CASP10') + 1;
+          const cmtm7Rank = sortedGenes.indexOf('CMTM7') + 1;
+          const crlf2Rank = sortedGenes.indexOf('CRLF2') + 1;
+          
+          // 각 유전자의 결과 출력
+          console.log('CASP10 Rank:', casp10Rank);
+          console.log('CMTM7 Rank:', cmtm7Rank);
+          console.log('CRLF2 Rank:', crlf2Rank);
 
-        CRLF2averageResult = (CRLF2rankScores['CASP10'] + CRLF2rankScores['CMTM7'] + CRLF2rankScores['CRLF2']) / 3;
-      }
+          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+          CRLF2rankScores['CASP10'] = applyExpressionCondition(casp10Rank, 657, 1398, 1398, 3123, 3121, 5016);
+          CRLF2rankScores['CMTM7'] = applyExpressionCondition(cmtm7Rank, 832, 1325, 1325, 4060, 4060, 5452);
+          CRLF2rankScores['CRLF2'] = applyExpressionCondition(crlf2Rank, 48, 419, 419, 7410, 7410, 13061);
 
-      if (ABL1_LikeSelected == true) {
-        ABL1_LikeaverageResult = 0;
-      }
+          console.log('CASP10 Result:', CRLF2rankScores['CASP10']);
+          console.log('CMTM7 Result:', CRLF2rankScores['CMTM7']);
+          console.log('CRLF2 Result:', CRLF2rankScores['CRLF2']);
 
-      console.log('CASP10:', casp10Result);
-      console.log('CMTM7:', cmtm7Result);
-      console.log('CRLF2:', crlf2Result);
-      console.log('ABL1 Average:', ABL1averageResult);
-      console.log('CRLF2 Average:', CRLF2averageResult);
-      console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
-    }  
+          CRLF2averageResult = (CRLF2rankScores['CASP10'] + CRLF2rankScores['CMTM7'] + CRLF2rankScores['CRLF2']) / 3;
+        }
 
-    const queryParams = new URLSearchParams({
-      ABL1averageResult: ABL1averageResult,
-      CRLF2averageResult: CRLF2averageResult,
-      ABL1_LikeaverageResult: ABL1_LikeaverageResult,
-      ABL1selected: ABL1selected,
-      CRLF2selected: CRLF2selected,
-      ABL1_LikeSelected: ABL1_LikeSelected,
-      selectedmethod: selectedmethod
-    });
+        if (ABL1_LikeSelected == true) {
+          ABL1_LikeaverageResult = 0;
+        }
 
-    // URL에 데이터를 추가하여 다음 페이지로 이동
-    goto(`/result?${queryParams.toString()}`);
-  }
+        console.log('CASP10:', casp10Result);
+        console.log('CMTM7:', cmtm7Result);
+        console.log('CRLF2:', crlf2Result);
+        console.log('ABL1 Average:', ABL1averageResult);
+        console.log('CRLF2 Average:', CRLF2averageResult);
+        console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+      }  
+
+      const queryParams = new URLSearchParams({
+        ABL1averageResult: ABL1averageResult,
+        CRLF2averageResult: CRLF2averageResult,
+        ABL1_LikeaverageResult: ABL1_LikeaverageResult,
+        ABL1selected: ABL1selected,
+        CRLF2selected: CRLF2selected,
+        ABL1_LikeSelected: ABL1_LikeSelected,
+        selectedmethod: selectedmethod
+      });
+
+      // URL에 데이터를 추가하여 다음 페이지로 이동
+      goto(`/result?${queryParams.toString()}`);
+    }
+    }
+    
 
   // 파일 선택 시 파일 이름을 추출하여 레이블에 표시하는 함수
   function updateFileName(event) {
@@ -288,7 +292,7 @@
       const fileName = fileInput.files[0].name;
       
       file_value = fileName;
-      filetype = file_value.split('.')[1];
+      filetype = file_value.split('.')[file_value.split('.').length - 1];
 
     } else {
       file_value = '';
