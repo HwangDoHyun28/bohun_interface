@@ -87,17 +87,21 @@
 
       try {
         columnNumber = fileRows[0].length;
-      } catch (e) {
+      } 
+
+      catch (err) {
         file_value = "";
         preview = false;
         alert("Please select right format file");
         return;
-      } finally {
-        columnNumber = fileRows[0].length;
-        selectedColumns = Array.from({ length: columnNumber }, () => true);
+      } 
 
-        preview = true; 
-      }
+
+      columnNumber = fileRows[0].length;
+      selectedColumns = Array.from({ length: columnNumber }, () => true);
+
+      preview = true; 
+
       
     };
     reader.readAsText(file);
@@ -128,41 +132,46 @@
     }
 
     else if (true_length == 2){
+      let firstidx;
+      let secondidx;
       let step;
       let num = 0;
+
       for (step=0; step<selectedColumns.length; step++) {
         if (selectedColumns[step] == true) {
           num = num + 1;
           if (num ==1) {
-            let step2;
-            for (step2=1; step2<fileRows.length-1; step2++) {
-              value = fileRows[step2][step];
-              geneExpressions[value] = 0;
-            }
+            firstidx = step;
           }
           else if (num == 2) {
-            let step2;
-            for (step2=1; step2<fileRows.length; step2++) {
-              geneExpressions[value] = fileRows[step2][step];
-            }
+            secondidx = step;
           }
         }
       }
+      for (step=1; step<fileRows.length-1; step++) {
+        value = fileRows[step][firstidx];
+        geneExpressions[value] = fileRows[step][secondidx];
+      }
+      console.log('GeneExpressions Length: ', Object.keys(geneExpressions).length);
       if (selectedmethod == "RPKM") {
         if (ABL1selected == true) {
-          let idx; 
-          for (idx=0; idx<Object.keys(model["RPKM"]["ABL1"]).length; idx++) {
+          for (let idx=0; idx<Object.keys(model["RPKM"]["ABL1"]).length; idx++) {
             // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
             ABL1geneScores[Object.keys(model["RPKM"]["ABL1"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["ABL1"])[idx]], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][0], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][1], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][2], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][3]);
           }
-          
+
+          console.log('ABL1geneScores:', ABL1geneScores);
+
           let ABL1sum = 0;
 
-          for (let i = 0; i < ABL1geneScores.length; i++ ) {
-            ABL1sum += ABL1geneScores[i];
+          for (let idx = 0; idx < Object.keys(model["RPKM"]["ABL1"]).length; idx++ ) {
+            ABL1sum += ABL1geneScores[Object.keys(model["RPKM"]["ABL1"])[idx]];
           }
+          
+          console.log('ABL1sum:', ABL1sum);
 
-          ABL1averageResult = ABL1sum / ABL1geneScores.length;
+          ABL1averageResult = ABL1sum / Object.keys(model["RPKM"]["ABL1"]).length;
+          console.log('ABL1 Average:', ABL1averageResult);
         }
 
         if (CRLF2selected == true) {
@@ -170,15 +179,21 @@
           for (idx=0; idx<Object.keys(model["RPKM"]["CRLF2"]).length; idx++) {
             // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
             CRLF2geneScores[Object.keys(model["RPKM"]["CRLF2"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["CRLF2"])[idx]], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][0], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][1], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][2], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][3]);
+            console.log(geneExpressions[Object.keys(model["RPKM"]["CRLF2"])[idx]]);
           }
           
+          console.log('CRLF2geneScores:', CRLF2geneScores);
+
           let CRLF2sum = 0;
 
-          for (let i = 0; i < CRLF2geneScores.length; i++ ) {
-            CRLF2sum += CRLF2geneScores[i];
+          for (let idx = 0; idx < Object.keys(model["RPKM"]["CRLF2"]).length; idx++ ) {
+            CRLF2sum += CRLF2geneScores[Object.keys(model["RPKM"]["CRLF2"])[idx]];
           }
+          
+          console.log('CRLF2sum:', CRLF2sum);
 
-          CRLF2averageResult = CRLF2sum / CRLF2geneScores.length;
+          CRLF2averageResult = CRLF2sum / Object.keys(model["RPKM"]["CRLF2"]).length;
+          console.log('CRLF2 Average:', CRLF2averageResult);
         }
 
         if (ABL1_LikeSelected == true) {
@@ -186,52 +201,78 @@
           for (idx=0; idx<Object.keys(model["RPKM"]["ABL1_Like"]).length; idx++) {
             // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
             ABL1_LikegeneScores[Object.keys(model["RPKM"]["ABL1_Like"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["ABL1_Like"])[idx]], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][0], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][1], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][2], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][3]);
-
-            let ABL1_Likesum = 0;
-
-            for (let i = 0; i < ABL1_LikegeneScores.length; i++ ) {
-              ABL1_Likesum += ABL1_LikegeneScores[i];
-            }
-
-            ABL1_LikeaverageResult = ABL1_Likesum / ABL1_LikegeneScores.length;
           }  
+
+          console.log('ABL1_LikegeneScores:', ABL1_LikegeneScores);
+
+          let ABL1_Likesum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RPKM"]["ABL1_Like"]).length; idx++ ) {
+            ABL1_Likesum += ABL1_LikegeneScores[Object.keys(model["RPKM"]["ABL1_Like"])[idx]];
+          }
+          
+          console.log('ABL1_Likesum:', ABL1_Likesum);
+
+          ABL1_LikeaverageResult = ABL1_Likesum / Object.keys(model["RPKM"]["ABL1_Like"]).length;
+          console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
         }
       }
       else if (selectedmethod == "RANK") {
         const sortedGenes = Object.keys(geneExpressions).sort((a, b) => geneExpressions[b] - geneExpressions[a]);
 
         if (ABL1selected == true) {
-          ABL1averageResult = 0;
+          for (let idx=0; idx<Object.keys(model["RANK"]["ABL1"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1rankScores[Object.keys(model["RANK"]["ABL1"])[idx]] = applyExpressionCondition(sortedGenes.indexOf(Object.keys(model["RANK"]["ABL1"])[idx]) + 1, model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][0], model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][1], model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][2], model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][3]);
+          }
+
+          let ABL1sum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RANK"]["ABL1"]).length; idx++ ) {
+            ABL1sum += ABL1rankScores[Object.keys(model["RANK"]["ABL1"])[idx]];
+          }
+
+          console.log('ABL1sum:', ABL1sum);
+
+          ABL1averageResult = ABL1sum / Object.keys(model["RPKM"]["ABL1"]).length;
+          console.log('ABL1 Average:', ABL1averageResult);
         }
 
         if (CRLF2selected == true) {
-          // CASP10, CMTM7, CRLF의 gene expression 값을 기준으로 순위 계산
-          const casp10Rank = sortedGenes.indexOf('CASP10') + 1;
-          const cmtm7Rank = sortedGenes.indexOf('CMTM7') + 1;
-          const crlf2Rank = sortedGenes.indexOf('CRLF2') + 1;
-          
-          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-          CRLF2rankScores['CASP10'] = applyExpressionCondition(casp10Rank, 657, 1398, 1398, 3123, 3121, 5016);
-          CRLF2rankScores['CMTM7'] = applyExpressionCondition(cmtm7Rank, 832, 1325, 1325, 4060, 4060, 5452);
-          CRLF2rankScores['CRLF2'] = applyExpressionCondition(crlf2Rank, 48, 419, 419, 7410, 7410, 13061);
+          for (let idx=0; idx<Object.keys(model["RANK"]["CRLF2"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            CRLF2rankScores[Object.keys(model["RANK"]["CRLF2"])[idx]] = applyExpressionCondition(sortedGenes.indexOf(Object.keys(model["RANK"]["CRLF2"])[idx]) + 1, model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][0], model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][1], model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][2], model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][3]);
+          }
 
-          console.log('CASP10 Result:', CRLF2rankScores['CASP10']);
-          console.log('CMTM7 Result:', CRLF2rankScores['CMTM7']);
-          console.log('CRLF2 Result:', CRLF2rankScores['CRLF2']);
+          let CRLF2sum = 0;
 
-          CRLF2averageResult = (CRLF2rankScores['CASP10'] + CRLF2rankScores['CMTM7'] + CRLF2rankScores['CRLF2']) / 3;
+          for (let idx = 0; idx < Object.keys(model["RANK"]["CRLF2"]).length; idx++ ) {
+            CRLF2sum += CRLF2rankScores[Object.keys(model["RANK"]["CRLF2"])[idx]];
+          }
+
+          console.log('CRLF2sum:', CRLF2sum);
+
+          CRLF2averageResult = CRLF2sum / Object.keys(model["RPKM"]["CRLF2"]).length;
+          console.log('CRLF2 Average:', CRLF2averageResult);
         }
 
         if (ABL1_LikeSelected == true) {
-          ABL1_LikeaverageResult = 0;
-        }
+          for (let idx=0; idx<Object.keys(model["RANK"]["ABL1_Like"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1_LikerankScores[Object.keys(model["RANK"]["ABL1_Like"])[idx]] = applyExpressionCondition(sortedGenes.indexOf(Object.keys(model["RANK"]["ABL1_Like"])[idx]) + 1, model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][0], model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][1], model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][2], model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][3]);
+          }
 
-        console.log('CASP10:', casp10Result);
-        console.log('CMTM7:', cmtm7Result);
-        console.log('CRLF2:', crlf2Result);
-        console.log('ABL1 Average:', ABL1averageResult);
-        console.log('CRLF2 Average:', CRLF2averageResult);
-        console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+          let ABL1_Likesum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RANK"]["ABL1_Like"]).length; idx++ ) {
+            ABL1_Likesum += ABL1_LikerankScores[Object.keys(model["RANK"]["ABL1_Like"])[idx]];
+          }
+
+          console.log('ABL1_Likesum:', ABL1_Likesum);
+
+          ABL1_LikeaverageResult = ABL1_Likesum / Object.keys(model["RPKM"]["ABL1_Like"]).length;
+          console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+        }
       }  
 
       else {
@@ -313,7 +354,7 @@
           Upload your RPKM matrix file ( txt, csv, tsv, or ... )
         </p>           
         <div class="flex">
-          <Label for="fileInput" class="font-Catamaran w-28 rounded-lg text-center text-white mt-3 py-2 bg-violet-400 hover:bg-violet-500 text-base font-semibold hover:ring-transparent">
+          <Label for="fileInput" class="cursor-pointer font-Catamaran w-28 rounded-lg text-center text-white mt-3 py-2 bg-violet-400 hover:bg-violet-500 text-base font-semibold hover:ring-transparent">
             Select File
           </Label>
           <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-5">{file_value}</Label>
@@ -330,20 +371,20 @@
           </div>
           <!-- 파일 미리보기 섹션 -->
           <div class="mt-2 overflow-x-auto">
-            <table class="mt-1 border-2 text-sm border-neutral-100 text-neutral-400">
+            <table class="mt-0 border-2 text-sm border-neutral-100 text-neutral-400">
               {#each fileRows.slice(0, 6) as row, rowIndex}
                 {#if rowIndex === 0}
                   <tr>
                     {#each row as cell, cellIndex}
-                      <th class="border-2 text-center text-white text-sm border-neutral-100 bg-violet-300 p-2 mr-5">
-                        <div class="mx-2 flex">
+                      <th class="border-2 text-center text-white text-sm border-neutral-100 hover:bg-violet-400 bg-violet-300 p-2 mr-5">
+                        <div class="cursor-pointer mx-2 flex">
                           <Checkbox
                             id="{cellIndex}"
                             bind:checked={selectedColumns[cellIndex]}
-                            class="mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                            class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
                             on:click={() => toggleColumn(cellIndex)}
                           />
-                          <label for="{cellIndex}">
+                          <label class="cursor-pointer" for="{cellIndex}">
                             {cell}
                           </label>
                         </div>
@@ -370,11 +411,11 @@
             <Select
               id="Patient"
               size="sm" 
-              class="mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
+              class="cursor-pointer mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
               bind:value={selectedmethod}
             >
               {#each Based as { value, name }}
-                <option class="group-hover:text-white group-hover:bg-neutral-200" {value}>{name}</option>
+                <option class="cursor-pointer group-hover:text-white group-hover:bg-neutral-200" {value}>{name}</option>
               {/each}
             </Select>
           </div>
@@ -390,9 +431,9 @@
                   on:click={() => {
                     ABL1selected = !ABL1selected;
                   }}
-                  class="h-6 w-6 bg-inherit checked:bg-violet-800 focus:ring-white"
+                  class="cursor-pointer h-6 w-6 bg-inherit checked:bg-violet-800 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-medium" for="boxplot-check1">
+                <label class="cursor-pointer ml-5 text-neutral-400 text-base font-medium" for="boxplot-check1">
                   ABL1 Class
                 </label>
               </div>
@@ -403,9 +444,9 @@
                   on:click={() => {
                     CRLF2selected = !CRLF2selected;
                   }}
-                  class="w-6 h-6 bg-inherit checked:bg-violet-500 focus:ring-white"
+                  class="cursor-pointer w-6 h-6 bg-inherit checked:bg-violet-500 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-medium" for="boxplot-check2">
+                <label class="cursor-pointer ml-5 text-neutral-400 text-base font-medium" for="boxplot-check2">
                   CRLF2 Class
                 </label>
               </div>
@@ -416,8 +457,8 @@
                 on:click={() => {
                   ABL1_LikeSelected = !ABL1_LikeSelected;
                 }}
-                class="w-6 h-6 bg-inherit checked:bg-violet-300 focus:ring-white"/>
-                <label class="ml-5 text-neutral-400 text-base font-medium" for="boxplot-check3">
+                class="cursor-pointer w-6 h-6 bg-inherit checked:bg-violet-300 focus:ring-white"/>
+                <label class="cursor-pointer ml-5 text-neutral-400 text-base font-medium" for="boxplot-check3">
                   ABL1-Like Class
                 </label>
               </div>

@@ -13,10 +13,10 @@
         <p class="place-content-center text-6xl text-white font-sans font-semibold my-3">
         Probability Calculator
         </p>
-        <div class="mt-16 left-96 place-content-center">
+        <div class="mt-10 left-96 place-content-center">
           <Button
             href="/about"
-            class="place-content-center py-4 px-8 mt-5 text-2xl font-semibold bg-violet-700 hover:bg-violet-800 focus:ring-transparent"
+            class="place-content-center py-4 px-7 mt-5 text-2xl font-semibold bg-violet-800 hover:bg-violet-700 focus:ring-transparent"
           >About</Button>
           <div class="mt-16 mb-5 place-content-center flex">
             <Button href="https://pnucolab.com/" type="submit" target="self" class="ring-transparent">
@@ -44,5 +44,4 @@
           </div>
       </div>
     </footer>    
-    
 </div>
