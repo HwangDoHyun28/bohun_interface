@@ -5,7 +5,8 @@
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
   import { Alert } from 'flowbite-svelte';
-  
+  import model from '../../lib/model.json';
+
   let columnNumber;
   let filetype = "";
   let value = "";
@@ -145,59 +146,57 @@
               geneExpressions[value] = fileRows[step2][step];
             }
           }
+        }
       }
-    }
-
       if (selectedmethod == "RPKM") {
         if (ABL1selected == true) {
-          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-          ABL1geneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.5654433, 58.45411, 0, 4.883518);
-          ABL1geneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 13.46951, 700.5429, 0.2895722, 87.59672);
-          ABL1geneScores['SLC2A5'] = applyExpressionCondition(geneExpressions['SLC2A5'], 15.26396, 205.1955, 0.1024562, 54.12377);
-          ABL1geneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.93495, 40.47132, 3.555556, 27.80424);
-          ABL1geneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 171.042, 756.3316, 0.6464725, 457.4958);
-          ABL1geneScores['NEURL1B'] = applyExpressionCondition(geneExpressions['NEURL1B'], 48.08602, 377.4831, 0.808105, 87.74368);
-          ABL1geneScores['AFAP1L2'] = applyExpressionCondition(geneExpressions['AFAP1L2'], 2.67134324933023, 148.361961244139, 0.276805776923961, 12.8356383275342);
-          ABL1geneScores['CEACAM21'] = applyExpressionCondition(geneExpressions['CEACAM21'], 15.46394, 65.26508, 4.370161, 47.89709);
-          ABL1geneScores['ELFN2'] = applyExpressionCondition(geneExpressions['ELFN2'], 3.731676, 160.7782, 0.08965376, 31.71739);
-          ABL1geneScores['ZFHX3'] = applyExpressionCondition(geneExpressions['ZFHX3'], 1.363497, 11.44101, 0.08152398, 4.554561);
-          ABL1geneScores['ABL1'] = applyExpressionCondition(geneExpressions['ABL1'], 13.0397867876073, 100.822441272638, 7.0543970000532, 58.5511885839582);
-          ABL1geneScores['DCTN4'] = applyExpressionCondition(geneExpressions['DCTN4'], 61.16148, 243.7928, 15.17781, 105.4528);
-          ABL1geneScores['SLFN13'] = applyExpressionCondition(geneExpressions['SLFN13'], 4.167124, 33.07598, 0.8668036, 17.89969);
-          ABL1geneScores['HPCAL1'] = applyExpressionCondition(geneExpressions['HPCAL1'], 87.19817, 375.5679, 33.24991, 212.7731);
-          ABL1geneScores['SH2D4A'] = applyExpressionCondition(geneExpressions['SH2D4A'], 0.04547993, 9.107743, 0, 1.3434);
-          ABL1geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 31.45275, 257.4393, 15.5387, 91.99394);
-          ABL1geneScores['DEXI'] = applyExpressionCondition(geneExpressions['DEXI'], 11.99806, 55.72624, 2.747108, 27.06386);
-          ABL1geneScores['LAIR1'] = applyExpressionCondition(geneExpressions['LAIR1'], 153.355, 960.5403, 22.27905, 532.9934); 
+          let idx; 
+          for (idx=0; idx<Object.keys(model["RPKM"]["ABL1"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1geneScores[Object.keys(model["RPKM"]["ABL1"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["ABL1"])[idx]], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][0], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][1], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][2], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][3]);
+          }
+          
+          let ABL1sum = 0;
 
-          ABL1averageResult = (ABL1geneScores['WNT9A'] + ABL1geneScores['SPATS2L'] + ABL1geneScores['SLC2A5'] + ABL1geneScores['WSB2'] + ABL1geneScores['SOCS2'] + ABL1geneScores['NEURL1B'] + ABL1geneScores['AFAP1L2'] + ABL1geneScores['CEACAM21'] + ABL1geneScores['ELFN2'] + ABL1geneScores['ZFHX3'] + ABL1geneScores['ABL1'] + ABL1geneScores['DCTN4'] + ABL1geneScores['SLFN13'] + ABL1geneScores['HPCAL1'] + ABL1geneScores['SH2D4A'] + ABL1geneScores['CASP10'] + ABL1geneScores['DEXI'] + ABL1geneScores['LAIR1']) / 18;
+          for (let i = 0; i < ABL1geneScores.length; i++ ) {
+            ABL1sum += ABL1geneScores[i];
+          }
+
+          ABL1averageResult = ABL1sum / ABL1geneScores.length;
         }
 
         if (CRLF2selected == true) {
-          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-          CRLF2geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 657, 3123, 1398, 5016);
-          CRLF2geneScores['CMTM7'] = applyExpressionCondition(geneExpressions['CMTM7'], 832, 4060, 1325, 5452);
-          CRLF2geneScores['CRLF2'] = applyExpressionCondition(geneExpressions['CRLF2'], 48, 7410, 419, 13061);
+          let idx; 
+          for (idx=0; idx<Object.keys(model["RPKM"]["CRLF2"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            CRLF2geneScores[Object.keys(model["RPKM"]["CRLF2"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["CRLF2"])[idx]], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][0], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][1], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][2], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][3]);
+          }
+          
+          let CRLF2sum = 0;
 
-          CRLF2averageResult = (CRLF2geneScores['CASP10'] + CRLF2geneScores['CMTM7'] + CRLF2geneScores['CRLF2']) / 3;
+          for (let i = 0; i < CRLF2geneScores.length; i++ ) {
+            CRLF2sum += CRLF2geneScores[i];
+          }
+
+          CRLF2averageResult = CRLF2sum / CRLF2geneScores.length;
         }
 
         if (ABL1_LikeSelected == true) {
-          // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-          ABL1_LikegeneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 4.101311,	853.4433,	0.2895722,	83.71679);
-          ABL1_LikegeneScores['SAV1'] = applyExpressionCondition(geneExpressions['SAV1'], 14.06004, 76.60259, 0.3860737, 26.77266);
-          ABL1_LikegeneScores['SNAP47'] = applyExpressionCondition(geneExpressions['SNAP47'], 5.299292, 59.40034, 1.991974, 20.32479);
-          ABL1_LikegeneScores['JCHAIN'] = applyExpressionCondition(geneExpressions['JCHAIN'], 11.55285, 2401.916, 1.834375, 814.8963);
-          ABL1_LikegeneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.6469912, 56.28609, 0, 4.883518);
-          ABL1_LikegeneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.3198, 39.32335, 3.555556, 27.80424);
-          ABL1_LikegeneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 73.41159, 1177.613, 0.6464725, 457.4958);
-          ABL1_LikegeneScores['ABCA9'] = applyExpressionCondition(geneExpressions['ABCA9'], 0.012253011315132, 61.1093687703313, 0, 9.05664532319996);
+          let idx;
+          for (idx=0; idx<Object.keys(model["RPKM"]["ABL1_Like"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1_LikegeneScores[Object.keys(model["RPKM"]["ABL1_Like"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["ABL1_Like"])[idx]], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][0], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][1], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][2], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][3]);
 
-          ABL1_LikeaverageResult = (ABL1_LikegeneScores['SPATS2L'] + ABL1_LikegeneScores['SAV1'] + ABL1_LikegeneScores['SNAP47'] + ABL1_LikegeneScores['JCHAIN'] 
-          + ABL1_LikegeneScores['WNT9A'] + ABL1_LikegeneScores['WSB2'] + ABL1_LikegeneScores['SOCS2'] + ABL1_LikegeneScores['ABCA9']) / 8;
-        }  
+            let ABL1_Likesum = 0;
+
+            for (let i = 0; i < ABL1_LikegeneScores.length; i++ ) {
+              ABL1_Likesum += ABL1_LikegeneScores[i];
+            }
+
+            ABL1_LikeaverageResult = ABL1_Likesum / ABL1_LikegeneScores.length;
+          }  
+        }
       }
-
       else if (selectedmethod == "RANK") {
         const sortedGenes = Object.keys(geneExpressions).sort((a, b) => geneExpressions[b] - geneExpressions[a]);
 
@@ -259,7 +258,7 @@
       goto(`/result?${queryParams.toString()}`);
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
     }
-    }
+  }
     
 
   // 파일 선택 시 파일 이름을 추출하여 레이블에 표시하는 함수
@@ -314,7 +313,7 @@
           Upload your RPKM matrix file ( txt, csv, tsv, or ... )
         </p>           
         <div class="flex">
-          <Label for="fileInput" class="font-Catamaran w-32 rounded-lg text-center text-white mt-3 py-2 bg-violet-400 hover:bg-violet-500 text-base font-semibold hover:ring-transparent">
+          <Label for="fileInput" class="font-Catamaran w-28 rounded-lg text-center text-white mt-3 py-2 bg-violet-400 hover:bg-violet-500 text-base font-semibold hover:ring-transparent">
             Select File
           </Label>
           <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-5">{file_value}</Label>

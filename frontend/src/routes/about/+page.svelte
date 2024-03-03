@@ -1,7 +1,7 @@
 <script>
   import { P, A } from "flowbite-svelte";
-  import CarouselItemAbout0 from '/home/hdh1028/Downloads/Bohun_Ranking_Pathway/bohun_interface/frontend/src/lib/about0.svelte';
-  import CarouselItemAbout1 from '/home/hdh1028/Downloads/Bohun_Ranking_Pathway/bohun_interface/frontend/src/lib/about1.svelte';
+  import CarouselItemAbout0 from '../../lib/about0.svelte';
+  import CarouselItemAbout1 from '../../lib/about1.svelte';
 
 let currentIndex = 0;
 
