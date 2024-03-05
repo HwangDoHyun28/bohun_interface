@@ -10,7 +10,7 @@
   /> 
   <Button
       href="/about"
-      class="-ml-10 absolute bottom-64 place-content-center py-4 px-7 mt-5 text-2xl font-semibold bg-violet-800 hover:bg-violet-700 focus:ring-transparent">
+      class="-ml-16 absolute bottom-64 place-content-center py-4 px-7 mt-5 text-2xl font-semibold bg-violet-800 hover:bg-violet-700 focus:ring-transparent">
     About
   </Button>
   

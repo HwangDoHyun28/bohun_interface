@@ -8,6 +8,7 @@
   import model from '../../lib/model.json';
 
   let columnNumber;
+  let rowNumber;
   let filetype = "";
   let value = "";
   let file_value = "";
@@ -34,10 +35,21 @@
   let casp10Result = 0;
   let cmtm7Result = 0;
   let crlf2Result = 0;
+  
+  let checkcolumnidx = [];
+  let checkrowidx = [];
 
   let ABL1averageResult = 0;
   let CRLF2averageResult = 0;
   let ABL1_LikeaverageResult = 0;
+
+  function create2DArray(rows, columns) {
+    var arr = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+        arr[i] = new Array(columns);
+    }
+    return arr;
+}
 
   // gene expression 값에 대한 조건을 적용하여 결과를 반환하는 함수
   function applyExpressionCondition(value, lower1, upper1, lower2, upper2) {
@@ -87,6 +99,7 @@
 
       try {
         columnNumber = fileRows[0].length;
+        rowNumber = fileRows.length;
       } 
 
       catch (err) {
@@ -96,12 +109,41 @@
         return;
       } 
 
+      selectedChecks = create2DArray(columnNumber+1, rowNumber+1);
+      tableTF = create2DArray(columnNumber, rowNumber);
 
-      columnNumber = fileRows[0].length;
-      selectedColumns = Array.from({ length: columnNumber }, () => true);
+      preview = true;
+      
+      //str인 셀은 true를 뱉는 2차원 array 만들기
+      for (let i = 0; i < fileRows.length; i++) {
+        for (let j=0; j< fileRows[i].length; j++){
+          tableTF[j][i] = isNaN(fileRows[i][j]);
+        }
+      }
 
-      preview = true; 
+      // 열 중에서 true가 절반 이상 있는 열은 array에 담아 차후 체크박스가 나타나게 한다.
+      for (let j=0; j < fileRows[0].length; j++){
+        if (tableTF[j].filter(element => true === element).length >= parseInt(fileRows.length/2)) {
+          checkcolumnidx.push(j+1)
+        }
+      }
 
+      // 체크박스가 나타나게 한 column의 index를 제외하고 각 row의 값에서 true가 절반 이상 있는 row의 인덱스를 저장한다.
+      for (let i=0; i < fileRows.length; i++) {
+        let removecolumnidxrow = [];
+        
+        for (let j=0; j < fileRows[0].length; j++) {
+          if (checkcolumnidx.includes(parseInt(j+1)) == true) {
+            removecolumnidxrow.push(false)
+          }
+          else {
+            removecolumnidxrow.push(tableTF[j][i]) 
+          }
+        }
+        if (removecolumnidxrow.filter(element => true === element).length >= parseInt((fileRows[0].length)/2)) {
+          checkrowidx.push(i+1)
+        }
+      }
       
     };
     reader.readAsText(file);
@@ -324,10 +366,12 @@
     fileInput.addEventListener('change', handleFileSelect);
   });
 
-  let selectedColumns = []; // 각 열의 선택 여부를 저장하는 배열
+  let selectedChecks;
+  let tableTF; // 각 열의 선택 여부를 저장하는 배열
 
-  function toggleColumn(cellIndex) {
-    selectedColumns[cellIndex] = !selectedColumns[cellIndex];
+  function toggleColumn(cellIndex,rowIndex) {
+    console.log(cellIndex, rowIndex)
+    selectedChecks[cellIndex][rowIndex] = !selectedChecks[cellIndex][rowIndex];
   }
 
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
@@ -373,45 +417,184 @@
           </div>
           <div class="mt-2 overflow-x-auto">
             <Table class="border-2 text-sm border-neutral-100 text-neutral-400" hoverable={true}>
-              {#each fileRows.slice(0, 10) as row, rowIndex}
-                {#if rowIndex === 0}
-                  <TableHead>
-                    <TableHeadCell>
-                      <Checkbox
-                        id="{rowIndex}"
-                        bind:checked={selectedColumns[rowIndex]}
-                        class="sr-only cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
-                        on:click={() => toggleColumn(rowIndex)}
-                      />
-                    </TableHeadCell>
-                    {#each row as cell, cellIndex}
+              {#if fileRows.length < 10}
+                {#each fileRows.slice(0, fileRows.length) as row, rowIndex}
+                  {#if rowIndex === 0}
+                    <TableHead>
                       <TableHeadCell>
-                        <Checkbox
-                          id="{cellIndex}"
-                          bind:checked={selectedColumns[cellIndex]}
-                          class="sr-only cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
-                          on:click={() => toggleColumn(cellIndex)}
-                        />
+                        <span class="sr-only">Check</span>
                       </TableHeadCell>
-                    {/each}
-                    {#each row as cell, cellIndex}
+                      {#if row.length < 10}
+                        {#each row.slice(0, row.length) as cell, cellIndex}
+                          {#if checkcolumnidx.includes(parseInt(cellIndex+1)) == true}
+                            <TableHeadCell>
+                              <Checkbox
+                                id="{cellIndex+1}"
+                                bind:checked={selectedChecks[cellIndex+1][0]}
+                                class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                                on:click={() => toggleColumn(cellIndex+1, 0)}
+                              />
+                            </TableHeadCell>
+                          {:else}
+                            <TableHeadCell>
+                              <span class="sr-only">Check</span>
+                            </TableHeadCell>
+                          {/if}
+                        {/each}
+                      {:else}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          <TableHeadCell>
+                            <Checkbox
+                              id="{cellIndex}"
+                              bind:checked={selectedChecks[cellIndex+1][0]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(cellIndex+1, 0)}
+                            />
+                          </TableHeadCell>
+                        {/each}
+                      {/if}
+                    </TableHead>
+                    <TableBody>
+                      <TableBodyRow>
+                        {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                          <TableBodyCell>
+                            <Checkbox
+                              id="{rowIndex}"
+                              bind:checked={selectedChecks[0][rowIndex+1]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(0, rowIndex+1)}
+                            />
+                          </TableBodyCell>
+                        {:else}
+                          <TableHeadCell>
+                            <span class="sr-only">Check</span>
+                          </TableHeadCell>
+                        {/if}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          <TableBodyCell>
+                            {cell}
+                          </TableBodyCell>
+                        {/each}
+                      </TableBodyRow>
+                    </TableBody>
+                  {:else}
+                    <TableBody>
+                      <TableBodyRow>
+                        {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                          <TableBodyCell>
+                            <Checkbox
+                              id="{rowIndex}"
+                              bind:checked={selectedChecks[0][rowIndex+1]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(0, rowIndex+1)}
+                            />
+                          </TableBodyCell>
+                        {:else}
+                          <TableHeadCell>
+                            <span class="sr-only">Check</span>
+                          </TableHeadCell>
+                        {/if}
+                          {#each row.slice(0, 10) as cell, cellIndex}
+                            <TableBodyCell>
+                              {cell}
+                            </TableBodyCell>
+                          {/each}
+                          {#each row.slice(0, 10) as cell, cellIndex}
+                            <TableBodyCell>
+                              {cell}
+                            </TableBodyCell>
+                          {/each}
+                      </TableBodyRow>
+                    </TableBody>
+                  {/if}
+                {/each}
+              {:else}
+                {#each fileRows.slice(0, 10) as row, rowIndex}
+                  {#if rowIndex === 0}
+                    <TableHead>
                       <TableHeadCell>
-                        {cell}
+                        <span class="sr-only">Check</span>
                       </TableHeadCell>
-                    {/each}
-                  </TableHead>
-                {:else}
-                  <TableBody class="divide-y">
-                    <TableBodyRow>
-                      {#each row as cell, cellIndex}
-                        <TableBodyCell>
-                          {cell}
-                        </TableBodyCell>
-                      {/each}
-                    </TableBodyRow>
-                  </TableBody>
-                {/if}
-              {/each}
+                      {#if row.length < 10}
+                        {#each row.slice(0, row.length) as cell, cellIndex}
+                          {#if checkcolumnidx.includes(parseInt(cellIndex+1)) == true}
+                            <TableHeadCell>
+                              <Checkbox
+                                id="{cellIndex}"
+                                bind:checked={selectedChecks[cellIndex+1][0]}
+                                class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                                on:click={() => toggleColumn(cellIndex+1, 0)}
+                              />
+                            </TableHeadCell>
+                          {:else}
+                            <TableHeadCell>
+                              <span class="sr-only">Check</span>
+                            </TableHeadCell>
+                          {/if}
+                        {/each}
+                      {:else}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          <TableHeadCell>
+                            <Checkbox
+                              id="{cellIndex}"
+                              bind:checked={selectedChecks[cellIndex+1][0]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(cellIndex+1, 0)}
+                            />
+                          </TableHeadCell>
+                        {/each}
+                      {/if}
+                    </TableHead>
+                    <TableBody>
+                      <TableBodyRow>
+                        {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                          <TableBodyCell>
+                            <Checkbox
+                              id="{rowIndex}"
+                              bind:checked={selectedChecks[0][rowIndex+1]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(0, rowIndex+1)}
+                            />
+                          </TableBodyCell>
+                        {:else}
+                          <TableHeadCell>
+                            <span class="sr-only">Check</span>
+                          </TableHeadCell>
+                        {/if}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          <TableBodyCell>
+                            {cell}
+                          </TableBodyCell>
+                        {/each}
+                      </TableBodyRow>
+                    </TableBody>
+                  {:else}
+                    <TableBody>
+                      <TableBodyRow>
+                        {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                          <TableBodyCell>
+                            <Checkbox
+                              id="{rowIndex}"
+                              bind:checked={selectedChecks[0][rowIndex+1]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(0, rowIndex+1)}
+                            />
+                          </TableBodyCell>
+                        {:else}
+                          <TableHeadCell>
+                            <span class="sr-only">Check</span>
+                          </TableHeadCell>
+                        {/if}
+                          {#each row.slice(0, 10) as cell, cellIndex}
+                            <TableBodyCell>
+                              {cell}
+                            </TableBodyCell>
+                          {/each}
+                      </TableBodyRow>
+                    </TableBody>
+                  {/if}
+                {/each}
+              {/if}
             </Table>  
           </div> 
         {/if}
