@@ -294,9 +294,12 @@
         ABL1_LikeSelected: ABL1_LikeSelected,
         selectedmethod: selectedmethod
       });
+
       loading = true; // 파일 처리가 시작되었으므로 로딩 상태를 true로 설정
+
       // URL에 데이터를 추가하여 다음 페이지로 이동
       goto(`/result?${queryParams.toString()}`);
+
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
     }
   }
@@ -331,6 +334,7 @@
   }
 
 </script>
+
 <style>
   /* YourComponent에 대한 스타일 */
   @import '/home/hdh1028/Downloads/Bohun_Ranking_Pathway/bohun_interface/frontend/src/routes/scrollbar.css'; /* scrollbar.css 파일 임포트 */

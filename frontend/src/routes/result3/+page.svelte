@@ -4,9 +4,14 @@
   import { Select } from "flowbite-svelte";
   import { P, A, Input, Label, Helper } from "flowbite-svelte";
   import { Fileupload, Button, Checkbox } from "flowbite-svelte";
+  import { Alert } from 'flowbite-svelte';
+  import model from '../../lib/model.json';
 
-  let value;
-
+  let columnNumber;
+  let rowNumber;
+  let filetype = "";
+  let value = "";
+  let file_value = "";
   let selectedmethod;
   let Based = [
     { value: "RPKM", name: "RPKM based" },
@@ -30,10 +35,31 @@
   let casp10Result = 0;
   let cmtm7Result = 0;
   let crlf2Result = 0;
+  
+  let checkcolumnidx = [];
+  let checkrowidx = [];
 
   let ABL1averageResult = 0;
   let CRLF2averageResult = 0;
   let ABL1_LikeaverageResult = 0;
+
+  let selectedrowChecks;
+  let selectedcolumnChecks;
+  let tableTF; // 각 열의 선택 여부를 저장하는 배열
+
+  let Checkedclass;
+  let Defaultclass = "border-2 border-neutral-100 mr-2 text-center text-sm py-2 px-5";
+  let columnCheckedclass = "font-semibold border-2 border-neutral-100 bg-violet-300 text-white mr-2 text-center text-sm py-2 px-5";
+  let rowCheckedclass = "font-semibold border-2 border-neutral-100 bg-violet-300 text-white mr-2 text-center text-sm py-2 px-5";
+  let crossCheckedclass = "font-semibold border-2 border-neutral-100 bg-violet-400 text-white mr-2 text-center text-sm py-2 px-5";
+
+  function create2DArray(rows, columns) {
+    var arr = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+        arr[i] = new Array(columns);
+    }
+    return arr;
+}
 
   // gene expression 값에 대한 조건을 적용하여 결과를 반환하는 함수
   function applyExpressionCondition(value, lower1, upper1, lower2, upper2) {
@@ -48,22 +74,90 @@
     }
   }
 
+  let fileContent = "";
+  let fileRows = [];
+  let loading = false; // 로딩 상태를 나타내는 변수
+  let preview = false; // 파일 미리보기 상태를 나타내는 변수
+
   // 파일을 읽어서 특정 유전자의 gene expression 값을 추출하고 결과를 출력하는 함수
   function processFile(file) {
     const reader = new FileReader();
 
     reader.onload = function(event) {
-      const content = event.target.result;
-      const lines = content.split('\n');
+      if (filetype=="txt") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split('\t'));
+      }
+      else if (filetype=="csv") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split(','));
+      }
+      else if (filetype=="tsv") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split('\t'));
+      }
+      else if (filetype=="xlsx") {
+        fileContent = event.target.result;
+        fileRows = fileContent.split('\n').map(row => row.split(','));
+      }
+      else {
+        file_value = "";
+        preview = false;
+        alert("Please select right format file");
+        return;
+      }
 
-      lines.forEach(line => {
-        const [geneName, expressionStr] = line.split('\t');
-        const expression = parseFloat(expressionStr);
+      try {
+        columnNumber = fileRows[0].length;
+        rowNumber = fileRows.length;
+      } 
 
-        if (!isNaN(expression)) {
-          geneExpressions[geneName] = expression;
+      catch (err) {
+        file_value = "";
+        preview = false;
+        alert("Please select right format file");
+        return;
+      } 
+      tableTF = create2DArray(columnNumber, rowNumber);
+
+      preview = true;
+      
+      //str인 셀은 true를 뱉는 2차원 array 만들기
+      for (let i = 0; i < fileRows.length; i++) {
+        for (let j=0; j< fileRows[i].length; j++){
+          tableTF[j][i] = isNaN(fileRows[i][j]);
         }
-      });
+      }
+
+      // 열 중에서 true가 절반 이상 있는 열은 array에 담아 차후 체크박스가 나타나게 한다.
+      for (let j=0; j < fileRows[0].length; j++){
+        if (tableTF[j].filter(element => element == true).length >= parseInt(fileRows.length/2)) {
+          checkcolumnidx.push(j+1)
+        }
+      }
+
+      // 체크박스가 나타나게 한 column의 index를 제외하고 각 row의 값에서 true가 절반 이상 있는 row의 인덱스를 저장한다.
+      for (let i=0; i < fileRows.length; i++) {
+        let removecolumnidxrow = [];
+        
+        for (let j=0; j < fileRows[0].length; j++) {
+          if (checkcolumnidx.includes(parseInt(j+1)) == true) {
+          }
+          else {
+            removecolumnidxrow.push(tableTF[j][i]) 
+          }
+        }
+        if (removecolumnidxrow.filter(element => element == true).length > parseInt((removecolumnidxrow.length)/2)) {
+          checkrowidx.push(i+1)
+        }
+      }
+
+      selectedrowChecks= Array.from({ length: rowNumber+1 }, () => false);
+      selectedrowChecks[checkrowidx[0]] = true;
+      
+      selectedcolumnChecks = Array.from({ length: columnNumber+1 }, () => false);
+      selectedcolumnChecks[checkcolumnidx[0]] = true;
+      
     };
     reader.readAsText(file);
   }
@@ -79,148 +173,189 @@
   }
 
   // 버튼 클릭 시 결과 페이지로 이동하는 함수
-  async function handlePredictProbability() {
-    if (selectedmethod == "RPKM") {
-      if (ABL1selected == true) {
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        ABL1geneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.5654433, 58.45411, 0, 4.883518);
-        ABL1geneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 13.46951, 700.5429, 0.2895722, 87.59672);
-        ABL1geneScores['SLC2A5'] = applyExpressionCondition(geneExpressions['SLC2A5'], 15.26396, 205.1955, 0.1024562, 54.12377);
-        ABL1geneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.93495, 40.47132, 3.555556, 27.80424);
-        ABL1geneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 171.042, 756.3316, 0.6464725, 457.4958);
-        ABL1geneScores['NEURL1B'] = applyExpressionCondition(geneExpressions['NEURL1B'], 48.08602, 377.4831, 0.808105, 87.74368);
-        ABL1geneScores['AFAP1L2'] = applyExpressionCondition(geneExpressions['AFAP1L2'], 2.67134324933023, 148.361961244139, 0.276805776923961, 12.8356383275342);
-        ABL1geneScores['CEACAM21'] = applyExpressionCondition(geneExpressions['CEACAM21'], 15.46394, 65.26508, 4.370161, 47.89709);
-        ABL1geneScores['ELFN2'] = applyExpressionCondition(geneExpressions['ELFN2'], 3.731676, 160.7782, 0.08965376, 31.71739);
-        ABL1geneScores['ZFHX3'] = applyExpressionCondition(geneExpressions['ZFHX3'], 1.363497, 11.44101, 0.08152398, 4.554561);
-        ABL1geneScores['ABL1'] = applyExpressionCondition(geneExpressions['ABL1'], 13.0397867876073, 100.822441272638, 7.0543970000532, 58.5511885839582);
-        ABL1geneScores['DCTN4'] = applyExpressionCondition(geneExpressions['DCTN4'], 61.16148, 243.7928, 15.17781, 105.4528);
-        ABL1geneScores['SLFN13'] = applyExpressionCondition(geneExpressions['SLFN13'], 4.167124, 33.07598, 0.8668036, 17.89969);
-        ABL1geneScores['HPCAL1'] = applyExpressionCondition(geneExpressions['HPCAL1'], 87.19817, 375.5679, 33.24991, 212.7731);
-        ABL1geneScores['SH2D4A'] = applyExpressionCondition(geneExpressions['SH2D4A'], 0.04547993, 9.107743, 0, 1.3434);
-        ABL1geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 31.45275, 257.4393, 15.5387, 91.99394);
-        ABL1geneScores['DEXI'] = applyExpressionCondition(geneExpressions['DEXI'], 11.99806, 55.72624, 2.747108, 27.06386);
-        ABL1geneScores['LAIR1'] = applyExpressionCondition(geneExpressions['LAIR1'], 153.355, 960.5403, 22.27905, 532.9934); 
+  async function handlePredictProbability() { 
+    let true_length = selectedColumns.filter(element => true === element).length;
 
-        console.log('WNT9A Result:', geneExpressions['WNT9A']);
-        console.log('SPATS2L Result:', geneExpressions['SPATS2L']);
-        console.log('SLC2A5 Result:', geneExpressions['SLC2A5']);
-        console.log('WSB2 Result:', geneExpressions['WSB2']);
-        console.log('SOCS2 Result:', geneExpressions['SOCS2']);
-        console.log('NEURL1B Result:', geneExpressions['NEURL1B']);
-        console.log('AFAP1L2 Result:', geneExpressions['AFAP1L2']);
-        console.log('CEACAM21 Result:', geneExpressions['CEACAM21']);
-        console.log('ELFN2 Result:', geneExpressions['ELFN2']);
-        console.log('ZFHX3 Result:', geneExpressions['ZFHX3']);
-        console.log('ABL1 Result:', geneExpressions['ABL1']);
-        console.log('DCTN4 Result:', geneExpressions['DCTN4']);
-        console.log('SLFN13 Result:', geneExpressions['SLFN13']);
-        console.log('HPCAL1 Result:', geneExpressions['HPCAL1']);
-        console.log('SH2D4A Result:', geneExpressions['SH2D4A']);
-        console.log('CASP10 Result:', geneExpressions['CASP10']);
-        console.log('DEXI Result:', geneExpressions['DEXI']);
-        console.log('LAIR1 Result:', geneExpressions['LAIR1']);
-
-        ABL1averageResult = (ABL1geneScores['WNT9A'] + ABL1geneScores['SPATS2L'] + ABL1geneScores['SLC2A5'] + ABL1geneScores['WSB2'] + ABL1geneScores['SOCS2'] + ABL1geneScores['NEURL1B'] + ABL1geneScores['AFAP1L2'] + ABL1geneScores['CEACAM21'] + ABL1geneScores['ELFN2'] + ABL1geneScores['ZFHX3'] + ABL1geneScores['ABL1'] + ABL1geneScores['DCTN4'] + ABL1geneScores['SLFN13'] + ABL1geneScores['HPCAL1'] + ABL1geneScores['SH2D4A'] + ABL1geneScores['CASP10'] + ABL1geneScores['DEXI'] + ABL1geneScores['LAIR1']) / 18;
-        
-        console.log('ABL1 Sum:', ABL1averageResult);
-      }
-
-      if (CRLF2selected == true) {
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        CRLF2geneScores['CASP10'] = applyExpressionCondition(geneExpressions['CASP10'], 657, 3123, 1398, 5016);
-        CRLF2geneScores['CMTM7'] = applyExpressionCondition(geneExpressions['CMTM7'], 832, 4060, 1325, 5452);
-        CRLF2geneScores['CRLF2'] = applyExpressionCondition(geneExpressions['CRLF2'], 48, 7410, 419, 13061);
-
-        console.log('CASP10 Result:', CRLF2geneScores['CASP10']);
-        console.log('CMTM7 Result:', CRLF2geneScores['CMTM7']);
-        console.log('CRLF2 Result:', CRLF2geneScores['CRLF2']);
-
-        CRLF2averageResult = (CRLF2geneScores['CASP10'] + CRLF2geneScores['CMTM7'] + CRLF2geneScores['CRLF2']) / 3;
-      }
-
-      if (ABL1_LikeSelected == true) {
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        ABL1_LikegeneScores['SPATS2L'] = applyExpressionCondition(geneExpressions['SPATS2L'], 4.101311,	853.4433,	0.2895722,	83.71679);
-        ABL1_LikegeneScores['SAV1'] = applyExpressionCondition(geneExpressions['SAV1'], 14.06004, 76.60259, 0.3860737, 26.77266);
-        ABL1_LikegeneScores['SNAP47'] = applyExpressionCondition(geneExpressions['SNAP47'], 5.299292, 59.40034, 1.991974, 20.32479);
-        ABL1_LikegeneScores['JCHAIN'] = applyExpressionCondition(geneExpressions['JCHAIN'], 11.55285, 2401.916, 1.834375, 814.8963);
-        ABL1_LikegeneScores['WNT9A'] = applyExpressionCondition(geneExpressions['WNT9A'], 0.6469912, 56.28609, 0, 4.883518);
-        ABL1_LikegeneScores['WSB2'] = applyExpressionCondition(geneExpressions['WSB2'], 11.3198, 39.32335, 3.555556, 27.80424);
-        ABL1_LikegeneScores['SOCS2'] = applyExpressionCondition(geneExpressions['SOCS2'], 73.41159, 1177.613, 0.6464725, 457.4958);
-        ABL1_LikegeneScores['ABCA9'] = applyExpressionCondition(geneExpressions['ABCA9'], 0.012253011315132, 61.1093687703313, 0, 9.05664532319996);
-
-        console.log('SPATS2L Result:', ABL1_LikegeneScores['SPATS2L']);
-        console.log('SAV1 Result:', ABL1_LikegeneScores['SAV1']);
-        console.log('SNAP47 Result:', ABL1_LikegeneScores['SNAP47']);
-        console.log('JCHAIN Result:', ABL1_LikegeneScores['JCHAIN']);
-        console.log('WNT9A Result:', ABL1_LikegeneScores['WNT9A']);
-        console.log('WSB2 Result:', ABL1_LikegeneScores['WSB2']);
-        console.log('SOCS2 Result:', ABL1_LikegeneScores['SOCS2']);
-        console.log('ABCA9 Result:', ABL1_LikegeneScores['ABCA9']);
-
-        ABL1_LikeaverageResult = (ABL1_LikegeneScores['SPATS2L'] + ABL1_LikegeneScores['SAV1'] + ABL1_LikegeneScores['SNAP47'] + ABL1_LikegeneScores['JCHAIN'] 
-        + ABL1_LikegeneScores['WNT9A'] + ABL1_LikegeneScores['WSB2'] + ABL1_LikegeneScores['SOCS2'] + ABL1_LikegeneScores['ABCA9']) / 8;
-      }
-      console.log('ABL1 Average Result:', ABL1averageResult);
-      console.log('CRLF2 Average Result:', CRLF2averageResult);
-      console.log('ABL1_Like Average Result:', ABL1_LikeaverageResult);     
+    if (true_length < 2) {
+      alert("Please select 2 columns");
+      return;
     }
 
-    else if (selectedmethod == "RANK") {
-      const sortedGenes = Object.keys(geneExpressions).sort((a, b) => geneExpressions[b] - geneExpressions[a]);
+    else if (true_length > 2) {
+      alert("Please select 2 columns");
+      return;
+    }
 
-      if (ABL1selected == true) {
-        ABL1averageResult = 0;
+    else if (true_length == 2){
+      let firstidx;
+      let secondidx;
+      let step;
+      let num = 0;
+
+      
+      console.log('GeneExpressions Length: ', Object.keys(geneExpressions).length);
+      if (selectedmethod == "RPKM") {
+        if (ABL1selected == true) {
+          for (let idx=0; idx<Object.keys(model["RPKM"]["ABL1"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1geneScores[Object.keys(model["RPKM"]["ABL1"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["ABL1"])[idx]], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][0], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][1], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][2], model["RPKM"]["ABL1"][Object.keys(model["RPKM"]["ABL1"])[idx]][3]);
+          }
+
+          console.log('ABL1geneScores:', ABL1geneScores);
+
+          let ABL1sum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RPKM"]["ABL1"]).length; idx++ ) {
+            ABL1sum += ABL1geneScores[Object.keys(model["RPKM"]["ABL1"])[idx]];
+          }
+          
+          console.log('ABL1sum:', ABL1sum);
+
+          ABL1averageResult = ABL1sum / Object.keys(model["RPKM"]["ABL1"]).length;
+          console.log('ABL1 Average:', ABL1averageResult);
+        }
+
+        if (CRLF2selected == true) {
+          let idx; 
+          for (idx=0; idx<Object.keys(model["RPKM"]["CRLF2"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            CRLF2geneScores[Object.keys(model["RPKM"]["CRLF2"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["CRLF2"])[idx]], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][0], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][1], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][2], model["RPKM"]["CRLF2"][Object.keys(model["RPKM"]["CRLF2"])[idx]][3]);
+            console.log(geneExpressions[Object.keys(model["RPKM"]["CRLF2"])[idx]]);
+          }
+          
+          console.log('CRLF2geneScores:', CRLF2geneScores);
+
+          let CRLF2sum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RPKM"]["CRLF2"]).length; idx++ ) {
+            CRLF2sum += CRLF2geneScores[Object.keys(model["RPKM"]["CRLF2"])[idx]];
+          }
+          
+          console.log('CRLF2sum:', CRLF2sum);
+
+          CRLF2averageResult = CRLF2sum / Object.keys(model["RPKM"]["CRLF2"]).length;
+          console.log('CRLF2 Average:', CRLF2averageResult);
+        }
+
+        if (ABL1_LikeSelected == true) {
+          let idx;
+          for (idx=0; idx<Object.keys(model["RPKM"]["ABL1_Like"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1_LikegeneScores[Object.keys(model["RPKM"]["ABL1_Like"])[idx]] = applyExpressionCondition(geneExpressions[Object.keys(model["RPKM"]["ABL1_Like"])[idx]], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][0], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][1], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][2], model["RPKM"]["ABL1_Like"][Object.keys(model["RPKM"]["ABL1_Like"])[idx]][3]);
+          }  
+
+          console.log('ABL1_LikegeneScores:', ABL1_LikegeneScores);
+
+          let ABL1_Likesum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RPKM"]["ABL1_Like"]).length; idx++ ) {
+            ABL1_Likesum += ABL1_LikegeneScores[Object.keys(model["RPKM"]["ABL1_Like"])[idx]];
+          }
+          
+          console.log('ABL1_Likesum:', ABL1_Likesum);
+
+          ABL1_LikeaverageResult = ABL1_Likesum / Object.keys(model["RPKM"]["ABL1_Like"]).length;
+          console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+        }
+      }
+      else if (selectedmethod == "RANK") {
+        const sortedGenes = Object.keys(geneExpressions).sort((a, b) => geneExpressions[b] - geneExpressions[a]);
+
+        if (ABL1selected == true) {
+          for (let idx=0; idx<Object.keys(model["RANK"]["ABL1"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1rankScores[Object.keys(model["RANK"]["ABL1"])[idx]] = applyExpressionCondition(sortedGenes.indexOf(Object.keys(model["RANK"]["ABL1"])[idx]) + 1, model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][0], model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][1], model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][2], model["RANK"]["ABL1"][Object.keys(model["RANK"]["ABL1"])[idx]][3]);
+          }
+
+          let ABL1sum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RANK"]["ABL1"]).length; idx++ ) {
+            ABL1sum += ABL1rankScores[Object.keys(model["RANK"]["ABL1"])[idx]];
+          }
+
+          console.log('ABL1sum:', ABL1sum);
+
+          ABL1averageResult = ABL1sum / Object.keys(model["RPKM"]["ABL1"]).length;
+          console.log('ABL1 Average:', ABL1averageResult);
+        }
+
+        if (CRLF2selected == true) {
+          for (let idx=0; idx<Object.keys(model["RANK"]["CRLF2"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            CRLF2rankScores[Object.keys(model["RANK"]["CRLF2"])[idx]] = applyExpressionCondition(sortedGenes.indexOf(Object.keys(model["RANK"]["CRLF2"])[idx]) + 1, model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][0], model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][1], model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][2], model["RANK"]["CRLF2"][Object.keys(model["RANK"]["CRLF2"])[idx]][3]);
+          }
+
+          let CRLF2sum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RANK"]["CRLF2"]).length; idx++ ) {
+            CRLF2sum += CRLF2rankScores[Object.keys(model["RANK"]["CRLF2"])[idx]];
+          }
+
+          console.log('CRLF2sum:', CRLF2sum);
+
+          CRLF2averageResult = CRLF2sum / Object.keys(model["RPKM"]["CRLF2"]).length;
+          console.log('CRLF2 Average:', CRLF2averageResult);
+        }
+
+        if (ABL1_LikeSelected == true) {
+          for (let idx=0; idx<Object.keys(model["RANK"]["ABL1_Like"]).length; idx++) {
+            // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
+            ABL1_LikerankScores[Object.keys(model["RANK"]["ABL1_Like"])[idx]] = applyExpressionCondition(sortedGenes.indexOf(Object.keys(model["RANK"]["ABL1_Like"])[idx]) + 1, model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][0], model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][1], model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][2], model["RANK"]["ABL1_Like"][Object.keys(model["RANK"]["ABL1_Like"])[idx]][3]);
+          }
+
+          let ABL1_Likesum = 0;
+
+          for (let idx = 0; idx < Object.keys(model["RANK"]["ABL1_Like"]).length; idx++ ) {
+            ABL1_Likesum += ABL1_LikerankScores[Object.keys(model["RANK"]["ABL1_Like"])[idx]];
+          }
+
+          console.log('ABL1_Likesum:', ABL1_Likesum);
+
+          ABL1_LikeaverageResult = ABL1_Likesum / Object.keys(model["RPKM"]["ABL1_Like"]).length;
+          console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+        }
+      }  
+
+      else {
+        alert("Please select the method");
+        return;
       }
 
-      if (CRLF2selected == true) {
-        // CASP10, CMTM7, CRLF의 gene expression 값을 기준으로 순위 계산
-        const casp10Rank = sortedGenes.indexOf('CASP10') + 1;
-        const cmtm7Rank = sortedGenes.indexOf('CMTM7') + 1;
-        const crlf2Rank = sortedGenes.indexOf('CRLF2') + 1;
-        
-        // 각 유전자의 결과 출력
-        console.log('CASP10 Rank:', casp10Rank);
-        console.log('CMTM7 Rank:', cmtm7Rank);
-        console.log('CRLF2 Rank:', crlf2Rank);
-
-        // 각 gene expression 값에 대한 조건을 적용하고 결과를 반환
-        CRLF2rankScores['CASP10'] = applyExpressionCondition(casp10Rank, 657, 1398, 1398, 3123, 3121, 5016);
-        CRLF2rankScores['CMTM7'] = applyExpressionCondition(cmtm7Rank, 832, 1325, 1325, 4060, 4060, 5452);
-        CRLF2rankScores['CRLF2'] = applyExpressionCondition(crlf2Rank, 48, 419, 419, 7410, 7410, 13061);
-
-        console.log('CASP10 Result:', CRLF2rankScores['CASP10']);
-        console.log('CMTM7 Result:', CRLF2rankScores['CMTM7']);
-        console.log('CRLF2 Result:', CRLF2rankScores['CRLF2']);
-
-        CRLF2averageResult = (CRLF2rankScores['CASP10'] + CRLF2rankScores['CMTM7'] + CRLF2rankScores['CRLF2']) / 3;
+      if (ABL1selected===false && CRLF2selected===false && ABL1_LikeSelected===false) {
+        alert("Please select at least one class");
+        return;
       }
 
-      if (ABL1_LikeSelected == true) {
-        ABL1_LikeaverageResult = 0;
-      }
+      const queryParams = new URLSearchParams({
+        ABL1averageResult: ABL1averageResult,
+        CRLF2averageResult: CRLF2averageResult,
+        ABL1_LikeaverageResult: ABL1_LikeaverageResult,
+        ABL1selected: ABL1selected,
+        CRLF2selected: CRLF2selected,
+        ABL1_LikeSelected: ABL1_LikeSelected,
+        selectedmethod: selectedmethod
+      });
+      loading = true; // 파일 처리가 시작되었으므로 로딩 상태를 true로 설정
+      // URL에 데이터를 추가하여 다음 페이지로 이동
+      goto(`/result?${queryParams.toString()}`);
+      loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
+    }
+  }
+    
 
-      console.log('CASP10:', casp10Result);
-      console.log('CMTM7:', cmtm7Result);
-      console.log('CRLF2:', crlf2Result);
-      console.log('ABL1 Average:', ABL1averageResult);
-      console.log('CRLF2 Average:', CRLF2averageResult);
-      console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
-    }  
+  // 파일 선택 시 파일 이름을 추출하여 레이블에 표시하는 함수
+  function updateFileName(event) {
+    const fileInput = event.target;
 
-    const queryParams = new URLSearchParams({
-      ABL1averageResult: ABL1averageResult,
-      CRLF2averageResult: CRLF2averageResult,
-      ABL1_LikeaverageResult: ABL1_LikeaverageResult,
-      ABL1selected: ABL1selected,
-      CRLF2selected: CRLF2selected,
-      ABL1_LikeSelected: ABL1_LikeSelected,
-      selectedmethod: selectedmethod
-    });
+    if (fileInput.files.length > 0) {
+      const fileName = fileInput.files[0].name;
+      
+      file_value = fileName;
+      filetype = file_value.split('.')[file_value.split('.').length - 1];
 
-    // URL에 데이터를 추가하여 다음 페이지로 이동
-    goto(`/result5?${queryParams.toString()}`);
+    } else {
+      file_value = '';
+    }
   }
 
   // 파일 선택 이벤트에 핸들러 등록
@@ -229,50 +364,321 @@
     
     fileInput.addEventListener('change', handleFileSelect);
   });
+
+  
+
+  function toggleColumn(cellIndex,rowIndex) {
+    console.log(cellIndex, rowIndex)
+    if (rowIndex == 0) {
+      selectedcolumnChecks = Array.from({ length: columnNumber+1 }, () => false);
+      selectedcolumnChecks[cellIndex] = !selectedcolumnChecks[cellIndex];
+    }
+    if (cellIndex == 0) {
+      selectedrowChecks= Array.from({ length: rowNumber+1 }, () => false);
+      selectedrowChecks[rowIndex] = !selectedrowChecks[rowIndex];
+    }
+  }
 </script>
+<style>
+  /* YourComponent에 대한 스타일 */
+  @import '../../routes/scrollbar.css'; /* scrollbar.css 파일 임포트 */
+</style>
+
+<!-- 로딩 화면 -->
+{#if loading}
+  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+  </div>
+{/if}
+
 
 <form type="submit">
-  <div class="mt-12 rounded-lg border mx-5 px-12 py-10 bg-white">
-    <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
+  <div class="mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
+    <p class="ml-8 text-3xl text-violet-900 font-medium mt-5">Ph(+) B-ALL Probability Calculator</p>
     <div class="mt-10">
       <div class="w-full px-10 rounded-lg">
         <p class="text-3xl text-violet-700 font-medium">Data</p>
-        <p class="mt-2 text-violet-400 text-base font-normal">
-          Upload your RPKM matrix file ( csv, tsv, or ... )
-        </p>   
-        <Label class="w-32 space-y-2 mb-2">
-          <Fileupload id="fileInput" class = "w-32 opacity-0" bind:value/>
-        </Label>           
-        <div class="-mt-12 flex">
-          <div>
-            <Button class="y-5 mt-3 py-2 bg-violet-400 hover:bg-violet-400 text-base font-semibold"
-              >Select File</Button
-            >
-          </div>
-          <div class="text-center mt-4">
-            <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-1">{value}</Label>
-          </div>
+        <p class="mt-2 text-violet-400 text-base font-medium">
+          Upload your RPKM matrix file ( txt, csv, tsv, or ... )
+        </p>           
+        <div class="flex">
+          <Label for="fileInput" class="cursor-pointer font-Catamaran w-28 rounded-lg text-center text-white mt-3 py-2 bg-violet-400 hover:bg-violet-500 text-base font-semibold hover:ring-transparent">
+            Select File
+          </Label>
+          <Label class="text-neutral-300 text-center text-[16px] font-normal px-3 mt-5">{file_value}</Label>
+          <Input class="hidden" type="file" id="fileInput" style={{display:"none"}} on:change={updateFileName}/>
         </div>
-        <!-- 파일 업로드 섹션 -->
+        <!-- 파일 미리보기 섹션 -->
+        {#if preview}
+          <div class="flex mt-12">
+            <p class="text-violet-400 text-lg font-medium">
+              Preview
+            </p>
+            <p class="ml-1 mt-1 text-neutral-300 text-sm font-normal">
+              (Select Columns)
+            </p>
+          </div>
+          <div class="-ml-0 -mt-1 overflow-x-auto p-2 m-2">
+            <table class="text-sm text-neutral-400">
+              {#if fileRows.length < 10}
+                {#each fileRows.slice(0, fileRows.length) as row, rowIndex}
+                  {#if rowIndex === 0}
+                    <tr>
+                      <th class="text-center text-white text-sm bg-transparent py-2 px-5 mr-5">
+                        <span class="sr-only">Check</span>
+                      </th>
+                      {#if row.length < 10}
+                        {#each row.slice(0, row.length) as cell, cellIndex}
+                          {#if checkcolumnidx.includes(parseInt(cellIndex+1)) == true}
+                            <th class="py-2 px-2">
+                              <Checkbox
+                                id="column_{cellIndex+1}"
+                                bind:checked={selectedcolumnChecks[cellIndex+1]}
+                                class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                                on:click={() => toggleColumn(cellIndex+1, 0)}
+                              />
+                            </th>
+                          {:else}
+                            <th class="py-2 px-5">
+                              <span class="sr-only">Check</span>
+                            </th>
+                          {/if}
+                        {/each}
+                      {:else}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          <th class="text-center text-white text-sm bg-transparent py-2 px-2 mr-5">
+                            <Checkbox
+                              id="column_{cellIndex+1}"
+                              bind:checked={selectedcolumnChecks[cellIndex+1]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(cellIndex+1, 0)}
+                            />
+                          </th>
+                        {/each}
+                      {/if}
+                    </tr>
+                    <tr>
+                      {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <Checkbox
+                            id="row_{rowIndex+1}"
+                            bind:checked={selectedrowChecks[rowIndex+1]}
+                            class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                            on:click={() => toggleColumn(0, rowIndex+1)}
+                          />
+                        </td>
+                      {:else}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <span class="sr-only">Check</span>
+                        </td>
+                      {/if}
+                      {#each row.slice(0, 10) as cell, cellIndex}
+                        {#if selectedcolumnChecks[cellIndex+1] == true}
+                          {#if selectedrowChecks[rowIndex+1] == true}
+                            <td class="{crossCheckedclass}">
+                              {cell}
+                            </td>
+                          {:else}
+                            <td class="{columnCheckedclass}">
+                              {cell}
+                            </td>
+                          {/if}
+                        {:else}
+                          {#if selectedrowChecks[rowIndex+1] == true}
+                            <td class="{rowCheckedclass}">
+                              {cell}
+                            </td>
+                          {:else}
+                          <td class="{Defaultclass}">
+                            {cell}
+                          </td>
+                          {/if}
+                        {/if}
+                      {/each}
+                    </tr>
+                  {:else}
+                    <tr>
+                      {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <Checkbox
+                            id="row_{rowIndex+1}"
+                            bind:checked={selectedrowChecks[rowIndex+1]}
+                            class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                            on:click={() => toggleColumn(0, rowIndex+1)}
+                          />
+                        </td>
+                      {:else}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <span class="sr-only">Check</span>
+                        </td>
+                      {/if}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          {#if selectedcolumnChecks[cellIndex+1] == true}
+                            {#if selectedrowChecks[rowIndex+1] == true}
+                              <td class="{crossCheckedclass}">
+                                {cell}
+                              </td>
+                            {:else}
+                              <td class="{columnCheckedclass}">
+                                {cell}
+                              </td>
+                            {/if}
+                          {:else}
+                            {#if selectedrowChecks[rowIndex+1] == true}
+                              <td class="{rowCheckedclass}">
+                                {cell}
+                              </td>
+                            {:else}
+                            <td class="{Defaultclass}">
+                              {cell}
+                            </td>
+                            {/if}
+                          {/if}
+                        {/each}
+                    </tr>
+                  {/if}
+                {/each}
+              {:else}
+                {#each fileRows.slice(0, 10) as row, rowIndex}
+                  {#if rowIndex === 0}
+                    <tr>
+                      <th class="text-center text-white text-sm bg-transparent py-2 px-5 mr-5">
+                        <span class="sr-only">Check</span>
+                      </th>
+                      {#if row.length < 10}
+                        {#each row.slice(0, row.length) as cell, cellIndex}
+                          {#if checkcolumnidx.includes(parseInt(cellIndex+1)) == true}
+                            <th class="text-center text-white text-sm bg-transparent py-2 px-2 mr-5">
+                              <Checkbox
+                                id="column_{cellIndex+1}"
+                                bind:checked={selectedcolumnChecks[cellIndex+1]}
+                                class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                                on:click={() => toggleColumn(cellIndex+1, 0)}
+                              />
+                            </th>
+                          {:else}
+                            <th class="text-center text-white text-sm bg-transparent py-2 px-5 mr-5">
+                              <span class="sr-only">Check</span>
+                            </th>
+                          {/if}
+                        {/each}
+                      {:else}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          <th class="text-center text-white text-sm bg-transparent py-2 px-2 mr-5">
+                            <Checkbox
+                              id="column_{cellIndex+1}"
+                              bind:checked={selectedcolumnChecks[cellIndex+1]}
+                              class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                              on:click={() => toggleColumn(cellIndex+1, 0)}
+                            />
+                          </th>
+                        {/each}
+                      {/if}
+                    </tr>
+                    <tr>
+                      {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <Checkbox
+                            id="row_{rowIndex+1}"
+                            bind:checked={selectedrowChecks[rowIndex+1]}
+                            class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                            on:click={() => toggleColumn(0, rowIndex+1)}
+                          />
+                        </td>
+                      {:else}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <span class="sr-only">Check</span>
+                        </td>
+                      {/if}
+                      {#each row.slice(0, 10) as cell, cellIndex}
+                        {#if selectedcolumnChecks[cellIndex+1] == true}
+                          {#if selectedrowChecks[rowIndex+1] == true}
+                            <td class="{crossCheckedclass}">
+                              {cell}
+                            </td>
+                          {:else}
+                            <td class="{columnCheckedclass}">
+                              {cell}
+                            </td>
+                          {/if}
+                        {:else}
+                          {#if selectedrowChecks[rowIndex+1] == true}
+                            <td class="{rowCheckedclass}">
+                              {cell}
+                            </td>
+                          {:else}
+                          <td class="{Defaultclass}">
+                            {cell}
+                          </td>
+                          {/if}
+                        {/if}
+                      {/each}
+                    </tr>
+                  {:else}
+                    <tr>
+                      {#if checkrowidx.includes(parseInt(rowIndex+1)) == true}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <Checkbox
+                            id="row_{rowIndex+1}"
+                            bind:checked={selectedrowChecks[rowIndex+1]}
+                            class="cursor-pointer mr-2 w-4 h-4 bg-inherit checked:bg-violet-500 focus:ring-transparent"
+                            on:click={() => toggleColumn(0, rowIndex+1)}
+                          />
+                        </td>
+                      {:else}
+                        <td class="mr-2 text-center text-sm py-2 px-2">
+                          <span class="sr-only">Check</span>
+                        </td>
+                      {/if}
+                        {#each row.slice(0, 10) as cell, cellIndex}
+                          {#if selectedcolumnChecks[cellIndex+1] == true}
+                            {#if selectedrowChecks[rowIndex+1] == true}
+                              <td class="{crossCheckedclass}">
+                                {cell}
+                              </td>
+                            {:else}
+                              <td class="{columnCheckedclass}">
+                                {cell}
+                              </td>
+                            {/if}
+                          {:else}
+                            {#if selectedrowChecks[rowIndex+1] == true}
+                              <td class="{rowCheckedclass}">
+                                {cell}
+                              </td>
+                            {:else}
+                            <td class="{Defaultclass}">
+                              {cell}
+                            </td>
+                            {/if}
+                          {/if}
+                        {/each}
+                    </tr>
+                  {/if}
+                {/each}
+              {/if}
+            </table>  
+          </div> 
+        {/if}
         <p class="mt-20 text-3xl text-violet-700 font-medium">Settings</p>   
         <div class="mb-10 w-full">
           <div class="w-full mr-24">
-            <p class="mt-2 text-violet-400 text-base font-normal">
+            <p class="mt-2 text-violet-400 text-base font-medium">
               RPKM or RANK Based
             </p>
             <Select
               id="Patient"
               size="sm" 
-              class="mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
+              class="cursor-pointer mt-3 text-base text-violet-500 bg-inherit border-violet-300 focus:ring-white focus:border-violet-300"
               bind:value={selectedmethod}
             >
               {#each Based as { value, name }}
-                <option class="group-hover:text-white group-hover:bg-neutral-200" {value}>{name}</option>
+                <option class="cursor-pointer group-hover:text-white group-hover:bg-neutral-200" {value}>{name}</option>
               {/each}
             </Select>
           </div>
           <div class="w-full mt-16 mr-5">
-            <p class="text-violet-400 text-base font-normal">
+            <p class="text-violet-400 text-base font-medium">
               Score Class
             </p>
             <div class="flex">
@@ -283,9 +689,9 @@
                   on:click={() => {
                     ABL1selected = !ABL1selected;
                   }}
-                  class="h-6 w-6 bg-inherit checked:bg-violet-800 focus:ring-white"
+                  class="cursor-pointer h-6 w-6 bg-inherit checked:bg-violet-800 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check1">
+                <label class="cursor-pointer ml-5 text-neutral-400 text-base font-medium" for="boxplot-check1">
                   ABL1 Class
                 </label>
               </div>
@@ -296,9 +702,9 @@
                   on:click={() => {
                     CRLF2selected = !CRLF2selected;
                   }}
-                  class="w-6 h-6 bg-inherit checked:bg-violet-500 focus:ring-white"
+                  class="cursor-pointer w-6 h-6 bg-inherit checked:bg-violet-500 focus:ring-white"
                 />
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check2">
+                <label class="cursor-pointer ml-5 text-neutral-400 text-base font-medium" for="boxplot-check2">
                   CRLF2 Class
                 </label>
               </div>
@@ -309,8 +715,8 @@
                 on:click={() => {
                   ABL1_LikeSelected = !ABL1_LikeSelected;
                 }}
-                class="w-6 h-6 bg-inherit checked:bg-violet-300 focus:ring-white"/>
-                <label class="ml-5 text-neutral-400 text-base font-normal" for="boxplot-check3">
+                class="cursor-pointer w-6 h-6 bg-inherit checked:bg-violet-300 focus:ring-white"/>
+                <label class="cursor-pointer ml-5 text-neutral-400 text-base font-medium" for="boxplot-check3">
                   ABL1-Like Class
                 </label>
               </div>
@@ -319,21 +725,20 @@
         </div>  
         <div class="mt-28 mb-12 text-center">
           <Button
-          class="text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
+          class="font-Catamaran text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-transparent"
           on:click={handlePredictProbability}
           >Predict Probability</Button>
         </div>
       </div> 
     </div>
-    <div class="mt-16 -mb-9 h-max bg-inherit hover:bg-inherit rounded-lg place-content-center">
-      <P class="text-violet-700 p-1 flex justify-center text-base" whitespace='nowrap'>This website is maintained by 
-        <A
-          class="text-violet-400 pl-1 underline"
-          href="https://pnucolab.com/">Computational Omics Lab
-        </A>, Pusan National University College of Biomedical Convergence
-          Engineering, South Korea.
-        <A class="text-violet-400 pl-1 underline">Contact US</A>
-      </P>
-    </div>
+    <footer>
+      <div class="mt-20 mb-2 px-2 sm:px-4">
+          <div class="mx-auto flex flex-col container">
+              <P class="text-violet-700 text-center">This website is maintained by <A class="text-violet-400 underline" href="https://sites.google.com/view/kimlab" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
+          </div>
+      </div>
+    </footer>    
   </div>
 </form>
+
+

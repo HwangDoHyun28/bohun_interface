@@ -415,7 +415,7 @@
               (Select Columns)
             </p>
           </div>
-          <div class="mt-2 overflow-x-auto">
+          <div class="mt-2 overflow-x-auto text-neutral-400">
             <Table class="border-2 text-sm border-neutral-100 text-neutral-400" hoverable={true}>
               {#if fileRows.length < 10}
                 {#each fileRows.slice(0, fileRows.length) as row, rowIndex}
