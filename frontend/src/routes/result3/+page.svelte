@@ -211,6 +211,12 @@
         }
       }
 
+      for (let i=0; i<Object.keys(geneexpressionperpatient).length; i++) {
+        for (let j=0; j<Object.keys(aliase).length; j++) {
+          geneexpressionperpatient[Object.keys(geneexpressionperpatient)[i]][Object.keys(aliase)[j]] = 0
+        }
+      }
+
       //파일에서 checkcolumnidx와 checkrowidx 안에 없는 인덱스의 값만 가져와 저장한다.
       for (let i=0; i<fileRows.length; i++) {
         if (checkrowidx.includes(i+1) == false) {
@@ -219,26 +225,26 @@
               let originalgenename = "";
 
               // 선택한 column의 값을 alise에 따라 변환하여 저장
-              for (n=0; n<aliase.length; n++) {
-                for (k=0; k<aliase[Object.keys(Object.keys)[n]].length; k++){
+              for (let n=0; n<aliase.length; n++) {
+                for (let k=0; k<aliase[Object.keys(Object.keys)[n]].length; k++){
                   if (fileRows[i][truecolumnidx] == aliase[n][k]) {
                     originalgenename = Object.keys(aliase)[n];
                   }
                 }
               }
-              geneexpressionperpatient[fileRows[truerowidx][j]][originalgenename].push(fileRows[i][j]);
+              geneexpressionperpatient[fileRows[truerowidx][j]][originalgenename] = fileRows[i][j];
             }
           }
         }
       }
 
       let ABL1averageResultObject = {};
-      let CRLF2averageResult = {};
-      let ABL1_LikeaverageResult = {};
+      let CRLF2averageResultObject = {};
+      let ABL1_LikeaverageResultObject = {};
 
       // geneexpressionperpatient에 저장한 값을 기반으로 필요한 값을 구한다. 
       for (let i=0; i<Object.keys(geneexpressionperpatient).length; i++) {
-        geneExpressions = geneexpressionperpatient[Object.keys(geneexpressionperpatient)[i]];
+        let geneExpressions = geneexpressionperpatient[Object.keys(geneexpressionperpatient)[i]];
 
         if (selectedmethod == "RPKM") {
           if (ABL1selected == true) {
@@ -254,11 +260,11 @@
             for (let idx = 0; idx < Object.keys(model["RPKM"]["ABL1"]).length; idx++ ) {
               ABL1sum += ABL1geneScores[Object.keys(model["RPKM"]["ABL1"])[idx]];
             }
-            
-            console.log('ABL1sum:', ABL1sum);
 
             ABL1averageResult = ABL1sum / Object.keys(model["RPKM"]["ABL1"]).length;
             console.log('ABL1 Average:', ABL1averageResult);
+
+            ABL1averageResultObject[Object.keys(geneexpressionperpatient)[i]] = ABL1averageResult;
           }
 
           if (CRLF2selected == true) {
@@ -276,11 +282,11 @@
             for (let idx = 0; idx < Object.keys(model["RPKM"]["CRLF2"]).length; idx++ ) {
               CRLF2sum += CRLF2geneScores[Object.keys(model["RPKM"]["CRLF2"])[idx]];
             }
-            
-            console.log('CRLF2sum:', CRLF2sum);
 
             CRLF2averageResult = CRLF2sum / Object.keys(model["RPKM"]["CRLF2"]).length;
             console.log('CRLF2 Average:', CRLF2averageResult);
+
+            CRLF2averageResultObject[Object.keys(geneexpressionperpatient)[i]] = CRLF2averageResult;
           }
 
           if (ABL1_LikeSelected == true) {
@@ -297,11 +303,11 @@
             for (let idx = 0; idx < Object.keys(model["RPKM"]["ABL1_Like"]).length; idx++ ) {
               ABL1_Likesum += ABL1_LikegeneScores[Object.keys(model["RPKM"]["ABL1_Like"])[idx]];
             }
-            
-            console.log('ABL1_Likesum:', ABL1_Likesum);
 
             ABL1_LikeaverageResult = ABL1_Likesum / Object.keys(model["RPKM"]["ABL1_Like"]).length;
             console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+
+            ABL1_LikeaverageResultObject[Object.keys(geneexpressionperpatient)[i]] = ABL1_LikeaverageResult;
           }
         }
         else if (selectedmethod == "RANK") {
@@ -319,10 +325,10 @@
               ABL1sum += ABL1rankScores[Object.keys(model["RANK"]["ABL1"])[idx]];
             }
 
-            console.log('ABL1sum:', ABL1sum);
-
             ABL1averageResult = ABL1sum / Object.keys(model["RPKM"]["ABL1"]).length;
             console.log('ABL1 Average:', ABL1averageResult);
+            
+            ABL1averageResultObject[Object.keys(geneexpressionperpatient)[i]] = ABL1averageResult;
           }
 
           if (CRLF2selected == true) {
@@ -337,10 +343,10 @@
               CRLF2sum += CRLF2rankScores[Object.keys(model["RANK"]["CRLF2"])[idx]];
             }
 
-            console.log('CRLF2sum:', CRLF2sum);
-
             CRLF2averageResult = CRLF2sum / Object.keys(model["RPKM"]["CRLF2"]).length;
             console.log('CRLF2 Average:', CRLF2averageResult);
+            
+            CRLF2averageResultObject[Object.keys(geneexpressionperpatient)[i]] = CRLF2averageResult;
           }
 
           if (ABL1_LikeSelected == true) {
@@ -355,10 +361,10 @@
               ABL1_Likesum += ABL1_LikerankScores[Object.keys(model["RANK"]["ABL1_Like"])[idx]];
             }
 
-            console.log('ABL1_Likesum:', ABL1_Likesum);
-
             ABL1_LikeaverageResult = ABL1_Likesum / Object.keys(model["RPKM"]["ABL1_Like"]).length;
             console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
+            
+            ABL1_LikeaverageResultObject[Object.keys(geneexpressionperpatient)[i]] = ABL1_LikeaverageResult;
           }
         }  
 
@@ -372,19 +378,47 @@
           return;
         }
       }
-
       
+      let ABL1 = '';
+      let CRLF2 = '';
+      let ABL1_Like = '';
+      let PatientID = '';
+
+      for (let i=0; i<Object.keys(ABL1averageResultObject).length; i++) {
+        ABL1 = ABL1 + `+${ABL1averageResultObject[Object.keys(ABL1averageResultObject)[i]]}`;
+      }
+
+      for (let i=0; i<Object.keys(CRLF2averageResultObject).length; i++) {
+        CRLF2 = CRLF2 + `+${CRLF2averageResultObject[Object.keys(CRLF2averageResultObject)[i]]}`;
+      }
+
+      for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
+        ABL1_Like = ABL1_Like + `+${ABL1_LikeaverageResultObject[Object.keys(ABL1_LikeaverageResultObject)[i]]}`;
+      }
+
+      for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
+        PatientID = PatientID+ `+${Object.keys(ABL1_LikeaverageResultObject)[i]}`;
+      }
+
+      console.log(ABL1);
+      console.log(CRLF2);
+      console.log(ABL1_Like);
+      console.log(PatientID);
 
       const queryParams = new URLSearchParams({
-        ABL1averageResult: ABL1averageResult,
-        CRLF2averageResult: CRLF2averageResult,
-        ABL1_LikeaverageResult: ABL1_LikeaverageResult,
+        ABL1averageResultObject: ABL1,
+        CRLF2averageResultObject: CRLF2,
+        ABL1_LikeaverageResultObject: ABL1_Like,
         ABL1selected: ABL1selected,
         CRLF2selected: CRLF2selected,
         ABL1_LikeSelected: ABL1_LikeSelected,
-        selectedmethod: selectedmethod
+        selectedmethod: selectedmethod,
+        PatientID: PatientID
+
       });
+
       loading = true; // 파일 처리가 시작되었으므로 로딩 상태를 true로 설정
+      
       // URL에 데이터를 추가하여 다음 페이지로 이동
       goto(`/result?${queryParams.toString()}`);
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
