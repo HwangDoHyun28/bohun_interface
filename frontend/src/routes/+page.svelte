@@ -17,7 +17,7 @@
   <footer class="-mt-8">
   <div class="text-base font-semibold mt-1 mb-2 px-2 sm:px-4">
       <div class="mx-auto flex flex-col container">
-          <P class="font-medium text-base text-violet-700 text-center">This website is maintained by <A class="text-violet-400 underline" href="https://sites.google.com/view/kimlab" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
+          <P class="font-medium text-base text-violet-700 text-center">This website is maintained by <A class="text-violet-400 underline" href="https://pnucolab.com/" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
       </div>
   </div>
 </footer> 

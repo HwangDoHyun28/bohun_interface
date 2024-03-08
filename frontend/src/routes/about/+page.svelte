@@ -43,7 +43,7 @@ function prev() {
   <footer>
     <div class="mt-2 mb-1 px-2 sm:px-4">
         <div class="mx-auto flex flex-col container">
-            <P class="text-violet-700 text-center">This website is maintained by <A class="text-violet-400 underline" href="https://sites.google.com/view/kimlab" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
+            <P class="text-violet-700 text-center">This website is maintained by <A class="text-violet-400 underline" href="https://pnucolab.com/" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
         </div>
     </div>
   </footer>    
