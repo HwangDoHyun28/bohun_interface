@@ -9,17 +9,6 @@
   //ABL1averageResultObject=%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111
   //&CRLF2averageResultObject=%2B0%2B0%2B0%2B0%2B0
   //&ABL1_LikeaverageResultObject=%2B-0.25%2B-0.25%2B-0.25%2B-0.25%2B-0.25
-  //&ABL1selected=true
-  //&CRLF2selected=true
-  //&ABL1_LikeSelected=true
-  //&selectedmethod=RPKM
-
-
-
-  //http://localhost:5174/result?
-  //ABL1averageResultObject=%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111
-  //&CRLF2averageResultObject=%2B0%2B0%2B0%2B0%2B0
-  //&ABL1_LikeaverageResultObject=%2B-0.25%2B-0.25%2B-0.25%2B-0.25%2B-0.25
   //&ABL1selected=true&CRLF2selected=true
   //&ABL1_LikeSelected=true
   //&selectedmethod=RPKM
