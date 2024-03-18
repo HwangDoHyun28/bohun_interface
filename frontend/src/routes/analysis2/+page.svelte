@@ -379,26 +379,11 @@
           }
         }
         
-        let ABL1 = '';
-        let CRLF2 = '';
-        let ABL1_Like = '';
-        let PatientID = '';
-  
-        for (let i=0; i<Object.keys(ABL1averageResultObject).length; i++) {
-          ABL1 = ABL1 + `+${ABL1averageResultObject[Object.keys(ABL1averageResultObject)[i]]}`;
-        }
-  
-        for (let i=0; i<Object.keys(CRLF2averageResultObject).length; i++) {
-          CRLF2 = CRLF2 + `+${CRLF2averageResultObject[Object.keys(CRLF2averageResultObject)[i]]}`;
-        }
-  
-        for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
-          ABL1_Like = ABL1_Like + `+${ABL1_LikeaverageResultObject[Object.keys(ABL1_LikeaverageResultObject)[i]]}`;
-        }
-  
-        for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
-          PatientID = PatientID+ `+${Object.keys(ABL1_LikeaverageResultObject)[i]}`;
-        }
+        let ABL1 = JSON.stringify(ABL1averageResultObject);
+        let CRLF2 = JSON.stringify(CRLF2averageResultObject);
+        let ABL1_Like = JSON.stringify(ABL1_LikeaverageResultObject);
+        let PatientID = JSON.stringify(Object.keys(ABL1_LikeaverageResultObject));
+        
   
         console.log(ABL1);
         console.log(CRLF2);
@@ -424,8 +409,36 @@
         loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
       }
     }
+     
+    function encodearray(array) {
+      // ENCODING TEST
+      console.log("Origin Data", array );
+      let uint = new Uint8Array( array.buffer );
+      console.log( "Convert F32 to Uint8 : Byte Length Test", array.length * 4, uint.length );
+
+      let str = btoa( String.fromCharCode.apply( null, uint ) ); //btoa( String.fromCharCode( ...uint ) );
+      console.log( "Base64 of Uint8 Array : ", str.length, ":", str );
+
+      return str;
+    }
+
+    function decodearray(str) {
+      // DECODE TEST
+      let blob = atob( str );
+      console.log("Blob Length", blob.length );
+      console.log( blob );
+
+      let ary_buf = new ArrayBuffer( blob.length );
+      let dv = new DataView( ary_buf );
+      for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
       
-  
+      // For WebGL Buffers, can skip Float32Array, just return ArrayBuffer is all thats needed.
+      let f32_ary = new Float32Array( ary_buf );
+      console.log( f32_ary );
+
+      return f32_ary;
+    }
+
     // 파일 선택 시 파일 이름을 추출하여 레이블에 표시하는 함수
     function updateFileName(event) {
       const fileInput = event.target;

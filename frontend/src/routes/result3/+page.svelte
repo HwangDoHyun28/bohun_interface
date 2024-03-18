@@ -80,12 +80,12 @@
       {selectedmethod} Based Probability of Each Class
     </p>   
       {#each num as key}
-        <div class="rounded-lg border-2 px-20 py-5 mt-8 border-violet-400">
+        <div class="mx-10 rounded-lg border-2 px-20 py-5 mt-8 border-violet-400">
           <div class="my-10">
-            <div class="mt-12">
-              <p class="mb-10 ml-0 text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[key]}'s Analysis Result</p>
-              <p class="mt-10 ml-3 text-lg text-neutral-500 font-medium mt-10">Total class</p>
+            <div class="mt-0 mb-16">
+              <p class="text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[key]}'s Analysis Result</p>
             </div>
+            <p class="mt-10 ml-3 text-lg text-neutral-500 font-medium mt-10">Total class</p>
             <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
               <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
               <p class="absolute -mt-1 ml-3 left-[48%]">0</p>
