@@ -61,6 +61,22 @@
   console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
   console.log('patientIDnumber:', patientIDnumber);
 
+  function decodearray(str) {
+    // DECODE TEST
+    let blob = atob( str );
+    console.log("Blob Length", blob.length );
+    console.log( blob );
+
+    let ary_buf = new ArrayBuffer( blob.length );
+    let dv = new DataView( ary_buf );
+    for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
+    
+    // For WebGL Buffers, can skip Float32Array, just return ArrayBuffer is all thats needed.
+    let f32_ary = new Float32Array( ary_buf );
+    console.log( f32_ary );
+
+    return f32_ary;
+  }
 
   // 파일 선택 시 호출되는 함수
   function starlocation(number) {
