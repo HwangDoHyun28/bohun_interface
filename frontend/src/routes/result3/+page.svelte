@@ -5,11 +5,12 @@
   import { Popover } from 'flowbite-svelte';
 
   //받아온 url의 형태
-  //http://localhost:5174/result?
-  //ABL1averageResultObject=%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111
-  //&CRLF2averageResultObject=%2B0%2B0%2B0%2B0%2B0
-  //&ABL1_LikeaverageResultObject=%2B-0.25%2B-0.25%2B-0.25%2B-0.25%2B-0.25
-  //&ABL1selected=true&CRLF2selected=true
+  //http://localhost:5174/result3?
+  //ABL1averageResultObject=OY7jvTmO4705juO9OY7jvTmO470%
+  //&CRLF2averageResultObject=AAAAAAAAAAAAAAAAAAAAAAAAAAA%3D
+  //&ABL1_LikeaverageResultObject=AACAvgAAgL4AAIC%2BAACAvgAAgL4%3D
+  //&ABL1selected=true
+  //&CRLF2selected=true
   //&ABL1_LikeSelected=true
   //&selectedmethod=RPKM
   //&PatientID=%2BSJALL014946_D1%2BSJALL014947_D1%2BSJALL014949_D1%2BSJALL014950_D1%2BSJALL014952_D1%0D
@@ -17,28 +18,38 @@
 
   let url = $page.url.search;
   let values = url.split('&');
-  let ABL1averageResult = [];
-  let CRLF2averageResult = [];
-  let ABL1_LikeaverageResult = [];
   let ABL1averageResultstr = [];
   let CRLF2averageResultstr = [];
   let ABL1_LikeaverageResultstr = [];
   let patientIDnumber = [];
   let num = [];
 
-  for (let i=1; i<values[0].split('%2B').length; i++) {
-    ABL1averageResult.push(parseFloat(values[0].split('%2B')[i]));
-    ABL1averageResultstr.push(parseFloat(values[0].split('%2B')[i]).toFixed(4));
+  function decodearray(str) {
+    // DECODE TEST
+    let blob = atob( str );
+    let ary_buf = new ArrayBuffer( blob.length );
+    let dv = new DataView( ary_buf );
+    for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
+    
+    // For WebGL Buffers, can skip Float32Array, just return ArrayBuffer is all thats needed.
+    let f32_ary = new Float32Array( ary_buf );
+
+    return f32_ary;
+  }
+  let ABL1averageResult = decodearray(decodeURIComponent(values[0].split('=')[1]));
+  let CRLF2averageResult = decodearray(decodeURIComponent(values[1].split('=')[1]));
+  let ABL1_LikeaverageResult = decodearray(decodeURIComponent(values[2].split('=')[1]));
+
+  for (let i=0; i<ABL1averageResult.length; i++) {
+    ABL1averageResultstr.push(parseFloat(ABL1averageResult[i].toFixed(4)));
   }
 
-  for (let i=1; i<values[1].split('%2B').length; i++) {
-    CRLF2averageResult.push(parseFloat(values[1].split('%2B')[i]));
-    CRLF2averageResultstr.push(parseFloat(values[1].split('%2B')[i]).toFixed(4));
+  for (let i=0; i<CRLF2averageResult.length; i++) {
+    CRLF2averageResultstr.push(parseFloat(CRLF2averageResult[i].toFixed(4)));
   }
 
-  for (let i=1; i<values[2].split('%2B').length; i++) {
-    ABL1_LikeaverageResult.push(parseFloat(values[2].split('%2B')[i]));
-    ABL1_LikeaverageResultstr.push(parseFloat(values[2].split('%2B')[i]).toFixed(4));
+  for (let i=0; i<ABL1_LikeaverageResult.length; i++) {
+    ABL1_LikeaverageResultstr.push(parseFloat(ABL1_LikeaverageResult[i].toFixed(4)));
   }
 
   let ABL1selected = values[3].split('=')[1];
@@ -61,31 +72,11 @@
   console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
   console.log('patientIDnumber:', patientIDnumber);
 
-  function decodearray(str) {
-    // DECODE TEST
-    let blob = atob( str );
-    console.log("Blob Length", blob.length );
-    console.log( blob );
-
-    let ary_buf = new ArrayBuffer( blob.length );
-    let dv = new DataView( ary_buf );
-    for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
-    
-    // For WebGL Buffers, can skip Float32Array, just return ArrayBuffer is all thats needed.
-    let f32_ary = new Float32Array( ary_buf );
-    console.log( f32_ary );
-
-    return f32_ary;
-  }
-
   // 파일 선택 시 호출되는 함수
   function starlocation(number) {
     let result = parseInt((parseFloat(number) + 1) * 47.3 + 1.5);
     return result;
   }
-  console.log('ABL1 Starlocation:', starlocation(ABL1averageResult[1]));
-  console.log('CRLF2 Starlocation:', starlocation(CRLF2averageResult[1]));
-  console.log('ABL1_Like Starlocation:', starlocation(ABL1_LikeaverageResult[1]));
 </script>
 
 <div class="relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">

@@ -5,11 +5,12 @@
   import { Popover } from 'flowbite-svelte';
 
   //받아온 url의 형태
-  //http://localhost:5174/result?
-  //ABL1averageResultObject=%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111%2B-0.1111111111111111
-  //&CRLF2averageResultObject=%2B0%2B0%2B0%2B0%2B0
-  //&ABL1_LikeaverageResultObject=%2B-0.25%2B-0.25%2B-0.25%2B-0.25%2B-0.25
-  //&ABL1selected=true&CRLF2selected=true
+  //http://localhost:5174/result3?
+  //ABL1averageResultObject=OY7jvTmO4705juO9OY7jvTmO470%
+  //&CRLF2averageResultObject=AAAAAAAAAAAAAAAAAAAAAAAAAAA%3D
+  //&ABL1_LikeaverageResultObject=AACAvgAAgL4AAIC%2BAACAvgAAgL4%3D
+  //&ABL1selected=true
+  //&CRLF2selected=true
   //&ABL1_LikeSelected=true
   //&selectedmethod=RPKM
   //&PatientID=%2BSJALL014946_D1%2BSJALL014947_D1%2BSJALL014949_D1%2BSJALL014950_D1%2BSJALL014952_D1%0D
@@ -17,28 +18,38 @@
 
   let url = $page.url.search;
   let values = url.split('&');
-  let ABL1averageResult = [];
-  let CRLF2averageResult = [];
-  let ABL1_LikeaverageResult = [];
   let ABL1averageResultstr = [];
   let CRLF2averageResultstr = [];
   let ABL1_LikeaverageResultstr = [];
   let patientIDnumber = [];
   let num = [];
 
-  for (let i=1; i<values[0].split('%2B').length; i++) {
-    ABL1averageResult.push(parseFloat(values[0].split('%2B')[i]));
-    ABL1averageResultstr.push(parseFloat(values[0].split('%2B')[i]).toFixed(4));
+  function decodearray(str) {
+    // DECODE TEST
+    let blob = atob( str );
+    let ary_buf = new ArrayBuffer( blob.length );
+    let dv = new DataView( ary_buf );
+    for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
+    
+    // For WebGL Buffers, can skip Float32Array, just return ArrayBuffer is all thats needed.
+    let f32_ary = new Float32Array( ary_buf );
+
+    return f32_ary;
+  }
+  let ABL1averageResult = decodearray(decodeURIComponent(values[0].split('=')[1]));
+  let CRLF2averageResult = decodearray(decodeURIComponent(values[1].split('=')[1]));
+  let ABL1_LikeaverageResult = decodearray(decodeURIComponent(values[2].split('=')[1]));
+
+  for (let i=0; i<ABL1averageResult.length; i++) {
+    ABL1averageResultstr.push(parseFloat(ABL1averageResult[i].toFixed(4)));
   }
 
-  for (let i=1; i<values[1].split('%2B').length; i++) {
-    CRLF2averageResult.push(parseFloat(values[1].split('%2B')[i]));
-    CRLF2averageResultstr.push(parseFloat(values[1].split('%2B')[i]).toFixed(4));
+  for (let i=0; i<CRLF2averageResult.length; i++) {
+    CRLF2averageResultstr.push(parseFloat(CRLF2averageResult[i].toFixed(4)));
   }
 
-  for (let i=1; i<values[2].split('%2B').length; i++) {
-    ABL1_LikeaverageResult.push(parseFloat(values[2].split('%2B')[i]));
-    ABL1_LikeaverageResultstr.push(parseFloat(values[2].split('%2B')[i]).toFixed(4));
+  for (let i=0; i<ABL1_LikeaverageResult.length; i++) {
+    ABL1_LikeaverageResultstr.push(parseFloat(ABL1_LikeaverageResult[i].toFixed(4)));
   }
 
   let ABL1selected = values[3].split('=')[1];
@@ -61,15 +72,11 @@
   console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
   console.log('patientIDnumber:', patientIDnumber);
 
-
   // 파일 선택 시 호출되는 함수
   function starlocation(number) {
     let result = parseInt((parseFloat(number) + 1) * 47.3 + 1.5);
     return result;
   }
-  console.log('ABL1 Starlocation:', starlocation(ABL1averageResult[1]));
-  console.log('CRLF2 Starlocation:', starlocation(CRLF2averageResult[1]));
-  console.log('ABL1_Like Starlocation:', starlocation(ABL1_LikeaverageResult[1]));
 </script>
 
 <div class="relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
@@ -79,167 +86,163 @@
     <p class="text-violet-400 text-base font-normal mt-2">
       {selectedmethod} Based Probability of Each Class
     </p>   
+      {#each num as key}
+        <div class="mx-10 rounded-lg border-2 px-20 py-5 mt-8 border-violet-400">
+          <div class="my-10">
+            <div class="mt-0 mb-16">
+              <p class="text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[key]}'s Analysis Result</p>
+            </div>
+            <p class="mt-10 ml-3 text-lg text-neutral-500 font-medium mt-10">Total class</p>
+            <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
+              <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
+              <p class="absolute -mt-1 ml-3 left-[48%]">0</p>
+              <p class="absolute -mt-1 right-5 text-right">1</p>
+            </div>  
+            <div class="relative mt-1 flex">
+              <p class="ml-4 text-xs text-neutral-500">BALLNOS</p>
+              <p class="absolute right-2 text-xs text-neutral-500">Other Classes</p>
+            </div>
+            <div class="-ml-1 mt-2 bg-inherit w-full relative">
+              {#if ABL1selected == 'true'}
+                <img
+                id = "Total_ABL1"
+                src="Star_yellow.svg"
+                class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
+                style="left: {`${starlocation(ABL1averageResult[key])}%`}"
+                alt="Tutorial Logo"
+                />
+                <Popover triggeredBy="#Total_ABL1" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
+                  <p class="text-sm text-[#FFD32A] font-semibold">ABL1 Class</p>
+                  <hr class="mb-2 border-1 border-neutral-100" />
+                  <p class="text-xs text-neutral-400">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1averageResultstr[key]}</span>.</p>
+                </Popover>
+              {/if}
+              {#if CRLF2selected == 'true'}
+                <img
+                id="Total_CRLF2"
+                src="Star_red.svg"
+                class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
+                style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[key]])}%`}"
+                alt="Tutorial Logo"
+                />
+                <Popover triggeredBy="#Total_CRLF2" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
+                  <p class="text-sm text-[#FF3F34] font-semibold">CRLF2 Class</p>
+                  <hr class="mb-2 border-1 border-neutral-100" />
+                  <p class="text-xs text-neutral-400">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[key]]}</span>.</p>
+                </Popover>
+              {/if}
+              {#if ABL1_LikeSelected == 'true'}
+              <img
+              id="Total_ABL1_Like"
+              src="Star_mint.svg"
+              class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
+              style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[key]])}%`}"
+              alt="Tutorial Logo"
+              />
+              <Popover triggeredBy="#Total_ABL1_Like" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
+                <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
+                <hr class="mb-2 border-1 border-neutral-100" />
+                <p class="text-xs text-neutral-400">The probability of ABL1 Like class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[key]]}</span>.</p>
+              </Popover>
+              {/if}
+            </div>
+          </div>              
 
-    {#each num as key}
-      {#if key !== 0}
-        <hr class="mt-5 border-1 border-neutral-100" />
-      {/if}
-      <div class="my-10">
-        <div class="mt-8">
-          <p class="ml-0 text-2xl text-neutral-500 font-medium mt-5">{patientIDnumber[key]}</p>
-          <p class="ml-3 text-lg text-neutral-400 font-medium mt-10">Total class</p>
-        </div>
-        <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
-          <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
-          <p class="absolute -mt-1 ml-3 left-[48%]">0</p>
-          <p class="absolute -mt-1 right-5 text-right">1</p>
-        </div>  
-        <div class="relative mt-1 flex">
-          <p class="ml-4 text-xs text-neutral-500">BALLNOS</p>
-          <p class="absolute right-2 text-xs text-neutral-500">Other Classes</p>
-        </div>
-        <div class="-ml-1 mt-2 bg-inherit w-full relative">
           {#if ABL1selected == 'true'}
-            <img
-            id = "Total_ABL1"
-            src="Star_violet_800_2.svg"
-            class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-            style="left: {`${starlocation(ABL1averageResult[key])}%`}"
-            alt="Tutorial Logo"
-            />
-            <Popover triggeredBy="#Total_ABL1" class="z-40 border-4 border-violet-100 p-1 text-sm w-68 font-light">
-              <p class="text-sm text-violet-800 font-semibold">ABL1 Class</p>
-              <hr class="mb-2 border-1 border-neutral-100" />
-              <p class="text-xs text-neutral-400">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1averageResultstr[key]}</span>.</p>
-            </Popover>
+            <div class="my-10">
+              <div class="flex mt-10">
+                <p class="ml-3 text-lg text-[#FFD32A] font-medium mt-5">ABL1 Class</p>
+                <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1averageResultstr[key]}</p>
+              </div>
+              <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
+                <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
+                <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
+                <p class="absolute -mt-1 right-4 text-right">1</p>
+              </div>  
+              <div class="relative mt-1 flex">
+                <p class="ml-5 text-xs text-neutral-500">BALLNOS</p>
+                <p class="absolute right-2 text-xs text-neutral-500">ABL1</p>
+              </div>
+              <div class="mt-2 bg-inherit w-full relative">
+                <img
+                id="ABL1"
+                src="Star_yellow.svg"
+                class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
+                style="left: {`${starlocation(ABL1averageResult[Object.keys(ABL1averageResult)[key]])}%`}"
+                alt="Tutorial Logo"
+                />
+                <Popover triggeredBy="#ABL1" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
+                  <p class="text-sm text-[#FFD32A] font-semibold">ABL1 Class</p>
+                  <hr class="mb-2 border-1 border-neutral-100" />
+                  <p class="text-xs text-neutral-400">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1averageResultstr[Object.keys(ABL1averageResultstr)[key]]}</span>.</p>
+                </Popover>
+              </div>
+            </div>              
           {/if}
           {#if CRLF2selected == 'true'}
-            <img
-            id="Total_CRLF2"
-            src="Star_violet_500_2.svg"
-            class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-            style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[key]])}%`}"
-            alt="Tutorial Logo"
-            />
-            <Popover triggeredBy="#Total_CRLF2" class="z-40 border-4 border-violet-100 p-1 text-sm w-68 font-light">
-              <p class="text-sm text-violet-500 font-semibold">CRLF2 Class</p>
-              <hr class="mb-2 border-1 border-neutral-100" />
-              <p class="text-xs text-neutral-400">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{CRLF2averageResult[Object.keys(CRLF2averageResult)[key]]}</span>.</p>
-            </Popover>
-          {/if}
+            <div class="my-10">
+              <div class="flex mt-10">
+                <p class="ml-3 text-lg text-[#FF3F34] font-medium mt-5">CRLF2 Class</p>
+                <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[key]]}</p>
+              </div>
+              <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
+                <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
+                <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
+                <p class="absolute -mt-1 right-4 text-right">1</p>
+              </div>  
+              <div class="relative mt-1 flex">
+                <p class="ml-5 text-xs text-neutral-500">BALLNOS</p>
+                <p class="absolute right-2 text-xs text-neutral-500">CRLF2</p>
+              </div>
+              <div class="mt-2 bg-inherit w-full relative">
+                <img
+                id="CRLF2"
+                src="Star_red.svg"
+                class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
+                style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[key]])}%`}"
+                alt="Tutorial Logo"
+                />
+                <Popover triggeredBy="#CRLF2" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
+                  <p class="text-sm text-[#FF3F34] font-semibold">CRLF2 Class</p>
+                  <hr class="mb-2 border-1 border-neutral-100" />
+                  <p class="text-xs text-neutral-400">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{CRLF2averageResultstr[key]}</span>.</p>
+                </Popover>
+              </div>
+            </div>              
+          {/if}  
           {#if ABL1_LikeSelected == 'true'}
-          <img
-          id="Total_ABL1_Like"
-          src="Star_violet_300_2.svg"
-          class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-          style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[key]])}%`}"
-          alt="Tutorial Logo"
-          />
-          <Popover triggeredBy="#Total_ABL1_Like" class="z-40 border-4 border-violet-100 p-1 text-sm w-68 font-light">
-            <p class="text-sm text-violet-300 font-semibold">ABL1 Like Class</p>
-            <hr class="mb-2 border-1 border-neutral-100" />
-            <p class="text-xs text-neutral-400">The probability of ABL1 Like class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[key]]}</span>.</p>
-          </Popover>
+            <div class="my-10">
+              <div class="flex mt-10">
+                <p class="ml-3 text-lg text-[#00D8D6] font-medium mt-5">ABL1-Like Class</p>
+                <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[key]]}</p>
+              </div>
+              <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
+                <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
+                <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
+                <p class="absolute -mt-1 right-4 text-right">1</p>
+              </div>  
+              <div class="relative mt-1 flex">
+                <p class="ml-5 text-xs text-neutral-500">BALLNOS</p>
+                <p class="absolute right-2 text-xs text-neutral-500">ABL1-Like</p>
+              </div>
+              <div class="mt-2 bg-inherit w-full relative">
+                <img
+                id="ABL1_Like"
+                src="Star_mint.svg"
+                class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
+                style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[key]])}%`}"
+                alt="Tutorial Logo"
+                />
+                <Popover triggeredBy="#ABL1_Like" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
+                  <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
+                  <hr class="mb-2 border-1 border-neutral-100" />
+                  <p class="text-xs text-neutral-400">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[key]]}</span>.</p>
+                </Popover>
+              </div>
+            </div>              
           {/if}
         </div>
-      </div>              
-
-      {#if ABL1selected == 'true'}
-        <div class="my-10">
-          <div class="flex mt-10">
-            <p class="ml-3 text-lg text-violet-800 font-medium mt-5">ABL1 Class</p>
-            <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1averageResultstr[key]}</p>
-          </div>
-          <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
-            <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
-            <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
-            <p class="absolute -mt-1 right-4 text-right">1</p>
-          </div>  
-          <div class="relative mt-1 flex">
-            <p class="ml-5 text-xs text-neutral-500">BALLNOS</p>
-            <p class="absolute right-2 text-xs text-neutral-500">ABL1</p>
-          </div>
-          <div class="mt-2 bg-inherit w-full relative">
-            <img
-            id="ABL1"
-            src="Star_violet_800_2.svg"
-            class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-            style="left: {`${starlocation(ABL1averageResult[Object.keys(ABL1averageResult)[key]])}%`}"
-            alt="Tutorial Logo"
-            />
-            <Popover triggeredBy="#ABL1" class="z-40 border-4 border-violet-100 p-1 text-sm w-68 font-light">
-              <p class="text-sm text-violet-800 font-semibold">ABL1 Class</p>
-              <hr class="mb-2 border-1 border-neutral-100" />
-              <p class="text-xs text-neutral-400">The probability of ABL1 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1averageResult[Object.keys(ABL1averageResult)[key]]}</span>.</p>
-            </Popover>
-          </div>
-        </div>              
-      {/if}
-      {#if CRLF2selected == 'true'}
-        <div class="my-10">
-          <div class="flex mt-10">
-            <p class="ml-3 text-lg text-violet-500 font-medium mt-5">CRLF2 Class</p>
-            <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: {CRLF2averageResult[Object.keys(CRLF2averageResult)[key]]}</p>
-          </div>
-          <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
-            <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
-            <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
-            <p class="absolute -mt-1 right-4 text-right">1</p>
-          </div>  
-          <div class="relative mt-1 flex">
-            <p class="ml-5 text-xs text-neutral-500">BALLNOS</p>
-            <p class="absolute right-2 text-xs text-neutral-500">CRLF2</p>
-          </div>
-          <div class="mt-2 bg-inherit w-full relative">
-            <img
-            id="CRLF2"
-            src="Star_violet_500_2.svg"
-            class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-            style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[key]])}%`}"
-            alt="Tutorial Logo"
-            />
-            <Popover triggeredBy="#CRLF2" class="z-40 border-4 border-violet-100 p-1 text-sm w-68 font-light">
-              <p class="text-sm text-violet-500 font-semibold">CRLF2 Class</p>
-              <hr class="mb-2 border-1 border-neutral-100" />
-              <p class="text-xs text-neutral-400">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{CRLF2averageResult[key]}</span>.</p>
-            </Popover>
-          </div>
-        </div>              
-      {/if}  
-      {#if ABL1_LikeSelected == 'true'}
-        <div class="my-10">
-          <div class="flex mt-10">
-            <p class="ml-3 text-lg text-violet-300 font-medium mt-5">ABL1-Like Class</p>
-            <p class="mt-5 ml-2 text-lg text-neutral-400 font-lg mt-5">: {ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[key]]}</p>
-          </div>
-          <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
-            <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
-            <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
-            <p class="absolute -mt-1 right-4 text-right">1</p>
-          </div>  
-          <div class="relative mt-1 flex">
-            <p class="ml-5 text-xs text-neutral-500">BALLNOS</p>
-            <p class="absolute right-2 text-xs text-neutral-500">ABL1-Like</p>
-          </div>
-          <div class="mt-2 bg-inherit w-full relative">
-            <img
-            id="ABL1_Like"
-            src="Star_violet_300_2.svg"
-            class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-            style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[key]])}%`}"
-            alt="Tutorial Logo"
-            />
-            <Popover triggeredBy="#ABL1_Like" class="z-40 border-4 border-violet-100 p-1 text-sm w-68 font-light">
-              <p class="text-sm text-violet-300 font-semibold">ABL1 Like Class</p>
-              <hr class="mb-2 border-1 border-neutral-100" />
-              <p class="text-xs text-neutral-400">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[key]]}</span>.</p>
-            </Popover>
-          </div>
-        </div>              
-      {/if}
-    {/each}
-  
-    
+      {/each}
     <div class="my-12 text-center">
       <Button
       href="/analysis"

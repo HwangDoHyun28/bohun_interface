@@ -379,26 +379,49 @@
           }
         }
         
-        let ABL1 = JSON.stringify(ABL1averageResultObject);
-        let CRLF2 = JSON.stringify(CRLF2averageResultObject);
-        let ABL1_Like = JSON.stringify(ABL1_LikeaverageResultObject);
-        let PatientID = JSON.stringify(Object.keys(ABL1_LikeaverageResultObject));
+        let ABL1 = [];
+        for (let i=0; i<Object.keys(ABL1averageResultObject).length; i++) {
+          ABL1.push(ABL1averageResultObject[Object.keys(ABL1averageResultObject)[i]]);
+        }
         
+        let CRLF2 = [];
+        for (let i=0; i<Object.keys(CRLF2averageResultObject).length; i++) {
+          CRLF2.push(CRLF2averageResultObject[Object.keys(CRLF2averageResultObject)[i]]);
+        }
+
+        let ABL1_Like = [];
+        for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
+          ABL1_Like.push(ABL1_LikeaverageResultObject[Object.keys(ABL1_LikeaverageResultObject)[i]]);
+        }
+
+        let PatientID = '';
+        for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
+        PatientID = PatientID+ `+${Object.keys(ABL1_LikeaverageResultObject)[i]}`;
+      }
   
-        console.log(ABL1);
-        console.log(CRLF2);
-        console.log(ABL1_Like);
-        console.log(PatientID);
+        console.log('ABL1: ', ABL1);
+        console.log('CRLF2: ', CRLF2);
+        console.log('ABL1_Like: ', ABL1_Like);
+        console.log('PatientID: ', PatientID);
+
+        ABL1 = encodearray(new Float32Array(ABL1));
+        CRLF2 = encodearray(new Float32Array(CRLF2));
+        ABL1_Like = encodearray(new Float32Array(ABL1_Like));
+
+        console.log('ABL1: ', ABL1);
+        console.log('CRLF2: ', CRLF2);
+        console.log('ABL1_Like: ', ABL1_Like);
+        console.log('PatientID: ', PatientID);
   
         const queryParams = new URLSearchParams({
-          ABL1averageResultObject: ABL1,
-          CRLF2averageResultObject: CRLF2,
-          ABL1_LikeaverageResultObject: ABL1_Like,
-          ABL1selected: ABL1selected,
-          CRLF2selected: CRLF2selected,
-          ABL1_LikeSelected: ABL1_LikeSelected,
-          selectedmethod: selectedmethod,
-          PatientID: PatientID
+          ABL1: ABL1,
+          CRLF2: CRLF2,
+          ABL1_L: ABL1_Like,
+          ABL1s: ABL1selected,
+          CRLF2s: CRLF2selected,
+          ABL1_Ls: ABL1_LikeSelected,
+          smthd: selectedmethod,
+          PatID: PatientID
   
         });
   
@@ -422,22 +445,7 @@
       return str;
     }
 
-    function decodearray(str) {
-      // DECODE TEST
-      let blob = atob( str );
-      console.log("Blob Length", blob.length );
-      console.log( blob );
-
-      let ary_buf = new ArrayBuffer( blob.length );
-      let dv = new DataView( ary_buf );
-      for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
-      
-      // For WebGL Buffers, can skip Float32Array, just return ArrayBuffer is all thats needed.
-      let f32_ary = new Float32Array( ary_buf );
-      console.log( f32_ary );
-
-      return f32_ary;
-    }
+    
 
     // 파일 선택 시 파일 이름을 추출하여 레이블에 표시하는 함수
     function updateFileName(event) {

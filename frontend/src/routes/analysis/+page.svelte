@@ -379,52 +379,73 @@
         }
       }
       
-      let ABL1 = '';
-      let CRLF2 = '';
-      let ABL1_Like = '';
-      let PatientID = '';
-
+      let ABL1 = [];
       for (let i=0; i<Object.keys(ABL1averageResultObject).length; i++) {
-        ABL1 = ABL1 + `+${ABL1averageResultObject[Object.keys(ABL1averageResultObject)[i]]}`;
+        ABL1.push(ABL1averageResultObject[Object.keys(ABL1averageResultObject)[i]]);
       }
-
+      
+      let CRLF2 = [];
       for (let i=0; i<Object.keys(CRLF2averageResultObject).length; i++) {
-        CRLF2 = CRLF2 + `+${CRLF2averageResultObject[Object.keys(CRLF2averageResultObject)[i]]}`;
+        CRLF2.push(CRLF2averageResultObject[Object.keys(CRLF2averageResultObject)[i]]);
       }
 
+      let ABL1_Like = [];
       for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
-        ABL1_Like = ABL1_Like + `+${ABL1_LikeaverageResultObject[Object.keys(ABL1_LikeaverageResultObject)[i]]}`;
+        ABL1_Like.push(ABL1_LikeaverageResultObject[Object.keys(ABL1_LikeaverageResultObject)[i]]);
       }
 
+      let PatientID = '';
       for (let i=0; i<Object.keys(ABL1_LikeaverageResultObject).length; i++) {
-        PatientID = PatientID+ `+${Object.keys(ABL1_LikeaverageResultObject)[i]}`;
-      }
+      PatientID = PatientID+ `+${Object.keys(ABL1_LikeaverageResultObject)[i]}`;
+    }
 
-      console.log(ABL1);
-      console.log(CRLF2);
-      console.log(ABL1_Like);
-      console.log(PatientID);
+      console.log('ABL1: ', ABL1);
+      console.log('CRLF2: ', CRLF2);
+      console.log('ABL1_Like: ', ABL1_Like);
+      console.log('PatientID: ', PatientID);
+
+      ABL1 = encodearray(new Float32Array(ABL1));
+      CRLF2 = encodearray(new Float32Array(CRLF2));
+      ABL1_Like = encodearray(new Float32Array(ABL1_Like));
+
+      console.log('ABL1: ', ABL1);
+      console.log('CRLF2: ', CRLF2);
+      console.log('ABL1_Like: ', ABL1_Like);
+      console.log('PatientID: ', PatientID);
 
       const queryParams = new URLSearchParams({
-        ABL1averageResultObject: ABL1,
-        CRLF2averageResultObject: CRLF2,
-        ABL1_LikeaverageResultObject: ABL1_Like,
-        ABL1selected: ABL1selected,
-        CRLF2selected: CRLF2selected,
-        ABL1_LikeSelected: ABL1_LikeSelected,
-        selectedmethod: selectedmethod,
-        PatientID: PatientID
+        ABL1: ABL1,
+        CRLF2: CRLF2,
+        ABL1_L: ABL1_Like,
+        ABL1s: ABL1selected,
+        CRLF2s: CRLF2selected,
+        ABL1_Ls: ABL1_LikeSelected,
+        smthd: selectedmethod,
+        PatID: PatientID
 
       });
 
       loading = true; // 파일 처리가 시작되었으므로 로딩 상태를 true로 설정
       
       // URL에 데이터를 추가하여 다음 페이지로 이동
-      goto(`/result?${queryParams.toString()}`);
+      goto(`/result3?${queryParams.toString()}`);
       loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
     }
   }
-    
+   
+  function encodearray(array) {
+    // ENCODING TEST
+    console.log("Origin Data", array );
+    let uint = new Uint8Array( array.buffer );
+    console.log( "Convert F32 to Uint8 : Byte Length Test", array.length * 4, uint.length );
+
+    let str = btoa( String.fromCharCode.apply( null, uint ) ); //btoa( String.fromCharCode( ...uint ) );
+    console.log( "Base64 of Uint8 Array : ", str.length, ":", str );
+
+    return str;
+  }
+
+  
 
   // 파일 선택 시 파일 이름을 추출하여 레이블에 표시하는 함수
   function updateFileName(event) {
