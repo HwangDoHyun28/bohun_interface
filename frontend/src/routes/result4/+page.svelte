@@ -303,7 +303,7 @@
     {/if}
 
     <!-- 페이지네이션 UI -->
-    <div class="flex justify-center items-center mt-5 h-12">
+    <div class="flex justify-center items-center mt-10 h-12">
       <!-- 이전 페이지 그룹 버튼 -->
       <button
         class="cursor-pointer text-violet-800 mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
@@ -317,7 +317,7 @@
       <!-- 페이지 버튼 -->
       {#each getPageNumbers() as pageNumber}
         <button
-          class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-0 hover:text-white hover:bg-violet-300 focus:border-violet-500"
+          class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 hover:text-white hover:bg-violet-300 focus:border-violet-500"
           class:selected={currentPage === pageNumber}
           on:click={() => changePage(pageNumber)}
         >
@@ -334,27 +334,6 @@
         class="mx-5 h-8"
         alt="SPADOMA Logo"/>
       </button>
-    </div>
-    <!-- 페이지네이션 UI -->
-    <div class="flex justify-center mt-8 h-12">
-      <img
-        src="left2.svg"
-        class="mx-5 mt-2 h-8"
-        alt="SPADOMA Logo"
-      />
-      {#each Array.from({ length: patientIDnumber.length }) as _, i}
-        <button
-          class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-0 hover:text-white hover:bg-violet-300 focus:border-violet-500"
-          class:selected={currentPage === i + 1}
-          on:click={() => changePage(i + 1)}>
-          {i + 1}
-        </button>
-      {/each}
-      <img
-        src="right2.svg"
-        class="mx-5 mt-2 h-8"
-        alt="SPADOMA Logo"
-      />
     </div>
     <div class="mt-20 mb-8 text-center">
       <Button
