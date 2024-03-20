@@ -124,7 +124,7 @@
       currentPage = totalPages;
     }
   }
-  
+
   // 현재 페이지에서 표시할 결과 인덱스 계산
   function calculateIndex() {
     return currentPage - 1;
@@ -301,6 +301,40 @@
     {:else}
       <p class="mx-10 mt-8 text-center text-gray-500">No results found for this page.</p>
     {/if}
+
+    <!-- 페이지네이션 UI -->
+    <div class="flex justify-center items-center mt-5 h-12">
+      <!-- 이전 페이지 그룹 버튼 -->
+      <button
+        class="cursor-pointer text-violet-800 mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
+        on:click={() => prevPageGroup()}
+        disabled={currentPage === 1}>
+        <img
+        src="left2.svg"
+        class="mx-5 h-8"
+        alt="SPADOMA Logo"/>
+      </button>
+      <!-- 페이지 버튼 -->
+      {#each getPageNumbers() as pageNumber}
+        <button
+          class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-0 hover:text-white hover:bg-violet-300 focus:border-violet-500"
+          class:selected={currentPage === pageNumber}
+          on:click={() => changePage(pageNumber)}
+        >
+          {pageNumber}
+        </button>
+      {/each}
+      <!-- 다음 페이지 그룹 버튼 -->
+      <button
+        class="mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
+        on:click={() => nextPageGroup()}
+        disabled={currentPage === totalPages}>
+        <img
+        src="right2.svg"
+        class="mx-5 h-8"
+        alt="SPADOMA Logo"/>
+      </button>
+    </div>
     <!-- 페이지네이션 UI -->
     <div class="flex justify-center mt-8 h-12">
       <img
