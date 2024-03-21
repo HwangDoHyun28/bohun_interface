@@ -316,17 +316,25 @@
       </button>
       <!-- 페이지 버튼 -->
       {#each getPageNumbers() as pageNumber}
-        <button
-          class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 hover:text-white hover:bg-violet-300 focus:border-violet-500"
-          class:selected={currentPage === pageNumber}
-          on:click={() => changePage(pageNumber)}
-        >
-          {pageNumber}
-        </button>
+        {#if currentPage === pageNumber}
+          <button
+            class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none bg-violet-300 text-white"
+            on:click={() => changePage(pageNumber)}
+          >
+            {pageNumber}
+          </button>
+        {:else}
+          <button
+            class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none hover:text-white hover:bg-violet-300"
+            on:click={() => changePage(pageNumber)}
+          >
+            {pageNumber}
+          </button>
+        {/if}
       {/each}
       <!-- 다음 페이지 그룹 버튼 -->
       <button
-        class="mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
+        class="cursor-pointer mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
         on:click={() => nextPageGroup()}
         disabled={currentPage === totalPages}>
         <img
