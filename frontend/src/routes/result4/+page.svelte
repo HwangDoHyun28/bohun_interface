@@ -78,8 +78,8 @@
     return result;
   }
 
-   // 페이지당 결과 수 설정
-   const resultsPerPage = 1; // 한 페이지당 결과 수
+  // 페이지당 결과 수 설정
+  let resultsPerPage = 1; // 한 페이지당 결과 수
   let currentPage = 1; // 현재 페이지
   const pagesToShow = 5; // 페이지네이션에 표시할 페이지 수
   let totalPages = Math.ceil(patientIDnumber.length / resultsPerPage); // 총 페이지 수
@@ -88,6 +88,7 @@
   function changePage(pageNumber) {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       currentPage = pageNumber;
+      console.log('Current Page:', currentPage);
     }
   }
 
@@ -126,26 +127,66 @@
   }
 
   // 현재 페이지에서 표시할 결과 인덱스 계산
-  function calculateIndex() {
+  function calculateIndex(currentPage) {
     return currentPage - 1;
   }
+
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // 부드러운 스크롤 적용
+    });
+  }
+
+  let searchKeyword = '';
+
+  function handleSearch() {
+  // 검색어를 가져와서 searchKeyword 변수에 저장합니다.
+  searchKeyword = document.getElementById('searchInput').value.trim().toLowerCase();
+  // 페이지를 1페이지로 초기화합니다.
+  changePage(1);
+  }
+
 </script>
 
-<div class="relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
+<div class="relative mt-12 rounded-lg border mx-5 px-24 pt-10 bg-white">
   <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
   <div class="relative w-full px-10 mt-8 pt-3">
     <p class="text-3xl text-violet-700 font-medium">Results</p>
     <p class="text-violet-400 text-base font-normal mt-2">
       {selectedmethod} Based Probability of Each Class
     </p>   
-    <div>
-
+    <div class="ml-32 mr-40 justify-between flex rounded-3xl border-2 py-1 mt-8 border-violet-200">
+      <div class="flex items-center justify-start text-lg text-center font-medium mx-10 border-r border-violet-300 text-violet-400 h-full">
+        Patient ID 
+        <img
+          id="searchIcon"
+          src="invertedtriangle.svg"
+          class="cursor-pointer w-5 h-5 ml-2 mr-5 mt-1 h-fit text-center"
+          alt="Tutorial Logo"
+        /> 
+      </div>
+      <p class="text-lg items-center justify-center text-center font-medium text-violet-400">Search</p>
+      <input
+        id="searchInput"
+        type="text"
+        class="text-lg items-center justify-center text-center font-medium text-violet-400"
+        placeholder="Search"
+      />
+      <div class="flex items-center justify-end text-xl text-center font-medium mx-10 border-l border-violet-300 text-violet-400 h-full">
+        <img
+        id="searchicon2"
+        src="searchicon2.svg"
+        class="cursor-pointer w-5 h-5 my-1 ml-8 mr-0 mt-1 h-fit text-center"
+        alt="Tutorial Logo"
+        /> 
+      </div>
     </div>
-    {#if patientIDnumber[calculateIndex()]}
-      <div class="mx-10 rounded-lg border-2 px-20 py-5 mt-8 border-violet-400">
+    {#if patientIDnumber[calculateIndex(currentPage)]}
+      <div class="mx-10 rounded-lg border-2 px-20 py-5 mt-3 border-violet-400">
         <div class="my-10">
           <div class="mt-0 mb-16">
-            <p class="text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex()]}'s Analysis Result</p>
+            <p class="text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
           </div>
           <p class="mt-10 ml-3 text-lg text-neutral-500 font-medium mt-10">Total class</p>
           <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
@@ -163,7 +204,7 @@
               id = "Total_ABL1"
               src="Star_yellow.svg"
               class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-              style="left: {`${starlocation(ABL1averageResult[calculateIndex()])}%`}"
+              style="left: {`${starlocation(ABL1averageResult[calculateIndex(currentPage)])}%`}"
               alt="Tutorial Logo"
               />
               <Popover triggeredBy="#Total_ABL1" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -177,7 +218,7 @@
               id="Total_CRLF2"
               src="Star_red.svg"
               class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-              style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[calculateIndex()]])}%`}"
+              style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[calculateIndex(currentPage)]])}%`}"
               alt="Tutorial Logo"
               />
               <Popover triggeredBy="#Total_CRLF2" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -191,7 +232,7 @@
             id="Total_ABL1_Like"
             src="Star_mint.svg"
             class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-            style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[calculateIndex()]])}%`}"
+            style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[calculateIndex(currentPage)]])}%`}"
             alt="Tutorial Logo"
             />
             <Popover triggeredBy="#Total_ABL1_Like" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -207,7 +248,7 @@
           <div class="my-10">
             <div class="flex mt-10">
               <p class="ml-3 text-lg text-[#FFD32A] font-medium mt-5">ABL1 Class</p>
-              <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1averageResultstr[calculateIndex()]}</p>
+              <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1averageResultstr[calculateIndex(currentPage)]}</p>
             </div>
             <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
               <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
@@ -223,7 +264,7 @@
               id="ABL1"
               src="Star_yellow.svg"
               class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-              style="left: {`${starlocation(ABL1averageResult[Object.keys(ABL1averageResult)[calculateIndex()]])}%`}"
+              style="left: {`${starlocation(ABL1averageResult[Object.keys(ABL1averageResult)[calculateIndex(currentPage)]])}%`}"
               alt="Tutorial Logo"
               />
               <Popover triggeredBy="#ABL1" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -238,7 +279,7 @@
           <div class="my-10">
             <div class="flex mt-10">
               <p class="ml-3 text-lg text-[#FF3F34] font-medium mt-5">CRLF2 Class</p>
-              <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[calculateIndex()]]}</p>
+              <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[calculateIndex(currentPage)]]}</p>
             </div>
             <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
               <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
@@ -254,7 +295,7 @@
               id="CRLF2"
               src="Star_red.svg"
               class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-              style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[calculateIndex()]])}%`}"
+              style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[calculateIndex(currentPage)]])}%`}"
               alt="Tutorial Logo"
               />
               <Popover triggeredBy="#CRLF2" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -269,7 +310,7 @@
           <div class="my-10">
             <div class="flex mt-10">
               <p class="ml-3 text-lg text-[#00D8D6] font-medium mt-5">ABL1-Like Class</p>
-              <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex()]]}</p>
+              <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex(currentPage)]]}</p>
             </div>
             <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
               <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
@@ -285,7 +326,7 @@
               id="ABL1_Like"
               src="Star_mint.svg"
               class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-              style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[calculateIndex()]])}%`}"
+              style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[calculateIndex(currentPage)]])}%`}"
               alt="Tutorial Logo"
               />
               <Popover triggeredBy="#ABL1_Like" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -319,14 +360,20 @@
         {#if currentPage === pageNumber}
           <button
             class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none bg-violet-300 text-white"
-            on:click={() => changePage(pageNumber)}
+            on:click={() => {
+              changePage(pageNumber);
+              scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
+            }}
           >
             {pageNumber}
           </button>
         {:else}
           <button
             class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none hover:text-white hover:bg-violet-300"
-            on:click={() => changePage(pageNumber)}
+            on:click={() => {
+              changePage(pageNumber);
+              scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
+            }}
           >
             {pageNumber}
           </button>

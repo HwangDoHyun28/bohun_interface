@@ -428,7 +428,7 @@
         loading = true; // 파일 처리가 시작되었으므로 로딩 상태를 true로 설정
         
         // URL에 데이터를 추가하여 다음 페이지로 이동
-        goto(`/result3?${queryParams.toString()}`);
+        goto(`/result4?${queryParams.toString()}`);
         loading = false; // 파일 처리가 완료되었으므로 로딩 상태를 false로 설정
       }
     }
