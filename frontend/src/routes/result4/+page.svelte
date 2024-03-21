@@ -3,6 +3,8 @@
   import { Button } from "flowbite-svelte";
   import { P, A } from "flowbite-svelte";
   import { Popover } from 'flowbite-svelte';
+  import { SearchOutline } from 'flowbite-svelte-icons';
+  import { Label, Input } from 'flowbite-svelte';
 
   //받아온 url의 형태
   //http://localhost:5174/result3?
@@ -166,13 +168,10 @@
           alt="Tutorial Logo"
         /> 
       </div>
-      <p class="text-lg items-center justify-center text-center font-medium text-violet-400">Search</p>
-      <input
-        id="searchInput"
-        type="text"
-        class="text-lg items-center justify-center text-center font-medium text-violet-400"
-        placeholder="Search"
-      />
+      <div>
+        <Input id="small-input" size="sm" placeholder="Small input" />
+        <input id="searchInput" class="w-full ps-10" placeholder="Search..." />
+      </div>
       <div class="flex items-center justify-end text-xl text-center font-medium mx-10 border-l border-violet-300 text-violet-400 h-full">
         <img
         id="searchicon2"
