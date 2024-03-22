@@ -180,7 +180,7 @@
         /> 
       </div>
     </div>
-    <div class="py-2 realtive flex mt-3 bg-violet-400 text-white ml-20 mr-20 flex rounded-3xl py-1 border-violet-300 rounded-full">
+    <div class="py-1 realtive flex mt-3 bg-violet-400 text-white ml-20 mr-20 flex rounded-3xl border-violet-300 rounded-full">
       <div class="flex ml-3 justify-start">
         <img
           id="Star_purple"
@@ -189,32 +189,58 @@
           alt="Tutorial Logo"
           />
         <p class="font-medium text-lg">5 out of 10 gene of the model matched</p>
-        <p class="mt-0 ml-1 text-violet-800 font-medium">(50%)</p>
+        <p class="ml-1 mt-1 text-violet-800 text-sm font-semibold">(50%)</p>
       </div>
       <div class="absolute right-36 cursor-pointer ml-2 justify-end">
         <p class="ml-1 text-white font-medium underline justify-end">Detail...</p>
       </div>
     </div>
     {#if patientIDnumber[calculateIndex(currentPage)]}
-      <div class="mx-10 rounded-3xl border px-20 py-5 mt-3 border-neutral-200">
-        <div class="mt-5 mb-10">
-          <div class="mb-16 flex">
-            <p class="justify-center text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
+      <div class="mx-10 rounded-3xl border px-5 py-5 mt-4 border-neutral-200">
+        <div class="mb-3 flex">
+          <p class="ml-10 mt-12 justify-center text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
+        </div>
+        <div class="justify-end text-lg mx-5 flex">
+          <div class="mx-2 flex">
+            <img
+            id = "Total_ABL1"
+            src="Star_yellow.svg"
+            class="cursor-pointer w-4 h-4 mr-2 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <p class="text-sm text-[#FFD32A]">ABL1 Class</p>
           </div>
-          <div class="mb-0 flex">
-            <div></div>
-            <div></div>
-            <div></div>
+          <div class="mx-2 flex">
+            <img
+            id = "Total_ABL1"
+            src="Star_red.svg"
+            class="cursor-pointer w-4 h-4 mx-3 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <p class="text-sm text-[#FF3F34]">CRLF2 Class</p>
           </div>
-          <p class="mt-10 ml-3 text-lg text-neutral-500 font-medium mt-10">Total class</p>
-          <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
-            <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
-            <p class="absolute -mt-1 ml-3 left-[48%]">0</p>
-            <p class="absolute -mt-1 right-5 text-right">1</p>
-          </div>  
-          <div class="relative mt-1 flex">
-            <p class="ml-4 text-xs text-neutral-500">BALLNOS</p>
-            <p class="absolute right-2 text-xs text-neutral-500">Other Classes</p>
+          <div class="mx-2 flex">
+            <img
+            id = "Total_ABL1"
+            src="Star_mint.svg"
+            class="cursor-pointer w-4 h-4 mx-3 h-fit text-center"
+            alt="Tutorial Logo"
+            />
+            <p class="text-sm text-[#00D8D6]">ABL1-Like Class</p>
+          </div>
+        </div>
+        <div class="mx-10 rounded-3xl border px-20 py-5 mt-3 border-neutral-200">
+          <div>
+            <p class="-ml-5 mb-3 text-lg text-neutral-500 font-medium mt-3">Total class</p>
+            <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
+              <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
+              <p class="absolute -mt-1 ml-3 left-[48%]">0</p>
+              <p class="absolute -mt-1 right-5 text-right">1</p>
+            </div>  
+            <div class="relative mt-1 flex">
+              <p class="ml-4 text-xs text-neutral-500">BALLNOS</p>
+              <p class="absolute right-2 text-xs text-neutral-500">Other Classes</p>
+            </div>
           </div>
           <div class="-ml-1 mt-2 bg-inherit w-full relative">
             {#if ABL1selected == 'true'}
@@ -355,59 +381,60 @@
             </div>
           </div>              
         {/if}
+        <!-- 페이지네이션 UI -->
+        <div class="flex justify-center items-center mt-10 mb-5 h-12">
+          <!-- 이전 페이지 그룹 버튼 -->
+          <button
+            class="cursor-pointer text-violet-800 mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
+            on:click={() => prevPageGroup()}
+            disabled={currentPage === 1}>
+            <img
+            src="left2.svg"
+            class="mx-5 h-8"
+            alt="SPADOMA Logo"/>
+          </button>
+          <!-- 페이지 버튼 -->
+          {#each getPageNumbers() as pageNumber}
+            {#if currentPage === pageNumber}
+              <button
+                class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none bg-violet-300 text-white"
+                on:click={() => {
+                  changePage(pageNumber);
+                  scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
+                }}
+              >
+                {pageNumber}
+              </button>
+            {:else}
+              <button
+                class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none hover:text-white hover:bg-violet-300"
+                on:click={() => {
+                  changePage(pageNumber);
+                  scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
+                }}
+              >
+                {pageNumber}
+              </button>
+            {/if}
+          {/each}
+          <!-- 다음 페이지 그룹 버튼 -->
+          <button
+            class="cursor-pointer mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
+            on:click={() => nextPageGroup()}
+            disabled={currentPage === totalPages}>
+            <img
+            src="right2.svg"
+            class="mx-5 h-8"
+            alt="SPADOMA Logo"/>
+          </button>
+        </div>
       </div>
       
     {:else}
       <p class="mx-10 mt-8 text-center text-gray-500">No results found for this page.</p>
     {/if}
 
-    <!-- 페이지네이션 UI -->
-    <div class="flex justify-center items-center mt-10 h-12">
-      <!-- 이전 페이지 그룹 버튼 -->
-      <button
-        class="cursor-pointer text-violet-800 mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
-        on:click={() => prevPageGroup()}
-        disabled={currentPage === 1}>
-        <img
-        src="left2.svg"
-        class="mx-5 h-8"
-        alt="SPADOMA Logo"/>
-      </button>
-      <!-- 페이지 버튼 -->
-      {#each getPageNumbers() as pageNumber}
-        {#if currentPage === pageNumber}
-          <button
-            class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none bg-violet-300 text-white"
-            on:click={() => {
-              changePage(pageNumber);
-              scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
-            }}
-          >
-            {pageNumber}
-          </button>
-        {:else}
-          <button
-            class="font-semibold text-neutral-400 rounded-full text-xl mx-2 px-5 py-3 focus:outline-none hover:text-white hover:bg-violet-300"
-            on:click={() => {
-              changePage(pageNumber);
-              scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
-            }}
-          >
-            {pageNumber}
-          </button>
-        {/if}
-      {/each}
-      <!-- 다음 페이지 그룹 버튼 -->
-      <button
-        class="cursor-pointer mx-1 px-3 py-1 focus:outline-none focus:border-violet-500"
-        on:click={() => nextPageGroup()}
-        disabled={currentPage === totalPages}>
-        <img
-        src="right2.svg"
-        class="mx-5 h-8"
-        alt="SPADOMA Logo"/>
-      </button>
-    </div>
+    
     <div class="mt-20 mb-8 text-center">
       <Button
       href="/analysis"
