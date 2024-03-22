@@ -151,41 +151,60 @@
 
 </script>
 
-<div class="relative mt-12 rounded-lg border mx-5 px-24 pt-10 bg-white">
-  <p class="ml-8 text-3xl text-violet-900 font-medium mt-2">Ph(+) B-ALL Probability Calculator</p>
+<div class="relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
+  <p class="ml-16 text-3xl text-violet-900 font-medium mt-12">Ph(+) B-ALL Probability Calculator</p>
   <div class="relative w-full px-10 mt-8 pt-3">
-    <p class="text-3xl text-violet-700 font-medium">Results</p>
-    <p class="text-violet-400 text-base font-normal mt-2">
+    <p class="ml-8 text-3xl text-violet-700 font-medium">Results</p>
+    <p class="ml-8 text-violet-400 text-base font-normal mt-2">
       {selectedmethod} Based Probability of Each Class
     </p>   
-    <div class="ml-32 mr-40 justify-between flex rounded-3xl border-2 py-1 mt-8 border-violet-200">
-      <div class="flex items-center justify-start text-lg text-center font-medium mx-10 border-r border-violet-300 text-violet-400 h-full">
+    <div class="ml-12 mr-16 justify-between flex rounded-3xl py-1 mt-10">
+      <div class="cursor-pointer mt-1 w-52 flex justify-center text-xl text-center font-medium ml-5 mr-5 border-r-2 border-violet-300 text-violet-700 h-full">
         Patient ID 
         <img
           id="searchIcon"
-          src="invertedtriangle.svg"
-          class="cursor-pointer w-5 h-5 ml-2 mr-5 mt-1 h-fit text-center"
+          src="invertedtriangle2.svg"
+          class="cursor-pointer w-4 h-4 ml-2 -mr-0 mt-3 h-fit text-center"
           alt="Tutorial Logo"
         /> 
       </div>
-      <div>
-        <Input id="small-input" size="sm" placeholder="Small input" />
-        <input id="searchInput" class="w-full ps-10" placeholder="Search..." />
+      <div class="w-full">
+        <Input id="searchInput" class="bg-white text-neutral-500 text-base outline-none border-violet-200 ring-1 ring-violet-200 focus:outline-none focus:border-violet-200 focus:ring-1 focus:ring-violet-200 rounded-full px-8 w-full" placeholder="Search..." />
       </div>
-      <div class="flex items-center justify-end text-xl text-center font-medium mx-10 border-l border-violet-300 text-violet-400 h-full">
+      <div class="mt-1 flex items-center justify-end text-xl text-center font-medium ml-5 mr-5 border-l-2 border-violet-300 text-violet-400 h-full">
         <img
         id="searchicon2"
-        src="searchicon2.svg"
+        src="searchicon3.svg"
         class="cursor-pointer w-5 h-5 my-1 ml-8 mr-0 mt-1 h-fit text-center"
         alt="Tutorial Logo"
         /> 
       </div>
     </div>
+    <div class="py-2 realtive flex mt-3 bg-violet-400 text-white ml-20 mr-20 flex rounded-3xl py-1 border-violet-300 rounded-full">
+      <div class="flex ml-3 justify-start">
+        <img
+          id="Star_purple"
+          src="Star_violet.svg"
+          class="w-4 h-4 mx-2 mt-1 text-center"
+          alt="Tutorial Logo"
+          />
+        <p class="font-medium text-lg">5 out of 10 gene of the model matched</p>
+        <p class="mt-0 ml-1 text-violet-800 font-medium">(50%)</p>
+      </div>
+      <div class="absolute right-36 cursor-pointer ml-2 justify-end">
+        <p class="ml-1 text-white font-medium underline justify-end">Detail...</p>
+      </div>
+    </div>
     {#if patientIDnumber[calculateIndex(currentPage)]}
-      <div class="mx-10 rounded-lg border-2 px-20 py-5 mt-3 border-violet-400">
-        <div class="my-10">
-          <div class="mt-0 mb-16">
-            <p class="text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
+      <div class="mx-10 rounded-3xl border px-20 py-5 mt-3 border-neutral-200">
+        <div class="mt-5 mb-10">
+          <div class="mb-16 flex">
+            <p class="justify-center text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
+          </div>
+          <div class="mb-0 flex">
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
           <p class="mt-10 ml-3 text-lg text-neutral-500 font-medium mt-10">Total class</p>
           <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
@@ -392,7 +411,7 @@
     <div class="mt-20 mb-8 text-center">
       <Button
       href="/analysis"
-      class="mb-5 px-7 text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
+      class="mb-5 px-7 py-4 text-xl font-semibold bg-violet-800 hover:bg-violet-900 focus:ring-white"
       >Return</Button>
     </div>
     <footer>
