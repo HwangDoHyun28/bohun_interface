@@ -151,8 +151,8 @@
 
 </script>
 
-<div class="selection:bg-violet-300 selection:text-white relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
-  <p class="ml-16 text-3xl text-violet-900 font-medium mt-12">Ph(+) B-ALL Probability Calculator</p>
+<div class="selection:bg-violet-300 selection:text-white relative mt-12 rounded-lg border mx-5 px-8 pt-10 bg-white">
+  <p class="ml-16 text-3xl text-violet-900 font-medium mt-8">Ph(+) B-ALL Probability Calculator</p>
   <div class="relative w-full px-10 mt-8 pt-3">
     <p class="ml-8 text-3xl text-violet-700 font-medium">Results</p>
     <p class="ml-8 text-violet-400 text-base font-normal mt-2">
@@ -169,7 +169,7 @@
         /> 
       </div>
       <div class="w-full">
-        <Input id="searchInput" class="bg-white text-neutral-500 text-base outline-none border-violet-200 ring-1 ring-violet-200 focus:outline-none focus:border-violet-200 focus:ring-1 focus:ring-violet-200 focus:bg-violet-100 rounded-full px-8 w-full" placeholder="Search..." />
+        <Input id="searchInput" class="bg-violet-100 text-violet-800 focus:text-neutral-500 text-base outline-none border-violet-200 ring-1 ring-violet-200 focus:outline-none focus:border-violet-200 focus:ring-1 focus:ring-violet-200 focus:bg-white rounded-full px-8 w-full" placeholder="Search..." />
       </div>
       <div class="py-1 mt-1 flex items-center justify-end text-xl text-center font-medium ml-5 mr-5 border-l-2 border-violet-300 text-violet-400 h-full">
         <img
@@ -180,7 +180,7 @@
         /> 
       </div>
     </div>
-    <div class="py-2 realtive flex mt-3 bg-violet-400 text-white ml-16 mr-16 flex rounded-full border-violet-300 rounded-full">
+    <div class="cursor-pointer py-2 realtive flex mt-3 bg-violet-400 text-white ml-16 mr-16 flex rounded-full border border-violet-200 rounded-full">
       <div class="flex ml-3 justify-start">
         <img
           id="Star_purple"
@@ -192,7 +192,7 @@
         <p class="ml-1 text-violet-800 text-base font-semibold">(50%)</p>
       </div>
       <div class="absolute right-36 cursor-pointer ml-2 justify-end">
-        <p class="ml-1 -mr-5 text-violet-100 font-medium text-base underline justify-end">More...</p>
+        <p class="ml-1 -mr-5 text-white font-medium text-base underline justify-end">More...</p>
       </div>
     </div>
     {#if patientIDnumber[calculateIndex(currentPage)]}
@@ -200,8 +200,8 @@
         <div class="mt-3 ml-3 mb-3 flex">
           <p class="ml-10 mt-16 justify-center text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
         </div>
-        <div class="cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
-          <div class="border rounded-2xl bg-violet-300 px-3 py-1 mx-1 flex">
+        <div class="-mt-5 cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
+          <div class="border border-violet-300 rounded-2xl bg-violet-400 px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_star"
             src="Star_yellow.svg"
@@ -210,7 +210,7 @@
             />
             <p class="cursor-pointer text-sm text-white">ABL1 Class</p>
           </div>
-          <div class="cursor-pointer border rounded-2xl bg-violet-300 px-3 py-1 mx-1 flex">
+          <div class="cursor-pointer border-violet-300 border rounded-2xl bg-violet-400 px-3 py-1 mx-1 flex">
             <img
             id = "CRLF2_star"
             src="Star_red.svg"
@@ -219,7 +219,7 @@
             />
             <p class="cursor-pointer text-sm text-white">CRLF2 Class</p>
           </div>
-          <div class="cursor-pointer border rounded-2xl bg-violet-300 px-3 py-1 mx-1 flex">
+          <div class="cursor-pointer border border-violet-300 rounded-2xl bg-violet-400 px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_Like_star"
             src="Star_mint.svg"
@@ -229,7 +229,7 @@
             <p class="cursor-pointer text-sm text-white">ABL1-Like Class</p>
           </div>
         </div>
-        <div class="bg-violet-200 mx-10 rounded-2xl px-20 py-5 mt-3 border border-violet-300">
+        <div class="bg-violet-100 mx-10 rounded-2xl px-20 py-5 mt-3 border border-violet-300">
           <div>
             <p class="-ml-5 mb-3 text-lg text-neutral-500 font-medium mt-3">Total class</p>
             <div class="bg-white mt-5 ml-2 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
@@ -287,7 +287,7 @@
             {/if}
           </div>
         </div>              
-        <div class="bg-violet-200 mx-10 rounded-2xl px-20 py-5 mt-5">
+        <div class="bg-violet-100 border border-violet-200 mx-10 rounded-2xl px-20 py-5 mt-5">
           {#if ABL1selected == 'true'}
             <div class="mb-10">
               <div class="-ml-5 flex mt-5">
