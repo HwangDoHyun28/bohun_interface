@@ -3,6 +3,7 @@
     "d3": "^7.8.5"
   },
   "devDependencies": {
-    "flowbite-svelte-icons": "^1.4.5"
+    "flowbite-svelte-icons": "^1.4.5",
+    "svelte-awesome-color-picker": "^3.0.6"
   }
 }

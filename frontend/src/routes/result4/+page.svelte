@@ -151,7 +151,7 @@
 
 </script>
 
-<div class="selection:bg-violet-300 relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
+<div class="selection:bg-violet-300 selection:text-white relative mt-12 rounded-lg border mx-5 px-12 pt-10 bg-white">
   <p class="ml-16 text-3xl text-violet-900 font-medium mt-12">Ph(+) B-ALL Probability Calculator</p>
   <div class="relative w-full px-10 mt-8 pt-3">
     <p class="ml-8 text-3xl text-violet-700 font-medium">Results</p>
@@ -196,21 +196,21 @@
       </div>
     </div>
     {#if patientIDnumber[calculateIndex(currentPage)]}
-      <div class="mx-10 rounded-2xl border px-5 py-5 mt-4 border-neutral-200">
+      <div class="bg-violet-100 mx-10 rounded-2xl border px-5 py-5 mt-4 border-neutral-200">
         <div class="mt-3 ml-3 mb-3 flex">
           <p class="ml-10 mt-16 justify-center text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
         </div>
-        <div class="justify-end text-lg mx-10 flex">
-          <div class="mx-3 flex">
+        <div class="cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
+          <div class="border rounded-2xl bg-white px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_star"
             src="Star_yellow.svg"
-            class="w-4 h-4 mr-1 h-fit text-center"
+            class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
             alt="Tutorial Logo2"
             />
             <p class="cursor-pointer text-sm text-[#FFD32A]">ABL1 Class</p>
           </div>
-          <div class="mx-3 flex">
+          <div class="cursor-pointer border rounded-2xl bg-white px-3 py-1 mx-1 flex">
             <img
             id = "CRLF2_star"
             src="Star_red.svg"
@@ -219,7 +219,7 @@
             />
             <p class="cursor-pointer text-sm text-[#FF3F34]">CRLF2 Class</p>
           </div>
-          <div class="mx-3 flex">
+          <div class="cursor-pointer border rounded-2xl bg-white px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_Like_star"
             src="Star_mint.svg"
@@ -229,10 +229,10 @@
             <p class="cursor-pointer text-sm text-[#00D8D6]">ABL1-Like Class</p>
           </div>
         </div>
-        <div class="mx-10 rounded-lg border px-20 py-5 mt-3 border-neutral-200">
+        <div class="bg-white mx-10 rounded-2xl px-20 py-5 mt-3 border border-neutral-200">
           <div>
             <p class="-ml-5 mb-3 text-lg text-neutral-500 font-medium mt-3">Total class</p>
-            <div class="mt-5 ml-2 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
+            <div class="bg-white mt-5 ml-2 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
               <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
               <p class="absolute -mt-1 ml-3 left-[48%]">0</p>
               <p class="absolute -mt-1 right-5 text-right">1</p>
@@ -282,19 +282,19 @@
             <Popover triggeredBy="#Total_ABL1_Like" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
               <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
               <hr class="mb-2 border-1 border-neutral-100" />
-              <p class="text-xs text-neutral-400">The probability of ABL1 Like class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex()]]}</span>.</p>
+              <p class="text-xs text-neutral-400">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex()]]}</span>.</p>
             </Popover>
             {/if}
           </div>
         </div>              
-        <div class="mx-10 rounded-lg border px-20 py-5 mt-3 border-neutral-200">
+        <div class="bg-white mx-10 rounded-2xl border px-20 py-5 mt-5 border-neutral-200">
           {#if ABL1selected == 'true'}
             <div class="mb-10">
-              <div class="flex mt-5">
+              <div class="-ml-5 flex mt-5">
                 <p class="ml-3 text-lg text-[#FFD32A] font-medium">ABL1 Class</p>
                 <p class="ml-1 text-lg text-neutral-400 font-lg">: {ABL1averageResultstr[calculateIndex(currentPage)]}</p>
               </div>
-              <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
+              <div class="bg-white mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
                 <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
                 <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
                 <p class="absolute -mt-1 right-4 text-right">1</p>
@@ -321,13 +321,11 @@
           {/if}
           {#if CRLF2selected == 'true'}
             <div class="my-10">
-              <div class="flex mt-10">
+              <div class="-ml-5 flex mt-10">
                 <p class="ml-3 text-lg text-[#FF3F34] font-medium mt-5">CRLF2 Class</p>
                 <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[calculateIndex(currentPage)]]}</p>
               </div>
-              <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2
-              
-              border-violet-300">
+              <div class="bg-white mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
                 <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
                 <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
                 <p class="absolute -mt-1 right-4 text-right">1</p>
@@ -354,11 +352,11 @@
           {/if}  
           {#if ABL1_LikeSelected == 'true'}
             <div class="my-10">
-              <div class="flex mt-10">
+              <div class="-ml-5 flex mt-10">
                 <p class="ml-3 text-lg text-[#00D8D6] font-medium mt-5">ABL1-Like Class</p>
                 <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex(currentPage)]]}</p>
               </div>
-              <div class="mt-5 ml-3 relative h-9 pt-2 flex rounded-lg font-semibold text-medium text-neutral-400 bg-inherit border-2 border-violet-300">
+              <div class="bg-white mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
                 <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
                 <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
                 <p class="absolute -mt-1 right-4 text-right">1</p>
