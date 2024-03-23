@@ -192,44 +192,44 @@
         <p class="ml-1 text-violet-800 text-base font-semibold">(50%)</p>
       </div>
       <div class="absolute right-36 cursor-pointer ml-2 justify-end">
-        <p class="ml-1 -mr-5 text-white font-medium text-base underline justify-end">More...</p>
+        <p class="ml-1 -mr-5 text-violet-100 font-medium text-base underline justify-end">More...</p>
       </div>
     </div>
     {#if patientIDnumber[calculateIndex(currentPage)]}
-      <div class="bg-violet-100 mx-10 rounded-2xl border px-5 py-5 mt-4 border-neutral-200">
+      <div class="bg-violet-200 mx-10 rounded-2xl border px-5 py-5 mt-4 border-neutral-200">
         <div class="mt-3 ml-3 mb-3 flex">
           <p class="ml-10 mt-16 justify-center text-2xl text-center font-semibold text-violet-800 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
         </div>
         <div class="cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
-          <div class="border rounded-2xl bg-white px-3 py-1 mx-1 flex">
+          <div class="border rounded-2xl bg-violet-300 px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_star"
             src="Star_yellow.svg"
             class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
             alt="Tutorial Logo2"
             />
-            <p class="cursor-pointer text-sm text-[#FFD32A]">ABL1 Class</p>
+            <p class="cursor-pointer text-sm text-white">ABL1 Class</p>
           </div>
-          <div class="cursor-pointer border rounded-2xl bg-white px-3 py-1 mx-1 flex">
+          <div class="cursor-pointer border rounded-2xl bg-violet-300 px-3 py-1 mx-1 flex">
             <img
             id = "CRLF2_star"
             src="Star_red.svg"
             class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
             alt="Tutorial Logo2"
             />
-            <p class="cursor-pointer text-sm text-[#FF3F34]">CRLF2 Class</p>
+            <p class="cursor-pointer text-sm text-white">CRLF2 Class</p>
           </div>
-          <div class="cursor-pointer border rounded-2xl bg-white px-3 py-1 mx-1 flex">
+          <div class="cursor-pointer border rounded-2xl bg-violet-300 px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_Like_star"
             src="Star_mint.svg"
             class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
             alt="Tutorial Logo2"
             />
-            <p class="cursor-pointer text-sm text-[#00D8D6]">ABL1-Like Class</p>
+            <p class="cursor-pointer text-sm text-white">ABL1-Like Class</p>
           </div>
         </div>
-        <div class="bg-white mx-10 rounded-2xl px-20 py-5 mt-3 border border-neutral-200">
+        <div class="bg-violet-200 mx-10 rounded-2xl px-20 py-5 mt-3 border border-violet-300">
           <div>
             <p class="-ml-5 mb-3 text-lg text-neutral-500 font-medium mt-3">Total class</p>
             <div class="bg-white mt-5 ml-2 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
@@ -287,11 +287,11 @@
             {/if}
           </div>
         </div>              
-        <div class="bg-white mx-10 rounded-2xl border px-20 py-5 mt-5 border-neutral-200">
+        <div class="bg-violet-200 mx-10 rounded-2xl px-20 py-5 mt-5">
           {#if ABL1selected == 'true'}
             <div class="mb-10">
               <div class="-ml-5 flex mt-5">
-                <p class="ml-3 text-lg text-[#FFD32A] font-medium">ABL1 Class</p>
+                <p class="ml-3 text-lg text-neutral-500 font-medium">ABL1 Class</p>
                 <p class="ml-1 text-lg text-neutral-400 font-lg">: {ABL1averageResultstr[calculateIndex(currentPage)]}</p>
               </div>
               <div class="bg-white mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
@@ -322,7 +322,7 @@
           {#if CRLF2selected == 'true'}
             <div class="my-10">
               <div class="-ml-5 flex mt-10">
-                <p class="ml-3 text-lg text-[#FF3F34] font-medium mt-5">CRLF2 Class</p>
+                <p class="ml-3 text-lg text-neutral-500 font-medium mt-5">CRLF2 Class</p>
                 <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[calculateIndex(currentPage)]]}</p>
               </div>
               <div class="bg-white mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
@@ -353,7 +353,7 @@
           {#if ABL1_LikeSelected == 'true'}
             <div class="my-10">
               <div class="-ml-5 flex mt-10">
-                <p class="ml-3 text-lg text-[#00D8D6] font-medium mt-5">ABL1-Like Class</p>
+                <p class="ml-3 text-lg text-neutral-500 font-medium mt-5">ABL1-Like Class</p>
                 <p class="mt-5 ml-1 text-lg text-neutral-400 font-lg mt-5">: {ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex(currentPage)]]}</p>
               </div>
               <div class="bg-white mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-neutral-400 bg-inherit border-2 border-neutral-300">
