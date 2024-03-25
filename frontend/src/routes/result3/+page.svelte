@@ -150,8 +150,7 @@
   }
 
   import { Dropdown, DropdownItem, Radio } from 'flowbite-svelte';
-  import { ChevronDownSolid } from 'flowbite-svelte-icons';
-  let group2 = 2;
+  let group2 = 1;
 
 </script>
 
@@ -165,31 +164,31 @@
     {#if patientIDnumber[calculateIndex(currentPage)]}
       <div class="bg-zinc-600 mx-10 rounded-2xl border px-5 pb-5 pt-3 mt-8 border-zinc-500">
         <div class="ml-0 mr-5 justify-between flex rounded-3xl py-1 mt-0">
-          <div class="py-1 cursor-pointer mt-1 w-52 flex justify-center text-xl text-center font-medium text-violet-300 h-full">
-            <Button>Dropdown radio<ChevronDownSolid class="w-3 h-3 ms-2 text-white dark:text-white" /></Button>
-            <Dropdown class="w-48 p-3 space-y-1">
-              <li class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Radio name="group2" bind:group={group2} value={1}>Default radio</Radio>
-              </li>
-              <li class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Radio name="group2" bind:group={group2} value={2}>Checked state</Radio>
-              </li>
-              <li class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
-                <Radio name="group2" bind:group={group2} value={3}>Default radio</Radio>
-              </li>
-            </Dropdown>
-            Patient ID 
-            <img
+          <div class="rounded-2xl py-1 cursor-pointer mt-1 w-52 flex justify-center text-xl text-center font-medium text-violet-300 h-full">
+            <div class="rounded-2xl flex">
+              <Button class="focus:ring-zinc-600 text-violet-300 text-xl">Patient ID</Button>
+              <img
               id="searchIcon"
               src="invertedtriangle2.svg"
-              class="cursor-pointer w-4 h-4 ml-2 -mr-0 mt-3 h-fit text-center"
-              alt="Tutorial Logo"
-            /> 
+              class="cursor-pointer w-4 h-4 mt-5 h-fit text-center"
+              alt="Tutorial Logo"/> 
+            </div>
+            <Dropdown class="place-items-start place-content-start justify-items-start focus:ring-inherit rounded bg-zinc-700 w-48 p-2 space-y-1">
+              <li class="place-items-start place-content-start justify-items-start rounded-2xl py-1 text-neutral-300 hover:bg-zinc-600 dark:hover:bg-gray-600">
+                <input id="Patient" class="-ml-7 mr-2 focus:ring-transparent rounded-2xl text-neutral-300" type="radio" name="group2" bind:group={group2} value={1}/>
+                <label class="text-base text-neutral-300 peer-checked/draft:text-sky-500" for="Patient">Patient ID</label>
+              </li>
+              <li class="place-content-start justify-start rounded-2xl py-1 hover:bg-zinc-600 dark:hover:bg-gray-600">
+                <input id="Page" class="focus:ring-transparent rounded-2xl text-neutral-300" type="radio" name="group2" bind:group={group2} value={2}/>
+                <label class="mr-2 text-base text-neutral-300 peer-checked/draft:text-sky-500" for="Page">Page Number</label>
+              </li>
+            </Dropdown> 
+            
           </div>
-          <div class="w-full">
+          <div class="mt-2 w-full">
             <Input id="searchInput" class="bg-zinc-700 text-neutral-200 focus:text-neutral-200 text-base outline-none border-inherent focus:outline-none focus:border-violet-200 focus:ring-1 focus:ring-violet-200 focus:bg-zinc-500 rounded-full px-8 w-full" placeholder="Search..." />
           </div>
-          <div class="py-1 mt-1 flex items-center justify-end text-xl text-center font-medium mx-0 text-violet-400 h-full">
+          <div class="py-1 mt-3 flex items-center justify-end text-xl text-center font-medium mx-0 text-violet-400 h-full">
             <img
             id="searchicon2"
             src="searchicon3.svg"
