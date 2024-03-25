@@ -486,7 +486,7 @@
   
   <style>
     /* YourComponent에 대한 스타일 */
-    @import '../../routes/scrollbar.css'; /* scrollbar.css 파일 임포트 */
+    @import '../scrollbar.css'; /* scrollbar.css 파일 임포트 */
   </style>
   
   <!-- 로딩 화면 -->
