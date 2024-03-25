@@ -149,36 +149,35 @@
   changePage(1);
   }
 
+  import { Dropdown, DropdownItem, Radio } from 'flowbite-svelte';
+  import { ChevronDownSolid } from 'flowbite-svelte-icons';
+  let group2 = 2;
+
 </script>
 
-<div class="selection:bg-indigo-400 selection:text-white relative mt-12 rounded-lg border mx-5 px-8 pt-10 bg-white">
-  <p class="ml-16 text-3xl text-violet-900 font-medium mt-8">Ph(+) B-ALL Probability Calculator</p>
+<div class="selection:bg-indigo-400 selection:text-white relative mt-12 rounded-lg border mx-5 px-8 pt-10 bg-zinc-700">
+  <p class="ml-16 text-3xl text-violet-100 font-medium mt-8">Ph(+) B-ALL Probability Calculator</p>
   <div class="relative w-full px-10 mt-0 pt-3">
-    <p class="mt-8 ml-8 text-3xl text-violet-700 font-medium">Results</p>
-    <p class="ml-8 text-violet-400 text-base font-normal mt-2">
+    <p class="mt-8 ml-8 text-3xl text-violet-300 font-medium">Results</p>
+    <p class="ml-8 text-violet-200 text-base font-normal mt-2">
       {selectedmethod} Based Probability of Each Class
     </p>  
-    <div class="mx-12 mt-5 cursor-pointer py-2 realtive flex bg-violet-400 text-white flex rounded-full rounded-full">
-      <div class="flex ml-3 justify-start">
-        <img
-          id="Star_purple"
-          src="Star_violet.svg"
-          class="w-4 h-4 mx-2 mt-1 text-center"
-          alt="Tutorial Logo"
-          />
-        <p class="font-medium text-base">5 out of 10 gene of the model matched</p>
-        <p class="ml-1 text-violet-800 text-base font-semibold">(50%)</p>
-      </div>
-      <div class="absolute right-36 cursor-pointer ml-2 justify-end">
-        <p class="ml-1 -mr-8 text-white font-medium text-base underline justify-end">More...</p>
-      </div>
-    </div> 
-    
-    
     {#if patientIDnumber[calculateIndex(currentPage)]}
-      <div class="bg-zinc-600 mx-10 rounded-2xl border px-5 pb-5 pt-3 mt-3 border-neutral-200">
+      <div class="bg-zinc-600 mx-10 rounded-2xl border px-5 pb-5 pt-3 mt-8 border-zinc-500">
         <div class="ml-0 mr-5 justify-between flex rounded-3xl py-1 mt-0">
-          <div class="py-1 cursor-pointer mt-1 w-52 flex justify-center text-xl text-center font-medium text-violet-100 h-full">
+          <div class="py-1 cursor-pointer mt-1 w-52 flex justify-center text-xl text-center font-medium text-violet-300 h-full">
+            <Button>Dropdown radio<ChevronDownSolid class="w-3 h-3 ms-2 text-white dark:text-white" /></Button>
+            <Dropdown class="w-48 p-3 space-y-1">
+              <li class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                <Radio name="group2" bind:group={group2} value={1}>Default radio</Radio>
+              </li>
+              <li class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                <Radio name="group2" bind:group={group2} value={2}>Checked state</Radio>
+              </li>
+              <li class="rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                <Radio name="group2" bind:group={group2} value={3}>Default radio</Radio>
+              </li>
+            </Dropdown>
             Patient ID 
             <img
               id="searchIcon"
@@ -235,7 +234,7 @@
         <div class="bg-zinc-700 mx-10 rounded-2xl px-20 py-5 mt-3">
           <div>
             <p class="-ml-5 mb-3 text-lg text-violet-300 font-medium mt-3">Total class</p>
-            <div class="bg-zinc-600 mt-5 ml-2 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
+            <div class="bg-zinc-600 mt-16 ml-2 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
               <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
               <p class="absolute -mt-1 ml-3 left-[48%]">0</p>
               <p class="absolute -mt-1 right-5 text-right">1</p>
@@ -254,10 +253,18 @@
               style="left: {`${starlocation(ABL1averageResult[calculateIndex(currentPage)])}%`}"
               alt="Tutorial Logo"
               />
-              <Popover triggeredBy="#Total_ABL1" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
-                <p class="text-sm text-[#FFD32A] font-semibold">ABL1 Class</p>
+              <Popover triggeredBy="#Total_ABL1" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
+                <div class="flex mb-1">
+                  <img
+                    id = "ABL1_star"
+                    src="Star_yellow.svg"
+                    class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
+                    alt="Tutorial Logo2"
+                    />
+                    <p class="text-sm text-[#FFD32A] font-semibold">ABL1 Class</p>
+                </div>
                 <hr class="mb-2 border-1 border-neutral-100" />
-                <p class="text-xs text-neutral-400">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1averageResultstr[calculateIndex()]}</span>.</p>
+                <p class="text-xs text-neutral-100">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{ABL1averageResultstr[calculateIndex(currentPage)]}</span>.</p>
               </Popover>
             {/if}
             {#if CRLF2selected == 'true'}
@@ -268,10 +275,18 @@
               style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[calculateIndex(currentPage)]])}%`}"
               alt="Tutorial Logo"
               />
-              <Popover triggeredBy="#Total_CRLF2" class="z-40 border-4 border-neutral-100 p-1 text-sm w-68 font-light">
-                <p class="text-sm text-[#FF3F34] font-semibold">CRLF2 Class</p>
+              <Popover triggeredBy="#Total_CRLF2" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
+                <div class="flex mb-1">
+                  <img
+                    id = "CRLF2_star"
+                    src="Star_red.svg"
+                    class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
+                    alt="Tutorial Logo2"
+                    />
+                    <p class="text-sm text-[#FF3F34] font-semibold">CRLF2 Class</p>
+                </div>
                 <hr class="mb-2 border-1 border-neutral-100" />
-                <p class="text-xs text-neutral-400">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[calculateIndex()]]}</span>.</p>
+                <p class="text-xs text-neutral-100">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{CRLF2averageResultstr[calculateIndex(currentPage)]}</span>.</p>
               </Popover>
             {/if}
             {#if ABL1_LikeSelected == 'true'}
@@ -283,9 +298,17 @@
             alt="Tutorial Logo"
             />
             <Popover triggeredBy="#Total_ABL1_Like" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
-              <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
+              <div class="flex mb-1">
+                <img
+                  id = "ABL1_Like_star"
+                  src="Star_mint.svg"
+                  class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
+                  alt="Tutorial Logo2"
+                  />
+                  <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
+              </div>
               <hr class="mb-2 border-1 border-neutral-100" />
-              <p class="text-xs text-neutral-400">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex()]]}</span>.</p>
+              <p class="text-xs text-neutral-100">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{ABL1_LikeaverageResultstr[calculateIndex(currentPage)]}</span>.</p>
             </Popover>
             {/if}
           </div>
@@ -297,7 +320,22 @@
                 <p class="ml-3 text-lg text-violet-300 font-medium">ABL1 Class</p>
                 <p class="ml-1 text-lg text-neutral-200 font-lg">: {ABL1averageResultstr[calculateIndex(currentPage)]}</p>
               </div>
-              <div class="bg-zinc-600 mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
+              <div class="-mx-5 mt-5 cursor-pointer py-1 relative flex bg-violet-400 text-white flex rounded-full rounded-full">
+                <div class="flex ml-3 justify-start">
+                  <img
+                    id="Star_purple"
+                    src="Star_violet.svg"
+                    class="w-4 h-4 mx-2 mt-1 text-center"
+                    alt="Tutorial Logo"
+                    />
+                  <p class="font-medium text-base">5 out of 10 gene of the model matched</p>
+                  <p class="ml-1 text-violet-800 text-base font-semibold">(50%)</p>
+                </div>
+                <div class="absolute right-12 cursor-pointer ml-2 justify-end">
+                  <p class="ml-1 -mr-8 text-white font-medium text-base underline justify-end">More...</p>
+                </div>
+              </div>           
+              <div class="bg-zinc-600 mt-16 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
                 <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
                 <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
                 <p class="absolute -mt-1 right-4 text-right">1</p>
@@ -315,12 +353,20 @@
                 alt="Tutorial Logo"
                 />
                 <Popover triggeredBy="#ABL1" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
-                  <p class="text-sm text-[#FFD32A] font-semibold">ABL1 Class</p>
+                  <div class="flex mb-1">
+                    <img
+                      id = "ABL1_star"
+                      src="Star_yellow.svg"
+                      class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
+                      alt="Tutorial Logo2"
+                      />
+                      <p class="text-sm text-[#FFD32A] font-semibold">ABL1 Class</p>
+                  </div>
                   <hr class="mb-2 border-1 border-neutral-100" />
-                  <p class="text-xs text-neutral-400">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1averageResultstr[Object.keys(ABL1averageResultstr)[calculateIndex()]]}</span>.</p>
+                  <p class="text-xs text-neutral-100">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{ABL1averageResultstr[calculateIndex(currentPage)]}</span>.</p>
                 </Popover>
               </div>
-              <hr class="my-5 border-zinc-500"/>
+              <hr class="-mx-5 my-5 border-zinc-500"/>
             </div>              
           {/if}
           {#if CRLF2selected == 'true'}
@@ -329,7 +375,22 @@
                 <p class="ml-3 text-lg text-violet-300 font-medium mt-5">CRLF2 Class</p>
                 <p class="mt-5 ml-1 text-lg text-neutral-200 font-lg mt-5">: {CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[calculateIndex(currentPage)]]}</p>
               </div>
-              <div class="bg-zinc-600 mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
+              <div class="-mx-5 mt-5 cursor-pointer py-1 relative flex bg-violet-400 text-white flex rounded-full rounded-full">
+                <div class="flex ml-3 justify-start">
+                  <img
+                    id="Star_purple"
+                    src="Star_violet.svg"
+                    class="w-4 h-4 mx-2 mt-1 text-center"
+                    alt="Tutorial Logo"
+                    />
+                  <p class="font-medium text-base">5 out of 10 gene of the model matched</p>
+                  <p class="ml-1 text-violet-800 text-base font-semibold">(50%)</p>
+                </div>
+                <div class="absolute right-12 cursor-pointer ml-2 justify-end">
+                  <p class="ml-1 -mr-8 text-white font-medium text-base underline justify-end">More...</p>
+                </div>
+              </div>
+              <div class="bg-zinc-600 mt-16 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
                 <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
                 <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
                 <p class="absolute -mt-1 right-4 text-right">1</p>
@@ -347,12 +408,20 @@
                 alt="Tutorial Logo"
                 />
                 <Popover triggeredBy="#CRLF2" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
-                  <p class="text-sm text-[#FF3F34] font-semibold">CRLF2 Class</p>
+                  <div class="flex mb-1">
+                    <img
+                      id = "CRLF2_star"
+                      src="Star_red.svg"
+                      class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
+                      alt="Tutorial Logo2"
+                      />
+                      <p class="text-sm text-[#FF3F34] font-semibold">CRLF2 Class</p>
+                  </div>
                   <hr class="mb-2 border-1 border-neutral-100" />
-                  <p class="text-xs text-neutral-400">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{CRLF2averageResultstr[calculateIndex()]}</span>.</p>
+                  <p class="text-xs text-neutral-100">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{CRLF2averageResultstr[calculateIndex(currentPage)]}</span>.</p>
                 </Popover>
               </div>
-              <hr class="my-5 border-zinc-500"/>
+              <hr class="-mx-5 my-5 border-zinc-500"/>
             </div>              
           {/if}  
           {#if ABL1_LikeSelected == 'true'}
@@ -361,7 +430,22 @@
                 <p class="ml-3 text-lg text-violet-300 font-medium mt-5">ABL1-Like Class</p>
                 <p class="mt-5 ml-1 text-lg text-neutral-200 font-lg mt-5">: {ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex(currentPage)]]}</p>
               </div>
-              <div class="bg-zinc-600 mt-5 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
+              <div class="-mx-5 mt-5 cursor-pointer py-1 relative flex bg-violet-400 text-white flex rounded-full rounded-full">
+                <div class="flex ml-3 justify-start">
+                  <img
+                    id="Star_purple"
+                    src="Star_violet.svg"
+                    class="w-4 h-4 mx-2 mt-1 text-center"
+                    alt="Tutorial Logo"
+                    />
+                  <p class="font-medium text-base">5 out of 10 gene of the model matched</p>
+                  <p class="ml-1 text-violet-800 text-base font-semibold">(50%)</p>
+                </div>
+                <div class="absolute right-12 cursor-pointer ml-2 justify-end">
+                  <p class="ml-1 -mr-8 text-white font-medium text-base underline justify-end">More...</p>
+                </div>
+              </div>
+              <div class="bg-zinc-600 mt-16 ml-3 relative h-9 pt-2 flex rounded-full font-semibold text-medium text-violet-100 bg-inherit border-2 border-violet-100">
                 <p class="absolute -mt-1 left-1 text-left ml-3">-1</p>
                 <p class="absolute -mt-1 ml-4 left-[47.7%]">0</p>
                 <p class="absolute -mt-1 right-4 text-right">1</p>
@@ -379,9 +463,17 @@
                 alt="Tutorial Logo"
                 />
                 <Popover triggeredBy="#ABL1_Like" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
-                  <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
+                  <div class="flex mb-1">
+                    <img
+                      id = "ABL1_Like_star"
+                      src="Star_mint.svg"
+                      class="cursor-pointer w-4 h-4 mr-1 h-fit text-center"
+                      alt="Tutorial Logo2"
+                      />
+                      <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
+                  </div>
                   <hr class="mb-2 border-1 border-neutral-100" />
-                  <p class="text-xs text-neutral-400">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex()]]}</span>.</p>
+                  <p class="text-xs text-neutral-100">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{ABL1_LikeaverageResultstr[calculateIndex(currentPage)]}</span>.</p>
                 </Popover>
               </div>
             </div>              
@@ -396,14 +488,14 @@
             disabled={currentPage === 1}>
             <img
             src="left2.svg"
-            class="mx-5 h-8"
+            class="mx-5 h-7"
             alt="SPADOMA Logo"/>
           </button>
           <!-- 페이지 버튼 -->
           {#each getPageNumbers() as pageNumber}
             {#if currentPage === pageNumber}
               <button
-                class="font-semibold text-neutral-400 rounded-full text-lg mx-2 px-4 py-2 focus:outline-none bg-violet-400 text-violet-100"
+                class="font-semibold text-violet-200 rounded-full text-lg mx-2 px-4 py-2 focus:outline-none bg-violet-300 text-violet-700"
                 on:click={() => {
                   changePage(pageNumber);
                   scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
@@ -413,7 +505,7 @@
               </button>
             {:else}
               <button
-                class="font-semibold text-neutral-300 rounded-full text-lg mx-2 px-4 py-2 focus:outline-none hover:text-violet-100 hover:bg-violet-400"
+                class="font-semibold text-violet-200 rounded-full text-lg mx-2 px-4 py-2 focus:outline-none hover:text-violet-700 hover:bg-violet-300"
                 on:click={() => {
                   changePage(pageNumber);
                   scrollToTop(); // 페이지 변경 시 맨 위로 스크롤
@@ -430,7 +522,7 @@
             disabled={currentPage === totalPages}>
             <img
             src="right2.svg"
-            class="mx-5 h-8"
+            class="mx-5 h-7"
             alt="SPADOMA Logo"/>
           </button>
         </div>
@@ -444,13 +536,13 @@
     <div class="mt-12 mb-8 text-center">
       <Button
       href="/analysis"
-      class="text-violet-200 mb-5 px-7 py-4 text-xl font-semibold bg-zinc-700 ring ring-zinc-5600 hover:bg-zinc-600 focus:ring-white"
+      class="text-violet-200 mb-5 px-7 py-4 text-xl font-semibold bg-zinc-800 ring ring-violet-300 hover:bg-zinc-700 focus:ring-white"
       >Return</Button>
     </div>
     <footer>
       <div class="mt-16 mb-2 px-2 sm:px-4">
           <div class="mx-auto flex flex-col container">
-              <P class="text-zinc-700 text-center">This website is maintained by <A class="text-zinc-400 underline" href="https://pnucolab.com/" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
+              <P class="text-zinc-300 text-center">This website is maintained by <A class="text-zinc-400 underline" href="https://pnucolab.com/" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
           </div>
       </div>
     </footer>
