@@ -38,6 +38,7 @@
 
     return f32_ary;
   }
+  
   let ABL1averageResult = decodearray(decodeURIComponent(values[0].split('=')[1]));
   let CRLF2averageResult = decodearray(decodeURIComponent(values[1].split('=')[1]));
   let ABL1_LikeaverageResult = decodearray(decodeURIComponent(values[2].split('=')[1]));
