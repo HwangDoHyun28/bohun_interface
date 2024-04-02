@@ -10,6 +10,12 @@
   let CRLF2averageResultstr = [];
   let ABL1_LikeaverageResultstr = [];
   let patientIDnumberstr = [];
+  
+  // 페이지당 결과 수 설정 
+  let currentPage = 1; // 현재 페이지
+  const pagesToShow = 5; // 페이지네이션에 표시할 페이지 수
+  let totalPages = 0; // 총 페이지 수
+
 
   // 변수를 reactive하게 선언합니다.
   let ABL1averageResult = writable('');
@@ -90,6 +96,9 @@
     let splitValues = value.split('+').slice(1);
     patientIDnumberstr = splitValues.map(item => item.replace(/\r$/, ''));
     console.log('patientIDnumberstr:', patientIDnumberstr);
+    let resultsPerPage = 1; // 한 페이지당 결과 수
+    totalPages = Math.ceil(patientIDnumberstr.length / resultsPerPage); // 총 페이지 수
+    console.log('Total Pages:', totalPages);
   });
 
   function decodearray(str) {
@@ -110,12 +119,7 @@
     return result;
   }
 
-  // 페이지당 결과 수 설정
-  let resultsPerPage = 1; // 한 페이지당 결과 수
-  let currentPage = 1; // 현재 페이지
-  const pagesToShow = 5; // 페이지네이션에 표시할 페이지 수
-  let totalPages = Math.ceil(patientIDnumberstr.length / resultsPerPage); // 총 페이지 수
-
+  
   // 페이지 변경 함수
   function changePage(pageNumber) {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -232,7 +236,7 @@
         <div class="mt-5 ml-3 mb-3 flex">
           <p class="ml-10 mt-16 justify-center text-2xl text-center font-semibold text-violet-100 font-medium mt-5">{patientIDnumberstr[calculateIndex(currentPage)]}'s Analysis Result</p>
         </div>
-        <div class="-mt-5 cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
+        <div class="cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
           <div class="rounded-2xl bg-zinc-500 px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_star"
@@ -509,6 +513,7 @@
             </div>              
           {/if}
         </div>
+        
         <!-- 페이지네이션 UI -->
         <div class="flex justify-center items-center mt-5 mb-0 h-12">
           <!-- 이전 페이지 그룹 버튼 -->

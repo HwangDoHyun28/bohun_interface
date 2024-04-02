@@ -1,78 +1,117 @@
 <script>
-  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
   import { Button } from "flowbite-svelte";
   import { P, A } from "flowbite-svelte";
   import { Popover } from 'flowbite-svelte';
-  import { SearchOutline } from 'flowbite-svelte-icons';
-  import { Label, Input } from 'flowbite-svelte';
+  import { Input } from 'flowbite-svelte';
 
-  //받아온 url의 형태
-  //http://localhost:5174/result3?
-  //ABL1averageResultObject=OY7jvTmO4705juO9OY7jvTmO470%
-  //&CRLF2averageResultObject=AAAAAAAAAAAAAAAAAAAAAAAAAAA%3D
-  //&ABL1_LikeaverageResultObject=AACAvgAAgL4AAIC%2BAACAvgAAgL4%3D
-  //&ABL1selected=true
-  //&CRLF2selected=true
-  //&ABL1_LikeSelected=true
-  //&selectedmethod=RPKM
-  //&PatientID=%2BSJALL014946_D1%2BSJALL014947_D1%2BSJALL014949_D1%2BSJALL014950_D1%2BSJALL014952_D1%0D
-
-
-  let url = $page.url.search;
-  let values = url.split('&');
   let ABL1averageResultstr = [];
   let CRLF2averageResultstr = [];
   let ABL1_LikeaverageResultstr = [];
-  let patientIDnumber = [];
-  let num = [];
+  let patientIDnumberstr = [];
+  
+  // 페이지당 결과 수 설정 
+  let currentPage = 1; // 현재 페이지
+  const pagesToShow = 5; // 페이지네이션에 표시할 페이지 수
+  let totalPages = 0; // 총 페이지 수
+
+
+  // 변수를 reactive하게 선언합니다.
+  let ABL1averageResult = writable('');
+  let CRLF2averageResult = writable('');
+  let ABL1_LikeaverageResult = writable('');
+  let ABL1selected = writable('');
+  let CRLF2selected = writable('');
+  let ABL1_LikeSelected = writable('');
+  let selectedmethod = writable('');
+  let patientIDnumber = writable('');
+
+  let params;
+
+  onMount(() => {
+    params = new URLSearchParams(window.location.search);
+
+    // 변수 값이 변경되면 store에 새로운 값을 설정합니다.
+    ABL1averageResult.set(params.get('ABL1') || '');
+    CRLF2averageResult.set(params.get('CRLF2') || '');
+    ABL1_LikeaverageResult.set(params.get('ABL1_L') || '');
+    ABL1selected.set(params.get('ABL1s') || '');
+    CRLF2selected.set(params.get('CRLF2s') || '');
+    ABL1_LikeSelected.set(params.get('ABL1_Ls') || '');
+    selectedmethod.set(params.get('smthd') || '');
+    patientIDnumber.set(params.get('PatID') || '');
+  });
+
+  // ABL1averageResult 값이 변경될 때마다 실행됩니다.
+  ABL1averageResult.subscribe(value => {
+    // value를 decode하고 배열에 추가하는 등의 작업을 수행합니다.
+    let decodedArray = decodearray(value);
+    console.log('ABL1 Average:', decodedArray);
+    // 새로운 변수에 저장하려면 아래와 같이 할당합니다.
+    ABL1averageResultstr = decodedArray;
+    console.log('ABL1averageResultstr:', ABL1averageResultstr);
+  });
+
+  // CRLF2averageResult 값이 변경될 때마다 실행됩니다.
+  CRLF2averageResult.subscribe(value => {
+    let decodedArray = decodearray(value);
+    console.log('CRLF2 Average:', decodedArray);
+    CRLF2averageResultstr = decodedArray;
+    console.log('CRLF2averageResultstr:', CRLF2averageResultstr);
+  });
+
+  // ABL1_LikeaverageResult 값이 변경될 때마다 실행됩니다.
+  ABL1_LikeaverageResult.subscribe(value => {
+    let decodedArray = decodearray(value);
+    console.log('ABL1_Like Average:', decodedArray);
+    ABL1_LikeaverageResultstr = decodedArray;
+    console.log('ABL1_LikeaverageResultstr:', ABL1_LikeaverageResultstr);
+  });
+
+  // ABL1selected 값이 변경될 때마다 실행됩니다.
+  ABL1selected.subscribe(value => {
+    console.log('Selected ABL1:', value);
+  });
+
+  // CRLF2selected 값이 변경될 때마다 실행됩니다.
+  CRLF2selected.subscribe(value => {
+    console.log('Selected CRLF2:', value);
+  });
+
+  // ABL1_LikeSelected 값이 변경될 때마다 실행됩니다.
+  ABL1_LikeSelected.subscribe(value => {
+    console.log('Selected ABL1_Like:', value);
+  });
+
+  // selectedmethod 값이 변경될 때마다 실행됩니다.
+  selectedmethod.subscribe(value => {
+    console.log('Selected Method:', value);
+  });
+
+  // patientIDnumber 값이 변경될 때마다 실행됩니다.
+  patientIDnumber.subscribe(value => {
+    console.log('Patient ID:', value);
+    // +를 기준으로 split하여 첫 번째 값을 제외하고, 마지막 값의 '\r'을 제거한 나머지 값을 patientIDnumberstr에 할당합니다.
+    let splitValues = value.split('+').slice(1);
+    patientIDnumberstr = splitValues.map(item => item.replace(/\r$/, ''));
+    console.log('patientIDnumberstr:', patientIDnumberstr);
+    let resultsPerPage = 1; // 한 페이지당 결과 수
+    totalPages = Math.ceil(patientIDnumberstr.length / resultsPerPage); // 총 페이지 수
+    console.log('Total Pages:', totalPages);
+  });
 
   function decodearray(str) {
-    // DECODE TEST
-    let blob = atob( str );
-    let ary_buf = new ArrayBuffer( blob.length );
-    let dv = new DataView( ary_buf );
-    for( let i=0; i < blob.length; i++ ) dv.setUint8( i, blob.charCodeAt(i) );
-    
+    let blob = atob(str);
+    let ary_buf = new ArrayBuffer(blob.length);
+    let dv = new DataView(ary_buf);
+    for (let i = 0; i < blob.length; i++) dv.setUint8(i, blob.charCodeAt(i));
+
     // For WebGL Buffers, can skip Float32Array, just return ArrayBuffer is all thats needed.
-    let f32_ary = new Float32Array( ary_buf );
+    let f32_ary = new Float32Array(ary_buf);
 
     return f32_ary;
   }
-  let ABL1averageResult = decodearray(decodeURIComponent(values[0].split('=')[1]));
-  let CRLF2averageResult = decodearray(decodeURIComponent(values[1].split('=')[1]));
-  let ABL1_LikeaverageResult = decodearray(decodeURIComponent(values[2].split('=')[1]));
-
-  for (let i=0; i<ABL1averageResult.length; i++) {
-    ABL1averageResultstr.push(parseFloat(ABL1averageResult[i].toFixed(4)));
-  }
-
-  for (let i=0; i<CRLF2averageResult.length; i++) {
-    CRLF2averageResultstr.push(parseFloat(CRLF2averageResult[i].toFixed(4)));
-  }
-
-  for (let i=0; i<ABL1_LikeaverageResult.length; i++) {
-    ABL1_LikeaverageResultstr.push(parseFloat(ABL1_LikeaverageResult[i].toFixed(4)));
-  }
-
-  let ABL1selected = values[3].split('=')[1];
-  let CRLF2selected = values[4].split('=')[1];
-  let ABL1_LikeSelected = values[5].split('=')[1];
-  let selectedmethod = values[6].split('=')[1];
-
-  for (let i=1; i<values[7].split('%2B').length; i++) {
-    if (i == values[7].split('%2B').length-1) {
-      patientIDnumber.push(values[7].split('%2B')[i].split('%')[0]);
-    }
-    else {
-      patientIDnumber.push(values[7].split('%2B')[i]);
-    } 
-    num.push(i-1);
-  }
-
-  console.log('ABL1 Average:', ABL1averageResult);
-  console.log('CRLF2 Average:', CRLF2averageResult);
-  console.log('ABL1_Like Average:', ABL1_LikeaverageResult);
-  console.log('patientIDnumber:', patientIDnumber);
 
   // 파일 선택 시 호출되는 함수
   function starlocation(number) {
@@ -80,12 +119,7 @@
     return result;
   }
 
-  // 페이지당 결과 수 설정
-  let resultsPerPage = 1; // 한 페이지당 결과 수
-  let currentPage = 1; // 현재 페이지
-  const pagesToShow = 5; // 페이지네이션에 표시할 페이지 수
-  let totalPages = Math.ceil(patientIDnumber.length / resultsPerPage); // 총 페이지 수
-
+  
   // 페이지 변경 함수
   function changePage(pageNumber) {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -151,17 +185,18 @@
 
   import { Dropdown, DropdownItem, Radio } from 'flowbite-svelte';
   let group2 = 1;
-
 </script>
+
+
 
 <div class="selection:bg-indigo-400 selection:text-white relative mt-12 rounded-lg border mx-5 px-8 pt-10 bg-zinc-700">
   <p class="ml-16 text-3xl text-violet-100 font-medium mt-8">Ph(+) B-ALL Probability Calculator</p>
   <div class="relative w-full px-10 mt-0 pt-3">
     <p class="mt-8 ml-8 text-3xl text-violet-300 font-medium">Results</p>
     <p class="ml-8 text-violet-200 text-base font-normal mt-2">
-      {selectedmethod} Based Probability of Each Class
+      {$selectedmethod} Based Probability of Each Class
     </p>  
-    {#if patientIDnumber[calculateIndex(currentPage)]}
+    {#if $patientIDnumber[calculateIndex(currentPage)]}
       <div class="bg-zinc-600 mx-10 rounded-2xl border px-5 pb-5 pt-3 mt-8 border-zinc-500">
         <div class="ml-0 mr-5 justify-between flex rounded-3xl py-1 mt-0">
           <div class="rounded-2xl py-1 cursor-pointer mt-1 w-52 flex justify-center text-xl text-center font-medium text-violet-300 h-full">
@@ -199,9 +234,9 @@
         </div>
         <hr class="mb-5 mt-3 border-zinc-500"/>
         <div class="mt-5 ml-3 mb-3 flex">
-          <p class="ml-10 mt-16 justify-center text-2xl text-center font-semibold text-violet-100 font-medium mt-5">{patientIDnumber[calculateIndex(currentPage)]}'s Analysis Result</p>
+          <p class="ml-10 mt-16 justify-center text-2xl text-center font-semibold text-violet-100 font-medium mt-5">{patientIDnumberstr[calculateIndex(currentPage)]}'s Analysis Result</p>
         </div>
-        <div class="-mt-5 cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
+        <div class="cursor-pointer rounded-2xl justify-end text-lg mx-12 flex">
           <div class="rounded-2xl bg-zinc-500 px-3 py-1 mx-1 flex">
             <img
             id = "ABL1_star"
@@ -244,12 +279,12 @@
             </div>
           </div>
           <div class="-ml-1 mt-2 bg-inherit w-full relative">
-            {#if ABL1selected == 'true'}
+            {#if $ABL1selected == 'true'}
               <img
               id = "Total_ABL1"
               src="Star_yellow.svg"
               class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-              style="left: {`${starlocation(ABL1averageResult[calculateIndex(currentPage)])}%`}"
+              style="left: {`${starlocation(ABL1averageResultstr[calculateIndex(currentPage)])}%`}"
               alt="Tutorial Logo"
               />
               <Popover triggeredBy="#Total_ABL1" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -266,12 +301,12 @@
                 <p class="text-xs text-neutral-100">The probability of ABL1 class is <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{ABL1averageResultstr[calculateIndex(currentPage)]}</span>.</p>
               </Popover>
             {/if}
-            {#if CRLF2selected == 'true'}
+            {#if $CRLF2selected == 'true'}
               <img
               id="Total_CRLF2"
               src="Star_red.svg"
               class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-              style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[calculateIndex(currentPage)]])}%`}"
+              style="left: {`${starlocation(CRLF2averageResultstr[calculateIndex(currentPage)])}%`}"
               alt="Tutorial Logo"
               />
               <Popover triggeredBy="#Total_CRLF2" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -288,12 +323,12 @@
                 <p class="text-xs text-neutral-100">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{CRLF2averageResultstr[calculateIndex(currentPage)]}</span>.</p>
               </Popover>
             {/if}
-            {#if ABL1_LikeSelected == 'true'}
+            {#if $ABL1_LikeSelected == 'true'}
             <img
             id="Total_ABL1_Like"
             src="Star_mint.svg"
             class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-            style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[calculateIndex(currentPage)]])}%`}"
+            style="left: {`${starlocation(ABL1_LikeaverageResultstr[calculateIndex(currentPage)])}%`}"
             alt="Tutorial Logo"
             />
             <Popover triggeredBy="#Total_ABL1_Like" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -313,7 +348,7 @@
           </div>
         </div>              
         <div class="bg-zinc-700 mx-10 rounded-2xl px-20 py-5 mt-5">
-          {#if ABL1selected == 'true'}
+          {#if $ABL1selected == 'true'}
             <div class="mb-10">
               <div class="-ml-5 flex mt-5">
                 <p class="ml-3 text-lg text-violet-300 font-medium">ABL1 Class</p>
@@ -348,7 +383,7 @@
                 id="ABL1"
                 src="Star_yellow.svg"
                 class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-                style="left: {`${starlocation(ABL1averageResult[Object.keys(ABL1averageResult)[calculateIndex(currentPage)]])}%`}"
+                style="left: {`${starlocation(ABL1averageResultstr[calculateIndex(currentPage)])}%`}"
                 alt="Tutorial Logo"
                 />
                 <Popover triggeredBy="#ABL1" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -368,11 +403,11 @@
               <hr class="-mx-5 my-5 border-zinc-500"/>
             </div>              
           {/if}
-          {#if CRLF2selected == 'true'}
+          {#if $CRLF2selected == 'true'}
             <div class="my-10">
               <div class="-ml-5 flex mt-10">
                 <p class="ml-3 text-lg text-violet-300 font-medium mt-5">CRLF2 Class</p>
-                <p class="mt-5 ml-1 text-lg text-neutral-200 font-lg mt-5">: {CRLF2averageResultstr[Object.keys(CRLF2averageResultstr)[calculateIndex(currentPage)]]}</p>
+                <p class="mt-5 ml-1 text-lg text-neutral-200 font-lg mt-5">: {CRLF2averageResultstr[calculateIndex(currentPage)]}</p>
               </div>
               <div class="-mx-5 mt-5 cursor-pointer py-1 relative flex bg-violet-400 text-white flex rounded-full rounded-full">
                 <div class="flex ml-3 justify-start">
@@ -403,7 +438,7 @@
                 id="CRLF2"
                 src="Star_red.svg"
                 class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-                style="left: {`${starlocation(CRLF2averageResult[Object.keys(CRLF2averageResult)[calculateIndex(currentPage)]])}%`}"
+                style="left: {`${starlocation(CRLF2averageResultstr[calculateIndex(currentPage)])}%`}"
                 alt="Tutorial Logo"
                 />
                 <Popover triggeredBy="#CRLF2" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -423,11 +458,11 @@
               <hr class="-mx-5 my-5 border-zinc-500"/>
             </div>              
           {/if}  
-          {#if ABL1_LikeSelected == 'true'}
+          {#if $ABL1_LikeSelected == 'true'}
             <div class="my-10">
               <div class="-ml-5 flex mt-10">
                 <p class="ml-3 text-lg text-violet-300 font-medium mt-5">ABL1-Like Class</p>
-                <p class="mt-5 ml-1 text-lg text-neutral-200 font-lg mt-5">: {ABL1_LikeaverageResultstr[Object.keys(ABL1_LikeaverageResultstr)[calculateIndex(currentPage)]]}</p>
+                <p class="mt-5 ml-1 text-lg text-neutral-200 font-lg mt-5">: {ABL1_LikeaverageResultstr[calculateIndex(currentPage)]}</p>
               </div>
               <div class="-mx-5 mt-5 cursor-pointer py-1 relative flex bg-violet-400 text-white flex rounded-full rounded-full">
                 <div class="flex ml-3 justify-start">
@@ -458,7 +493,7 @@
                 id="ABL1_Like"
                 src="Star_mint.svg"
                 class="cursor-pointer absolute w-6 h-6 ml-3 -mt-20 h-fit text-center"
-                style="left: {`${starlocation(ABL1_LikeaverageResult[Object.keys(ABL1_LikeaverageResult)[calculateIndex(currentPage)]])}%`}"
+                style="left: {`${starlocation(ABL1_LikeaverageResultstr[calculateIndex(currentPage)])}%`}"
                 alt="Tutorial Logo"
                 />
                 <Popover triggeredBy="#ABL1_Like" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
@@ -478,6 +513,7 @@
             </div>              
           {/if}
         </div>
+        
         <!-- 페이지네이션 UI -->
         <div class="flex justify-center items-center mt-5 mb-0 h-12">
           <!-- 이전 페이지 그룹 버튼 -->
