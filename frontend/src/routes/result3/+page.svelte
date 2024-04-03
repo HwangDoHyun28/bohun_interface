@@ -441,7 +441,7 @@
                 style="left: {`${starlocation(CRLF2averageResultstr[calculateIndex(currentPage)])}%`}"
                 alt="Tutorial Logo"
                 />
-                <Popover triggeredBy="#CRLF2" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
+                <Popover triggeredBy="#CRLF2" class="bg-white z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
                   <div class="flex mb-1">
                     <img
                       id = "CRLF2_star"
@@ -451,11 +451,11 @@
                       />
                       <p class="text-sm text-[#FF3F34] font-semibold">CRLF2 Class</p>
                   </div>
-                  <hr class="mb-2 border-1 border-neutral-100" />
-                  <p class="text-xs text-neutral-100">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{CRLF2averageResultstr[calculateIndex(currentPage)]}</span>.</p>
+                  <hr class="mb-2 border-1 border-neutral-200" />
+                  <p class="text-xs text-neutral-400">The probability of CRLF2 class is   <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{CRLF2averageResultstr[calculateIndex(currentPage)]}</span>.</p>
                 </Popover>
               </div>
-              <hr class="-mx-5 my-10 border-violet-100"/>
+              <hr class="-mx-5 my-10 border-violet-200"/>
             </div>              
           {/if}  
           {#if $ABL1_LikeSelected == 'true'}
@@ -496,7 +496,7 @@
                 style="left: {`${starlocation(ABL1_LikeaverageResultstr[calculateIndex(currentPage)])}%`}"
                 alt="Tutorial Logo"
                 />
-                <Popover triggeredBy="#ABL1_Like" class="bg-zinc-600 z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
+                <Popover triggeredBy="#ABL1_Like" class="bg-white z-40 border-2 border-neutral-100 p-1 text-sm w-68 font-light">
                   <div class="flex mb-1">
                     <img
                       id = "ABL1_Like_star"
@@ -506,8 +506,8 @@
                       />
                       <p class="text-sm text-[#00D8D6] font-semibold">ABL1 Like Class</p>
                   </div>
-                  <hr class="mb-2 border-1 border-neutral-100" />
-                  <p class="text-xs text-neutral-100">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-400 dark:text-white">{ABL1_LikeaverageResultstr[calculateIndex(currentPage)]}</span>.</p>
+                  <hr class="mb-2 border-1 border-neutral-200" />
+                  <p class="text-xs text-neutral-400">The probability of ABL1 Like class is <span class="ml-0 font-semibold text-neutral-500 dark:text-white">{ABL1_LikeaverageResultstr[calculateIndex(currentPage)]}</span>.</p>
                 </Popover>
               </div>
             </div>              
@@ -577,7 +577,7 @@
     <footer>
       <div class="mt-16 mb-2 px-2 sm:px-4">
           <div class="mx-auto flex flex-col container">
-              <P class="text-violet-500 text-center">This website is maintained by <A class="text-violet-800 underline" href="https://pnucolab.com/" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
+              <P class="text-violet-400 text-center">This website is maintained by <A class="text-violet-600 underline" href="https://pnucolab.com/" target="_blank">Computational Omics Lab</A>, Pusan National University College of Biomedical Convergence Engineering, South Korea. </P>
           </div>
       </div>
     </footer>
